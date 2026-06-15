@@ -1,0 +1,25 @@
+<div class="form-card">
+  <form class="js-form"{% if site.form_endpoint != "" %} action="{{ site.form_endpoint }}" method="post" data-endpoint="{{ site.form_endpoint }}"{% endif %}>
+    <input type="hidden" name="_form" value="help-desk request">
+    <div class="form-label">Request help</div>
+    <div class="form-stack">
+      <input class="field" type="text" name="name" placeholder="Your name" required aria-label="Your name">
+      <input class="field" type="text" name="organization" placeholder="Organization" aria-label="Organization">
+      <input class="field" type="email" name="email" placeholder="Email" required aria-label="Email">
+      <select class="field" name="role" required aria-label="I'm a…">
+        <option value="">I'm a…</option>
+        <option>Journalist / newsroom</option>
+        <option>Lawyer / legal aid</option>
+        <option>Nonprofit / civic group</option>
+        <option>Independent researcher</option>
+      </select>
+      <textarea class="field" name="message" placeholder="What are you working on, and what do you need?" rows="4" aria-label="What you need"></textarea>
+      <button class="btn btn--gold btn--submit" type="submit">Send request &rarr;</button>
+    </div>
+  </form>
+  <div class="js-form-success form-done" hidden>
+    <div class="form-done__heart">&#9829;</div>
+    <h3>Request received.</h3>
+    <p>Cupid's on it — we'll be in touch to make your match.</p>
+  </div>
+</div>

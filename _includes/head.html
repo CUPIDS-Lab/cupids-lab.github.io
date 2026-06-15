@@ -1,0 +1,16 @@
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0e0f12">
+
+  {%- comment -%} SEO meta (jekyll-seo-tag) — all output is local, no external calls. {%- endcomment -%}
+  {% seo %}
+
+  {%- comment -%} Preload the two primary font weights to avoid FOUT. {%- endcomment -%}
+  <link rel="preload" href="{{ '/assets/fonts/public-sans-400.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ '/assets/fonts/ibm-plex-mono-400.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  <link rel="icon" type="image/svg+xml" href="{{ '/assets/favicon.svg' | relative_url }}">
+  {% feed_meta %}
+</head>

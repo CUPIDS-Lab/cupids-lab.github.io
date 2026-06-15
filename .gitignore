@@ -1,0 +1,14 @@
+# Jekyll
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
+
+# Dependencies
+vendor/
+node_modules/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp

@@ -1,0 +1,145 @@
+---
+layout: default
+---
+{%- comment -%}
+  One consistent layout for every child page, driven entirely by the page's
+  front matter (eyebrow / title / intro / sections[]). Edit the page's front
+  matter and the page updates — the Jekyll equivalent of the design's
+  Markdown-driven model.
+
+  Section `type` values:
+    content | chips | archive | director | cta | subscribe | helpdesk | interest
+{%- endcomment -%}
+
+<!-- ============ HERO ============ -->
+<section class="hero hero--child">
+  <canvas class="cupids-particles hero__canvas" data-color="#cfb87c" data-count="34" data-link="135" data-dotop="0.4" data-lineop="0.12" aria-hidden="true"></canvas>
+  <div class="hero__inner">
+    {% if page.eyebrow %}<div class="eyebrow">{{ page.eyebrow }}</div>{% endif %}
+    <h1>{{ page.title }}{% if page.title_heart %} <span aria-hidden="true">&#9829;</span>{% endif %}</h1>
+    {% if page.intro %}<p class="hero__lead">{{ page.intro }}</p>{% endif %}
+  </div>
+</section>
+
+<!-- ============ SECTIONS ============ -->
+{% for s in page.sections %}
+{% assign alt = forloop.index0 | modulo: 2 %}
+<section class="band{% if alt == 1 %} band--alt{% endif %}">
+  <div class="band__inner band__inner--page">
+
+  {%- comment -%} ---------- CONTENT (prose + card grid) ---------- {%- endcomment -%}
+  {% if s.type == 'content' %}
+    {% if s.heading %}<h2 class="h-section h-section--sm">{{ s.heading }}</h2>{% endif %}
+    {% if s.body %}<p class="prose">{{ s.body }}</p>{% endif %}
+    {% if s.cards %}
+      <div class="grid grid--{{ s.cols | default: 3 }}">
+        {% for c in s.cards %}
+          {%- assign T = c.tag | upcase -%}
+          {%- if T contains 'INVESTIGATION' -%}{%- assign acc = '#b23a2e' -%}
+          {%- elsif T contains 'RAPID' or T contains 'REPORT' or T contains 'ISSUE' -%}{%- assign acc = '#e0a14e' -%}
+          {%- elsif T contains 'GUIDE' or T contains 'ARCHIVE' -%}{%- assign acc = '#6fcf97' -%}
+          {%- else -%}{%- assign acc = '#cfb87c' -%}{%- endif -%}
+          <div class="card">
+            {% if c.tag %}<div class="card__tag" style="color: {{ acc }};">{{ c.tag }}</div>{% endif %}
+            <h3>{{ c.title }}</h3>
+            {% if c.body %}<p class="card__body">{{ c.body }}</p>{% endif %}
+            {% if c.bullets %}
+              <div class="bullets">
+                {% for b in c.bullets %}
+                  {%- case b.accent -%}
+                    {%- when 'green' -%}{%- assign bacc = '#6fcf97' -%}
+                    {%- when 'amber' -%}{%- assign bacc = '#e0a14e' -%}
+                    {%- when 'red' -%}{%- assign bacc = '#b23a2e' -%}
+                    {%- else -%}{%- assign bacc = '#cfb87c' -%}
+                  {%- endcase -%}
+                  <div class="bullet" style="border-left-color: {{ bacc }};">{{ b.text }}</div>
+                {% endfor %}
+              </div>
+            {% endif %}
+            {% if c.meta %}<div class="card__meta">{{ c.meta }}</div>{% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+  {%- comment -%} ---------- CHIPS ---------- {%- endcomment -%}
+  {% elsif s.type == 'chips' %}
+    {% if s.heading %}<h2 class="h-section h-section--sm">{{ s.heading }}</h2>{% endif %}
+    {% if s.body %}<p class="sub">{{ s.body }}</p>{% endif %}
+    <div class="chips">
+      {% for ch in s.chips %}<span class="chip">{{ ch }}</span>{% endfor %}
+    </div>
+
+  {%- comment -%} ---------- CTA ---------- {%- endcomment -%}
+  {% elsif s.type == 'cta' %}
+    <div class="cta">
+      <div class="cta__text">
+        <h2>{{ s.title }}</h2>
+        <p>{{ s.text }}</p>
+      </div>
+      <a href="{{ s.to | relative_url }}" class="btn btn--gold btn--hero">{{ s.label }}</a>
+    </div>
+
+  {%- comment -%} ---------- DIRECTOR ---------- {%- endcomment -%}
+  {% elsif s.type == 'director' %}
+    <div class="split split--director director">
+      <div class="placeholder placeholder--1x1"><span>[ headshot ]</span></div>
+      <div>
+        <div class="kicker kicker--gold" style="letter-spacing:0.08em;">Director</div>
+        <h2>{{ s.name }}</h2>
+        <div class="director__role">{{ s.role }}</div>
+        <p class="director__bio">{{ s.bio }}</p>
+        <div class="director__links">
+          <span class="gold">{{ s.email }}</span>
+          <span class="cell-dim">·</span>
+          <a class="cell-dim" href="{{ site.github_url }}" rel="noopener">{{ s.github }}</a>
+        </div>
+      </div>
+    </div>
+
+  {%- comment -%} ---------- ARCHIVE TABLE ---------- {%- endcomment -%}
+  {% elsif s.type == 'archive' %}
+    <div class="table-head">
+      <h2 class="h-section h-section--sm" style="margin-bottom:0;">{{ s.heading | default: 'Public data archive' }}</h2>
+      <div class="filters">
+        <span class="pill pill--on">All</span>
+        <span class="pill pill--green">Preserved</span>
+        <span class="pill pill--amber">At risk</span>
+        <span class="pill pill--red">Removed</span>
+      </div>
+    </div>
+    {% if s.body %}<p class="sub" style="margin-top:-6px;">{{ s.body }}</p>{% endif %}
+    {% include archive-table.html rows=s.rows %}
+    <div class="note">{{ s.note | default: 'Every archived dataset ships with a documentation guide: provenance, limitations, and journalistic applications.' }}</div>
+
+  {%- comment -%} ---------- SUBSCRIBE ---------- {%- endcomment -%}
+  {% elsif s.type == 'subscribe' %}
+    <div class="split split--even">
+      <div class="subscribe-copy">
+        <h2>Get the Dispatch in your inbox</h2>
+        <p>One issue a month. No spam — just the work.</p>
+      </div>
+      <div>{% include forms/subscribe.html %}</div>
+    </div>
+
+  {%- comment -%} ---------- HELP DESK ---------- {%- endcomment -%}
+  {% elsif s.type == 'helpdesk' %}
+    <div class="split split--desk">
+      <div>
+        <h2 class="steps__h">How it works</h2>
+        <div class="step"><div class="step__n">1</div><div><div class="step__t">Tell us about it</div><p>Describe your project and the kind of help you need.</p></div></div>
+        <div class="step"><div class="step__n">2</div><div><div class="step__t">We make a match</div><p>Cupid pairs you with a student team suited to the work.</p></div></div>
+        <div class="step"><div class="step__n">3</div><div><div class="step__t">We do the work together</div><p>Students learn from real problems; you get real capacity.</p></div></div>
+      </div>
+      <div>{% include forms/helpdesk.html %}</div>
+    </div>
+
+  {%- comment -%} ---------- INTEREST ---------- {%- endcomment -%}
+  {% elsif s.type == 'interest' %}
+    {% include forms/interest.html %}
+
+  {% endif %}
+
+  </div>
+</section>
+{% endfor %}

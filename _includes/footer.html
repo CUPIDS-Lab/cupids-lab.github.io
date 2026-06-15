@@ -1,0 +1,23 @@
+<footer class="footer">
+  <div class="footer__grid">
+    <div>
+      <div class="footer__brand">cupids<span class="green">-</span>lab<span class="heart" role="button" tabindex="0" aria-label="hearts">&lt;3</span></div>
+      <p class="footer__about">The University of Colorado Public Interest Data Science Lab. An initiative within CMDI at CU Boulder.</p>
+    </div>
+    <nav class="footer__col" aria-label="Footer">
+      <a href="{{ '/projects/' | relative_url }}">/projects</a>
+      <a href="{{ '/research/' | relative_url }}">/research</a>
+      <a href="{{ '/dispatch/' | relative_url }}">/dispatch</a>
+      <a href="{{ '/resources/' | relative_url }}">/resources</a>
+    </nav>
+    <div class="footer__col">
+      <a href="{{ site.github_url }}" rel="noopener">github.com/{{ site.github_org }}</a>
+      <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+      <span>Boulder, Colorado</span>
+    </div>
+  </div>
+  <div class="footer__bar">
+    <span>&copy; {{ 'now' | date: "%Y" }} CUPIDS Lab &middot; University of Colorado Boulder</span>
+    <span>Matchmaking data &amp; democracy — made with <span class="heart">&#9829;</span> in Boulder</span>
+  </div>
+</footer>

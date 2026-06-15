@@ -1,0 +1,62 @@
+# ============================================================
+#  CUPIDS Lab — University of Colorado Public Interest Data
+#  Science Laboratory. Jekyll configuration.
+# ============================================================
+
+title: CUPIDS Lab
+tagline: We preserve the data democracy depends on.
+description: >-
+  The University of Colorado Public Interest Data Science Laboratory —
+  archiving at-risk public datasets, building data infrastructure, and
+  matching technical capacity with the journalists and civic groups who
+  need it.
+
+# Served at the org root: https://cupids-lab.github.io
+url: "https://cupids-lab.github.io"
+baseurl: ""
+
+lang: en
+author: CUPIDS Lab
+email: brian.keegan@colorado.edu
+github_org: CUPIDS-Lab
+github_url: https://github.com/CUPIDS-Lab
+
+# Optional Formspree form endpoint. Leave blank to keep the design's
+# client-side "thank you" confirmation (no data is sent anywhere).
+# When set (e.g. https://formspree.io/f/xxxxxxxx) the help-desk, join,
+# and subscribe forms POST to it.
+form_endpoint: ""
+
+# Build settings ---------------------------------------------
+markdown: kramdown
+highlighter: rouge
+permalink: pretty
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# jekyll-feed: the Dispatch is the lab's newsroom
+feed:
+  path: dispatch/feed.xml
+
+sass:
+  style: compressed
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - LICENSE
+  - vendor
+  - .github
+  - script
+  - "*.gem"
+
+# Default front matter --------------------------------------
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: page

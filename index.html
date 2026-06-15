@@ -1,0 +1,125 @@
+---
+layout: default
+title: CUPIDS Lab
+nav: home
+description: >-
+  A research lab at the University of Colorado archiving at-risk public
+  datasets, building data infrastructure, and matching technical capacity
+  with the journalists and civic groups who need it.
+home_archive:
+  - { dataset: "Front Range ozone readings", source: "EPA",  updated: "2026-05", status: "PRESERVED", tone: "green" }
+  - { dataset: "Colorado River streamflow",  source: "USGS", updated: "2026-04", status: "PRESERVED", tone: "green" }
+  - { dataset: "GHGRP methane emissions",    source: "EPA",  updated: "2026-03", status: "ARCHIVING", tone: "amber" }
+---
+
+<!-- ============ HERO ============ -->
+<section class="hero hero--home">
+  <canvas class="cupids-particles hero__canvas" data-color="#cfb87c" data-count="48" data-link="140" data-dotop="0.5" data-lineop="0.16" aria-hidden="true"></canvas>
+  <div class="hero__inner">
+    <div class="eyebrow">University of Colorado · Public Interest Data Science</div>
+    <h1>We preserve the data democracy depends on.</h1>
+    <p class="hero__lead">A research lab at the University of Colorado archiving at-risk public datasets, building data infrastructure, sharing resources, and matching technical capacity with the journalists and civic groups who need it.</p>
+    <div class="hero__actions">
+      <a href="{{ '/get-involved/' | relative_url }}" class="btn btn--gold btn--hero">Request help &rarr;</a>
+      <a href="{{ '/resources/' | relative_url }}" class="btn btn--ghost btn--hero">Browse resources</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MISSION ============ -->
+<section class="band band--card">
+  <div class="band__inner">
+    <div class="kicker kicker--gold">Our mission <span class="heart">&#9829;</span></div>
+    <p class="mission">We train students in data science while providing pro-bono technical capacity to the journalists, lawyers, and nonprofits keeping Colorado accountable.</p>
+  </div>
+</section>
+
+<!-- ============ THE MOMENT ============ -->
+<section class="band band--alt">
+  <div class="band__inner band__inner--tight">
+    <div class="kicker">The moment — what's disappearing</div>
+    <div class="ledger">
+      EPA air quality monitoring <span class="redact">&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;</span> <span class="heart tag-strong">REMOVED</span><br>
+      USGS streamflow records <span class="redact">&#9608;&#9608;&#9608;&#9608;&#9608;</span> <span class="amber tag-strong">AT RISK</span><br>
+      NOAA climate projections <span class="redact">&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;</span> <span class="green tag-strong">ARCHIVED BY CUPIDS</span>
+    </div>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat__num">&frac12;</div>
+        <div class="stat__label">of Colorado's newspaper journalists lost since 2005.</div>
+      </div>
+      <div class="stat">
+        <div class="stat__num">300&rarr;70</div>
+        <div class="stat__label">reporters at the Denver Post, then and now.</div>
+      </div>
+      <div class="stat">
+        <div class="stat__num">100s</div>
+        <div class="stat__label">of federal datasets removed or restricted since 2025.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW THE LAB WORKS ============ -->
+<section class="band">
+  <div class="band__inner">
+    <h2 class="h-section">How the lab works</h2>
+    <p class="sub">Three pillars, one public-interest mission.</p>
+    <div class="grid grid--3">
+      <a class="card card--pad card--link" href="{{ '/dispatch/' | relative_url }}">
+        <div class="card__num">01</div>
+        <h3>Research Newsroom</h3>
+        <p class="card__body">Cross-disciplinary student teams ship a monthly dispatch — explainers, dataset guides, and original investigations.</p>
+        <span class="card__more">Read the Dispatch &rarr;</span>
+      </a>
+      <a class="card card--pad card--link" href="{{ '/research/' | relative_url }}">
+        <div class="card__num">02</div>
+        <h3>Data Infrastructure</h3>
+        <p class="card__body">Acquire, clean, document, and archive critical public datasets in durable, open repositories.</p>
+        <span class="card__more">See our research &rarr;</span>
+      </a>
+      <a class="card card--pad card--link" href="{{ '/get-involved/' | relative_url }}">
+        <div class="card__num">03</div>
+        <h3>Community Help Desk</h3>
+        <p class="card__body">Pro-bono data support for journalists, lawyers, and nonprofits across Colorado.</p>
+        <span class="card__more">Request help &rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PUBLIC DATA ARCHIVE ============ -->
+<section class="band band--alt">
+  <div class="band__inner">
+    <div class="archive-link">
+      <div class="kicker" style="margin-bottom:0;">Public data archive</div>
+      <a href="{{ '/resources/' | relative_url }}">view all &rarr;</a>
+    </div>
+    {% include archive-table.html variant="home" rows=page.home_archive %}
+  </div>
+</section>
+
+<!-- ============ FEATURED · CUPIDS × CEJ ============ -->
+<section class="band">
+  <div class="band__inner split split--feature feature">
+    <div>
+      <div class="kicker kicker--gold" style="font-weight:600; letter-spacing:0.12em;">Featured · CUPIDS &times; CEJ</div>
+      <h2>Preserving environmental accountability</h2>
+      <p>With the Center for Environmental Journalism, we're systematically identifying, archiving, and documenting the at-risk federal datasets Colorado's reporters depend on — air quality, streamflow, climate projections, and methane emissions.</p>
+      <a class="feature__more" href="{{ '/projects/' | relative_url }}">See the project &rarr;</a>
+      <div class="feature__meta">2026–27 · de Castro Research Award</div>
+    </div>
+    <div class="placeholder placeholder--4x3"><span>[ data viz — at-risk dataset map ]</span></div>
+  </div>
+</section>
+
+<!-- ============ DISPATCH NEWSLETTER ============ -->
+<section class="band">
+  <div class="band__inner split split--even newsletter">
+    <div>
+      <h2>The CUPIDS Dispatch <span class="gold">&#9829;</span></h2>
+      <p>A monthly read on data, journalism, and democracy in Colorado. No spam — just the work.</p>
+    </div>
+    {% include forms/subscribe.html %}
+  </div>
+</section>
