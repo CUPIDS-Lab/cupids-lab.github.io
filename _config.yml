@@ -37,9 +37,17 @@ plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
 
-# jekyll-feed: the Dispatch is the lab's newsroom
+# The Dispatch is a collection — one Markdown file per issue.
+collections:
+  dispatch:
+    output: true
+    permalink: /dispatch/:name/
+
+# jekyll-feed: generate the Dispatch feed from the collection
 feed:
-  path: dispatch/feed.xml
+  collections:
+    dispatch:
+      path: dispatch/feed.xml
 
 sass:
   style: compressed
@@ -60,3 +68,8 @@ defaults:
       path: ""
     values:
       layout: page
+  - scope:
+      path: ""
+      type: dispatch
+    values:
+      layout: dispatch

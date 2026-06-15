@@ -1,0 +1,18 @@
+{%- comment -%}
+  Hero. Params: variant ("home"|"child"), eyebrow, title, title_heart, lead.
+  Carries the subtle particle-links canvas (tuned per variant).
+{%- endcomment -%}
+{%- assign variant = include.variant | default: 'child' -%}
+{%- if variant == 'home' -%}
+  {%- assign pcount = 48 -%}{%- assign plink = 140 -%}{%- assign pdot = '0.5' -%}{%- assign pline = '0.16' -%}
+{%- else -%}
+  {%- assign pcount = 34 -%}{%- assign plink = 135 -%}{%- assign pdot = '0.4' -%}{%- assign pline = '0.12' -%}
+{%- endif -%}
+<section class="hero hero--{{ variant }}">
+  <canvas class="cupids-particles hero__canvas" data-color="#cfb87c" data-count="{{ pcount }}" data-link="{{ plink }}" data-dotop="{{ pdot }}" data-lineop="{{ pline }}" aria-hidden="true"></canvas>
+  <div class="hero__inner">
+    {%- if include.eyebrow %}<div class="eyebrow">{{ include.eyebrow }}</div>{% endif -%}
+    <h1>{{ include.title }}{% if include.title_heart %} <span aria-hidden="true">&#9829;</span>{% endif %}</h1>
+    {%- if include.lead %}<div class="hero__lead">{{ include.lead }}</div>{% endif -%}
+  </div>
+</section>

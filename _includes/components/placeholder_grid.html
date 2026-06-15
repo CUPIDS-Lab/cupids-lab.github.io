@@ -1,0 +1,5 @@
+{%- comment -%} Grid of stripe placeholder tiles. Params: count, cols, label {%- endcomment -%}
+{%- assign n = include.count | default: 6 -%}
+<div class="grid grid--{{ include.cols | default: 3 }}">
+  {%- for i in (1..n) %}<div class="placeholder placeholder--4x3"><span>[ {{ include.label | default: 'placeholder' }} ]</span></div>{% endfor -%}
+</div>

@@ -5,10 +5,9 @@
       <p class="footer__about">The University of Colorado Public Interest Data Science Lab. An initiative within CMDI at CU Boulder.</p>
     </div>
     <nav class="footer__col" aria-label="Footer">
-      <a href="{{ '/projects/' | relative_url }}">/projects</a>
-      <a href="{{ '/research/' | relative_url }}">/research</a>
-      <a href="{{ '/dispatch/' | relative_url }}">/dispatch</a>
-      <a href="{{ '/resources/' | relative_url }}">/resources</a>
+      {%- for item in site.data.navigation.footer %}
+      <a href="{{ item.url | relative_url }}">{{ item.label }}</a>
+      {%- endfor %}
     </nav>
     <div class="footer__col">
       <a href="{{ site.github_url }}" rel="noopener">github.com/{{ site.github_org }}</a>

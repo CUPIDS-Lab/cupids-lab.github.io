@@ -1,0 +1,92 @@
+---
+layout: default
+---
+{%- comment -%} Hand-built home showcase, driven by `home.*` front matter and
+  _data (pillars, archive). {%- endcomment -%}
+{%- assign h = page.home -%}
+
+{% include components/hero.html variant="home" eyebrow=h.hero.eyebrow title=h.hero.title lead=h.hero.lead %}
+
+<!-- mission -->
+<section class="band band--card">
+  <div class="band__inner">
+    <div class="kicker kicker--gold">Our mission <span class="heart">&#9829;</span></div>
+    <p class="mission">{{ h.mission }}</p>
+  </div>
+</section>
+
+<!-- the moment -->
+<section class="band band--alt">
+  <div class="band__inner band__inner--tight">
+    <div class="kicker">{{ h.moment.kicker }}</div>
+    <div class="ledger">
+      {%- for row in h.moment.ledger %}
+      {{ row.label }} <span class="redact">&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;</span> <span class="tag-strong" style="color: {{ row.tone | bullet_color }};">{{ row.status }}</span>{% unless forloop.last %}<br>{% endunless %}
+      {%- endfor %}
+    </div>
+    <div class="stats">
+      {%- for st in h.moment.stats %}
+      <div class="stat"><div class="stat__num">{{ st.num }}</div><div class="stat__label">{{ st.label }}</div></div>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- how the lab works (pillars) -->
+<section class="band">
+  <div class="band__inner">
+    <h2 class="h-section">{{ h.pillars_heading }}</h2>
+    <p class="sub">{{ h.pillars_sub }}</p>
+    <div class="grid grid--3">
+      {%- for p in site.data.pillars %}
+      <a class="card card--pad card--link" href="{{ p.url | relative_url }}">
+        <div class="card__num">{{ p.num }}</div>
+        <h3>{{ p.title }}</h3>
+        <p class="card__body">{{ p.body }}</p>
+        <span class="card__more">{{ p.more }}</span>
+      </a>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- public data archive -->
+<section class="band band--alt">
+  <div class="band__inner">
+    <div class="archive-link">
+      <div class="kicker" style="margin-bottom:0;">Public data archive</div>
+      <a href="{{ '/resources/' | relative_url }}">view all &rarr;</a>
+    </div>
+    {%- assign rows = site.data.archive.datasets -%}
+    {%- if rows and rows != empty -%}
+      {% include components/archive_table.html variant="home" rows=rows %}
+    {%- else -%}
+      {% include components/placeholder_panel.html label="public data archive" %}
+    {%- endif -%}
+  </div>
+</section>
+
+<!-- featured -->
+<section class="band">
+  <div class="band__inner split split--feature feature">
+    <div>
+      <div class="kicker kicker--gold" style="font-weight:600; letter-spacing:0.12em;">{{ h.featured.eyebrow }}</div>
+      <h2>{{ h.featured.title }}</h2>
+      <p>{{ h.featured.body }}</p>
+      <a class="feature__more" href="{{ h.featured.link_to | relative_url }}">{{ h.featured.link_label }}</a>
+      <div class="feature__meta">{{ h.featured.meta }}</div>
+    </div>
+    <div class="placeholder placeholder--4x3"><span>{{ h.featured.caption }}</span></div>
+  </div>
+</section>
+
+<!-- dispatch signup -->
+<section class="band">
+  <div class="band__inner split split--even newsletter">
+    <div>
+      <h2>The CUPIDS Dispatch <span class="gold">&#9829;</span></h2>
+      <p>A monthly read on data, journalism, and democracy in Colorado. No spam — just the work.</p>
+    </div>
+    {% include forms/subscribe.html %}
+  </div>
+</section>

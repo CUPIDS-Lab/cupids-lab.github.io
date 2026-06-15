@@ -1,0 +1,16 @@
+# The three pillars on the home page.
+- num: "01"
+  title: Research Newsroom
+  body: "Cross-disciplinary student teams ship a monthly dispatch — explainers, dataset guides, and original investigations."
+  more: "Read the Dispatch →"
+  url: /dispatch/
+- num: "02"
+  title: Data Infrastructure
+  body: "Acquire, clean, document, and archive critical public datasets in durable, open repositories."
+  more: "See our research →"
+  url: /research/
+- num: "03"
+  title: Community Help Desk
+  body: "Pro-bono data support for journalists, lawyers, and nonprofits across Colorado."
+  more: "Request help →"
+  url: /get-involved/

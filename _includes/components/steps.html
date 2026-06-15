@@ -1,0 +1,11 @@
+{%- comment -%} Help-desk "how it works" steps. Param: include.steps (list of {title, body}) {%- endcomment -%}
+<h2 class="steps__h">{{ include.heading | default: 'How it works' }}</h2>
+{%- for st in include.steps %}
+<div class="step">
+  <div class="step__n">{{ forloop.index }}</div>
+  <div>
+    <div class="step__t">{{ st.title }}</div>
+    <p>{{ st.body }}</p>
+  </div>
+</div>
+{%- endfor %}

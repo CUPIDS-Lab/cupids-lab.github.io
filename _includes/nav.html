@@ -1,7 +1,6 @@
-{%- comment -%}
-  Sticky masthead. `page.nav` (home|projects|people|research|dispatch|resources|getinvolved)
-  drives the active-link highlight.
-{%- endcomment -%}
+{%- comment -%} Sticky masthead. Links come from _data/navigation.yml; `page.nav`
+  drives the active-link highlight. {%- endcomment -%}
+{%- assign n = site.data.navigation -%}
 <header class="nav">
   <div class="nav__inner">
     <div class="brand">
@@ -9,13 +8,10 @@
     </div>
     <button class="nav__toggle" aria-expanded="false" aria-label="Toggle navigation">menu</button>
     <nav class="nav__links" aria-label="Primary">
-      <a href="{{ '/' | relative_url }}"            class="{% if page.nav == 'home' %}is-active{% endif %}">/home</a>
-      <a href="{{ '/projects/' | relative_url }}"   class="{% if page.nav == 'projects' %}is-active{% endif %}">/projects</a>
-      <a href="{{ '/people/' | relative_url }}"     class="{% if page.nav == 'people' %}is-active{% endif %}">/people</a>
-      <a href="{{ '/research/' | relative_url }}"   class="{% if page.nav == 'research' %}is-active{% endif %}">/research</a>
-      <a href="{{ '/dispatch/' | relative_url }}"   class="{% if page.nav == 'dispatch' %}is-active{% endif %}">/dispatch</a>
-      <a href="{{ '/resources/' | relative_url }}"  class="{% if page.nav == 'resources' %}is-active{% endif %}">/resources</a>
-      <a href="{{ '/get-involved/' | relative_url }}" class="btn btn--gold btn--nav">Get Involved</a>
+      {%- for item in n.primary %}
+      <a href="{{ item.url | relative_url }}" class="{% if page.nav == item.key %}is-active{% endif %}">{{ item.label }}</a>
+      {%- endfor %}
+      <a href="{{ n.cta.url | relative_url }}" class="btn btn--gold btn--nav">{{ n.cta.label }}</a>
     </nav>
   </div>
 </header>

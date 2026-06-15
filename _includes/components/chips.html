@@ -1,0 +1,6 @@
+{%- comment -%} Chip row. Params: heading, body, items (list of strings) {%- endcomment -%}
+{%- if include.heading %}<h2 class="h-section h-section--sm">{{ include.heading }}</h2>{% endif -%}
+{%- if include.body %}<p class="sub">{{ include.body }}</p>{% endif -%}
+<div class="chips">
+  {%- for ch in include.items %}<span class="chip">{{ ch }}</span>{% endfor -%}
+</div>

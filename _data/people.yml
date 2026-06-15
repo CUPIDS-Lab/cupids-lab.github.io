@@ -1,0 +1,20 @@
+# People — director + collaborators/advisors. Edit here; the People page
+# (and any links to people) build from this reference file.
+director:
+  name: Brian C. Keegan
+  role: "Associate Professor, Department of Information Science · CU Boulder"
+  email: brian.keegan@colorado.edu
+  github: github.com/CUPIDS-Lab
+  bio: |
+    A computational social scientist with eighteen years studying how people collaborate online — on Wikipedia, Reddit, Twitter, and beyond. That research has always depended on open data, and on watching access to it systematically erode as platforms enclosed the information commons.
+    He has taught "Information Expositions" for eight years, serves as Vice Chair of one of the nation's first cannabis licensing boards, and writes a data-driven column for the Boulder Reporting Lab. CUPIDS is the synthesis of that research, teaching, and civic work.
+
+advisors:
+  - title: Hong Tien Vu
+    body: "Director, Center for Environmental Journalism · CUPIDS × CEJ collaboration."
+  - title: Advisor — Data Journalism
+    body: "Faculty advisor · to be announced."
+  - title: Advisor — Cybersecurity
+    body: "Faculty advisor · to be announced."
+  - title: Advisor — Law & Ethics
+    body: "Faculty advisor · to be announced."

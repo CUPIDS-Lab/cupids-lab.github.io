@@ -1,0 +1,5 @@
+# Public data archive. Empty for now — the archive renders a placeholder
+# panel until you add datasets here. Each row:
+#   - { dataset: "Front Range ozone readings", source: "EPA AQS", updated: "2026-05", status: PRESERVED, tone: green }
+# tone is one of: green (preserved) · amber (archiving / at risk) · red (removed)
+datasets: []
