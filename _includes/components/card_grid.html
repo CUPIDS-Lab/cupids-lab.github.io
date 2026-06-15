@@ -1,0 +1,4 @@
+{%- comment -%} Grid of cards. Params: include.items (list), include.cols {%- endcomment -%}
+<div class="grid grid--{{ include.cols | default: 3 }}">
+  {%- for c in include.items %}{% include components/card.html card=c %}{% endfor -%}
+</div>

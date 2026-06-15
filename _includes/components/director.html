@@ -1,0 +1,16 @@
+{%- comment -%} Director block. Param: include.person = { name, role, bio, email, github } {%- endcomment -%}
+{%- assign p = include.person -%}
+<div class="split split--director director">
+  <div class="placeholder placeholder--1x1"><span>[ headshot ]</span></div>
+  <div>
+    <div class="kicker kicker--gold" style="letter-spacing:0.08em;">Director</div>
+    <h2>{{ p.name }}</h2>
+    <div class="director__role">{{ p.role }}</div>
+    <p class="director__bio">{{ p.bio }}</p>
+    <div class="director__links">
+      <a class="gold" href="mailto:{{ p.email }}">{{ p.email }}</a>
+      <span class="cell-dim">·</span>
+      <a class="cell-dim" href="{{ site.github_url }}" rel="noopener">{{ p.github }}</a>
+    </div>
+  </div>
+</div>

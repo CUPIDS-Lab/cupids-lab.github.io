@@ -1,0 +1,8 @@
+{%- comment -%} Call-to-action banner. Params: title, text, label, to {%- endcomment -%}
+<div class="cta">
+  <div class="cta__text">
+    <h2>{{ include.title }}</h2>
+    <p>{{ include.text }}</p>
+  </div>
+  <a href="{{ include.to | smart_url }}" class="btn btn--gold btn--hero">{{ include.label }}</a>
+</div>

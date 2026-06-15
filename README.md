@@ -6,147 +6,144 @@ public datasets, building data infrastructure, sharing resources, and
 matching technical capacity with the journalists and civic groups who need
 it.
 
-This repository is the lab's website — a static [Jekyll](https://jekyllrb.com)
-site deployed to GitHub Pages. The design is the "data-forward / technical"
-direction: dark theme, IBM Plex Mono + Public Sans, black + CU gold, with the
-CUPIDS matchmaker heart (`<3` / ♥) threaded throughout.
+A static [Jekyll](https://jekyllrb.com) site deployed to GitHub Pages. The
+design is the "data-forward / technical" direction: dark theme, IBM Plex Mono
++ Public Sans, black + CU gold, with the CUPIDS matchmaker heart (`<3` / ♥)
+threaded throughout.
 
 ---
 
-## Pages
+## How it's built
 
-| Page             | URL              | Source                |
-|------------------|------------------|-----------------------|
-| Home (showcase)  | `/`              | `index.html`          |
-| Projects         | `/projects/`     | `projects.html`       |
-| People           | `/people/`       | `people.html`         |
-| Research         | `/research/`     | `research.html`       |
-| Dispatch         | `/dispatch/`     | `dispatch.html`       |
-| Resources        | `/resources/`    | `resources.html`      |
-| Get Involved     | `/get-involved/` | `get-involved.html`   |
+Content lives in **Markdown + YAML data**; presentation lives in **layouts,
+component includes, and Liquid filters**. No page is hand-written HTML.
 
-The **home page** is hand-built. Every **child page** renders through one
-shared layout (`_layouts/page.html`) driven entirely by its front matter —
-edit the front matter and the page updates. This is the Jekyll equivalent of
-the design's Markdown-driven model.
+```
+index.md, projects.md, people.md, …   Markdown pages — front matter + a
+                                       Markdown body (the hero lead)
+_dispatch/*.md                         the Dispatch — one file per issue
+_data/*.yml                            reference data (people, guides,
+                                       projects, datasets, nav, …)
+_layouts/        default · home · page (section dispatcher) · dispatch
+_includes/components/*.html            reusable "functions": card, card_grid,
+                                       placeholder_grid/panel, chips, cta,
+                                       director, archive_table, hero, steps
+_plugins/cupids.rb                     custom Liquid filters ("converters")
+assets/                                self-hosted fonts, CSS, ~5 KB JS
+```
+
+### Pages are data, not markup
+
+Every page selects a layout and declares its content in front matter. A page's
+**Markdown body becomes the hero lead**, and `sections:` compose the body from
+components:
+
+```yaml
+---
+layout: page
+nav: people
+eyebrow: People
+title: "Cross-functional teams, one mission."
+sections:
+  - { type: director, data: people.director }      # pulls _data/people.yml
+  - { type: cards, heading: "Collaborators & advisors", cols: 4, data: people.advisors }
+  - { type: cta, title: "…", label: "Join the lab →", to: "/get-involved/" }
+---
+CUPIDS draws students and faculty from information science, journalism, …
+```
+
+Section `type`s: `cards`, `chips`, `archive`, `director`, `cta`,
+`dispatch_list`, `subscribe`, `helpdesk`, `interest`. A section's list can be
+inline (`items:`) or pulled from a data file via `data:` (a dotted path like
+`people.advisors`, resolved by the `site_data` filter).
+
+### Liquid filters ("converters") — `_plugins/cupids.rb`
+
+The design's computed rules are abstracted into filters so templates stay
+declarative:
+
+- `accent_color` — tag → accent (INVESTIGATION→red, REPORT/RAPID/ISSUE→amber, GUIDE/ARCHIVE→green, else gold)
+- `bullet_color` — `green|amber|red|gold` → hex
+- `tone_class` — archive status tone → CSS class
+- `site_data` — resolve a dotted path into `_data`
+- `smart_url` — baseurl-prefix internal links, leave external/mailto alone
+- `dispatch_cards` — map Dispatch collection docs → card data
+
+> Custom plugins run because the site builds via GitHub Actions (not the
+> legacy `github-pages` gem). Keep deploying through the included workflow.
 
 ---
 
 ## Editing content
 
-Each child page is just front matter: an `eyebrow`, a `title`, an `intro`, and
-a list of `sections`. Each section has a `type`:
+| To change… | Edit… |
+|---|---|
+| A page's intro / sections | that page's `.md` file |
+| People (director + advisors) | `_data/people.yml` |
+| Guides & tools | `_data/guides.yml` |
+| Research focus areas | `_data/focus_areas.yml` |
+| Home pillars | `_data/pillars.yml` |
+| Navigation | `_data/navigation.yml` |
+| A Dispatch issue | add a file to `_dispatch/` |
 
-```yaml
-sections:
-  - type: content          # prose + a grid of cards
-    heading: "What we build"
-    cols: 3                 # cards per row (1–4)
-    body: "Optional intro paragraph."
-    cards:
-      - tag: "GUIDE"        # colors itself: GUIDE/ARCHIVE→green,
-        title: "A card"     #   REPORT/RAPID/ISSUE→amber,
-        body: "Body text."  #   INVESTIGATION→red, else gold
-        meta: "May 2026"    # optional byline/meta line
-        bullets:            # optional 2-col bullet list
-          - { text: "Item", accent: green }   # green|amber|red|gold
+### Placeholders are data-driven
 
-  - type: chips             # heading + body + pill row
-    heading: "Focus areas"
-    chips: [Information retrieval, Accessible visualization]
+The **projects grid**, **Dispatch list**, and **public data archive** render
+on-brand placeholder tiles while their data source is empty. They fill in
+automatically when you add content — no template changes:
 
-  - type: archive           # public-data-archive table
-    rows:
-      - { dataset: "…", source: "EPA", updated: "2026-05", status: "PRESERVED", tone: green }
+- add project cards under `more:` in `_data/projects.yml`
+- add datasets under `datasets:` in `_data/archive.yml`
+- add a `_dispatch/*.md` issue with `published: true`
 
-  - type: director          # headshot + bio + contacts
-    name: "Brian C. Keegan"
-    role: "…"
-    email: "…"
-    github: "github.com/CUPIDS-Lab"
-    bio: |
-      Paragraph one.
-      Paragraph two.
-
-  - type: cta               # call-to-action banner
-    title: "…"
-    text: "…"
-    label: "Join the lab →"
-    to: "/get-involved/"
-
-  - type: subscribe         # newsletter signup
-  - type: helpdesk          # "how it works" steps + request form
-  - type: interest          # join-the-lab interest form
-```
-
-Section backgrounds alternate automatically.
+(`_dispatch/2026-05-15-example-ozone.md` is an unpublished template to copy.)
+The funded **Featured · CUPIDS × CEJ** project and the People/Guides lists are
+real content.
 
 ---
 
 ## Local development
 
-Requires Ruby 3.x and Bundler.
-
 ```bash
 bundle install
-bundle exec jekyll serve      # http://localhost:4000
+bundle exec jekyll serve            # http://localhost:4000
 
-# Validate HTML + internal links (matches CI)
 bundle exec jekyll build
 LANG=C.UTF-8 bundle exec htmlproofer ./_site \
   --disable-external --allow-hash-href --ignore-empty-alt --no-enforce-https
 ```
 
----
-
 ## Performance & privacy
 
-The site makes **no external CDN, font, or API requests** — everything is
-served from this origin:
+No external CDN / font / API requests — everything is same-origin:
 
-- **Fonts are self-hosted.** IBM Plex Mono and Public Sans (OFL, latin subset,
-  `woff2`) live in `assets/fonts/`, declared via `@font-face` with
-  `font-display: swap`. No Google Fonts / `gstatic.com` calls. Licenses are
-  bundled alongside the fonts.
-- **No third-party libraries.** The particle-links hero background and the
-  heart-burst easter egg are ~5 KB of hand-written vanilla JS in
-  `assets/js/cupids.js`. Nothing is loaded from a CDN.
-- The two primary font weights are `<link rel="preload">`-ed to avoid layout
-  shift, and animations are disabled under `prefers-reduced-motion`.
+- **Fonts self-hosted.** IBM Plex Mono + Public Sans (OFL, latin `woff2`) in
+  `assets/fonts/`, via `@font-face` with `font-display: swap`. No Google Fonts.
+- **No third-party JS.** The particle hero background and heart-burst easter
+  egg are ~5 KB of vanilla JS in `assets/js/cupids.js`. Animation is disabled
+  under `prefers-reduced-motion`.
 
 ## Forms
 
 The help-desk, join-interest, and newsletter forms show a client-side
-confirmation by default and **send nothing** (honest to the prototype — no
-hidden third-party calls). To wire them to a real backend, set a
+confirmation and send nothing by default. To wire them to a backend, set a
 [Formspree](https://formspree.io) endpoint in `_config.yml`:
 
 ```yaml
 form_endpoint: "https://formspree.io/f/xxxxxxxx"
 ```
 
-When set, forms `POST` there and then show the confirmation.
-
----
-
 ## Deployment (GitHub Pages)
 
-Deployment is handled by GitHub Actions, **not** the legacy Pages Jekyll
-builder, so the site can use current Jekyll 4 + plugins.
+Deployed by GitHub Actions. **One-time setup:** Settings → Pages → Build and
+deployment → Source = **GitHub Actions**.
 
-**One-time setup:** repo **Settings → Pages → Build and deployment → Source**
-= **GitHub Actions**.
-
-- `.github/workflows/ci.yml` — builds the site and runs HTML/link validation
-  on every push and pull request (the quality gate).
-- `.github/workflows/pages.yml` — builds and deploys to GitHub Pages on every
-  push to `main`.
-
----
+- `.github/workflows/ci.yml` — build + HTML/link validation on every push/PR.
+- `.github/workflows/pages.yml` — build + deploy on pushes to `main`.
 
 ## License
 
-Site code is released under the terms in [`LICENSE`](LICENSE). Bundled fonts
-are licensed under the SIL Open Font License (see `assets/fonts/`).
+Site code under [`LICENSE`](LICENSE). Bundled fonts under the SIL Open Font
+License (see `assets/fonts/`).
 
 Matchmaking data &amp; democracy — made with ♥ in Boulder.

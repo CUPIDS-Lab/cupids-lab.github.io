@@ -1,0 +1,17 @@
+# Site navigation. `key` matches a page's `nav:` front matter for the
+# active-link highlight.
+primary:
+  - { label: "/home",      url: "/",              key: home }
+  - { label: "/projects",  url: "/projects/",     key: projects }
+  - { label: "/people",    url: "/people/",       key: people }
+  - { label: "/research",  url: "/research/",     key: research }
+  - { label: "/dispatch",  url: "/dispatch/",     key: dispatch }
+  - { label: "/resources", url: "/resources/",    key: resources }
+
+cta: { label: "Get Involved", url: "/get-involved/", key: getinvolved }
+
+footer:
+  - { label: "/projects",  url: "/projects/" }
+  - { label: "/research",  url: "/research/" }
+  - { label: "/dispatch",  url: "/dispatch/" }
+  - { label: "/resources", url: "/resources/" }
