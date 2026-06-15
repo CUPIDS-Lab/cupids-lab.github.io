@@ -341,6 +341,7 @@ a.card:hover, .card--link:hover { border-color: var(--line-3); transform: transl
 }
 .placeholder--4x3 { aspect-ratio: 4 / 3; }
 .placeholder--1x1 { aspect-ratio: 1 / 1; padding: 16px; }
+.placeholder--panel { min-height: 220px; }
 .placeholder span { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); }
 
 /* ---------- Director ---------- */

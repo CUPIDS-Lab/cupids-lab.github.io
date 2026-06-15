@@ -6,10 +6,6 @@ description: >-
   A research lab at the University of Colorado archiving at-risk public
   datasets, building data infrastructure, and matching technical capacity
   with the journalists and civic groups who need it.
-home_archive:
-  - { dataset: "Front Range ozone readings", source: "EPA",  updated: "2026-05", status: "PRESERVED", tone: "green" }
-  - { dataset: "Colorado River streamflow",  source: "USGS", updated: "2026-04", status: "PRESERVED", tone: "green" }
-  - { dataset: "GHGRP methane emissions",    source: "EPA",  updated: "2026-03", status: "ARCHIVING", tone: "amber" }
 ---
 
 <!-- ============ HERO ============ -->
@@ -95,7 +91,7 @@ home_archive:
       <div class="kicker" style="margin-bottom:0;">Public data archive</div>
       <a href="{{ '/resources/' | relative_url }}">view all &rarr;</a>
     </div>
-    {% include archive-table.html variant="home" rows=page.home_archive %}
+    <div class="placeholder placeholder--panel"><span>[ public data archive ]</span></div>
   </div>
 </section>
 
