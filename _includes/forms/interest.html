@@ -1,0 +1,26 @@
+<div class="interest">
+  <h2>Express interest</h2>
+  <p class="interest__sub">Tell us who you are — we'll point you to the right door.</p>
+  <div class="form-card">
+    <form class="js-form form-stack"{% if site.form_endpoint != "" %} action="{{ site.form_endpoint }}" method="post" data-endpoint="{{ site.form_endpoint }}"{% endif %}>
+      <input type="hidden" name="_form" value="join interest">
+      <input class="field" type="text" name="name" placeholder="Your name" required aria-label="Your name">
+      <input class="field" type="email" name="email" placeholder="Email" required aria-label="Email">
+      <select class="field" name="interest" required aria-label="I'm interested as a…">
+        <option value="">I'm interested as a…</option>
+        <option>Undergraduate student</option>
+        <option>Master's / graduate student</option>
+        <option>Prospective visiting fellow</option>
+        <option>Partner organization</option>
+        <option>Funder / supporter</option>
+      </select>
+      <textarea class="field" name="message" placeholder="A line or two about your background and interest" rows="3" aria-label="Background and interest"></textarea>
+      <button class="btn btn--gold btn--submit" type="submit">Submit &rarr;</button>
+    </form>
+    <div class="js-form-success form-done" hidden>
+      <div class="form-done__heart">&#9829;</div>
+      <h3>Thanks — we got it.</h3>
+      <p>We'll reach out with next steps for the inaugural cohort.</p>
+    </div>
+  </div>
+</div>

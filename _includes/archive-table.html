@@ -1,0 +1,25 @@
+{%- comment -%}
+  Public data archive table.
+  Params:
+    rows    — list of { dataset, source, updated, status, tone(green|amber|red) }
+    variant — "home" (4 cols, narrow) or "full" (default)
+{%- endcomment -%}
+{% assign variant = include.variant | default: 'full' %}
+<div class="table table--{{ variant }}">
+  <div class="table__row table__row--head">
+    <span>DATASET</span><span>SOURCE</span><span>UPDATED</span><span class="right">STATUS</span>
+  </div>
+  {% for r in include.rows %}
+    {%- case r.tone -%}
+      {%- when 'green' -%}{%- assign tcls = 'st-preserved' -%}
+      {%- when 'red' -%}{%- assign tcls = 'st-removed' -%}
+      {%- else -%}{%- assign tcls = 'st-archiving' -%}
+    {%- endcase -%}
+    <div class="table__row">
+      <span>{{ r.dataset }}</span>
+      <span class="cell-dim">{{ r.source }}</span>
+      <span class="cell-dim">{{ r.updated }}</span>
+      <span class="right {{ tcls }}">{{ r.status }}</span>
+    </div>
+  {% endfor %}
+</div>

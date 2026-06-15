@@ -1,0 +1,7 @@
+<div>
+  <form class="js-form subscribe-form"{% if site.form_endpoint != "" %} action="{{ site.form_endpoint }}" method="post" data-endpoint="{{ site.form_endpoint }}"{% endif %}>
+    <input class="field" type="email" name="email" placeholder="you@email.com" required aria-label="Email address">
+    <button class="btn btn--gold btn--submit" type="submit">Subscribe</button>
+  </form>
+  <div class="js-form-success form-success" hidden>&#10003; You're subscribed. Sealed with a &lt;3.</div>
+</div>

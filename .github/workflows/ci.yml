@@ -1,0 +1,42 @@
+name: CI
+
+# Build the site and validate HTML / links on every push and PR.
+# This is the quality gate — it does not deploy.
+on:
+  push:
+    branches-ignore:
+      - gh-pages
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build & link-check
+    runs-on: ubuntu-latest
+    env:
+      LANG: C.UTF-8        # html-proofer/Nokogiri must read UTF-8 source
+      LC_ALL: C.UTF-8
+      JEKYLL_ENV: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true   # bundle install + cache gems
+
+      - name: Build site
+        run: bundle exec jekyll build --trace
+
+      - name: Validate HTML & internal links
+        run: |
+          bundle exec htmlproofer ./_site \
+            --disable-external \
+            --allow-hash-href \
+            --ignore-empty-alt \
+            --no-enforce-https
