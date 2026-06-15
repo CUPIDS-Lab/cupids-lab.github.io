@@ -62,6 +62,17 @@ layout: default
       </div>
     {% endif %}
 
+  {%- comment -%} ---------- PLACEHOLDER GRID (awaiting real content) ---------- {%- endcomment -%}
+  {% elsif s.type == 'placeholder' %}
+    {% if s.heading %}<h2 class="h-section h-section--sm">{{ s.heading }}</h2>{% endif %}
+    {% if s.body %}<p class="prose">{{ s.body }}</p>{% endif %}
+    {% assign n = s.count | default: 6 %}
+    <div class="grid grid--{{ s.cols | default: 3 }}">
+      {% for i in (1..n) %}
+        <div class="placeholder placeholder--4x3"><span>[ {{ s.label | default: 'placeholder' }} ]</span></div>
+      {% endfor %}
+    </div>
+
   {%- comment -%} ---------- CHIPS ---------- {%- endcomment -%}
   {% elsif s.type == 'chips' %}
     {% if s.heading %}<h2 class="h-section h-section--sm">{{ s.heading }}</h2>{% endif %}
@@ -99,18 +110,24 @@ layout: default
 
   {%- comment -%} ---------- ARCHIVE TABLE ---------- {%- endcomment -%}
   {% elsif s.type == 'archive' %}
-    <div class="table-head">
-      <h2 class="h-section h-section--sm" style="margin-bottom:0;">{{ s.heading | default: 'Public data archive' }}</h2>
-      <div class="filters">
-        <span class="pill pill--on">All</span>
-        <span class="pill pill--green">Preserved</span>
-        <span class="pill pill--amber">At risk</span>
-        <span class="pill pill--red">Removed</span>
+    {% if s.placeholder %}
+      <h2 class="h-section h-section--sm">{{ s.heading | default: 'Public data archive' }}</h2>
+      {% if s.body %}<p class="sub">{{ s.body }}</p>{% endif %}
+      <div class="placeholder placeholder--panel"><span>[ public data archive ]</span></div>
+    {% else %}
+      <div class="table-head">
+        <h2 class="h-section h-section--sm" style="margin-bottom:0;">{{ s.heading | default: 'Public data archive' }}</h2>
+        <div class="filters">
+          <span class="pill pill--on">All</span>
+          <span class="pill pill--green">Preserved</span>
+          <span class="pill pill--amber">At risk</span>
+          <span class="pill pill--red">Removed</span>
+        </div>
       </div>
-    </div>
-    {% if s.body %}<p class="sub" style="margin-top:-6px;">{{ s.body }}</p>{% endif %}
-    {% include archive-table.html rows=s.rows %}
-    <div class="note">{{ s.note | default: 'Every archived dataset ships with a documentation guide: provenance, limitations, and journalistic applications.' }}</div>
+      {% if s.body %}<p class="sub" style="margin-top:-6px;">{{ s.body }}</p>{% endif %}
+      {% include archive-table.html rows=s.rows %}
+      <div class="note">{{ s.note | default: 'Every archived dataset ships with a documentation guide: provenance, limitations, and journalistic applications.' }}</div>
+    {% endif %}
 
   {%- comment -%} ---------- SUBSCRIBE ---------- {%- endcomment -%}
   {% elsif s.type == 'subscribe' %}
