@@ -423,6 +423,34 @@ textarea.field { resize: vertical; }
 .article blockquote { border-left: 3px solid var(--gold); margin: 0 0 18px; padding: 4px 0 4px 18px; color: var(--ink-muted); }
 
 /* ============================================================
+   SECURE CONTACT CALLOUT
+   ============================================================ */
+.secure { background: var(--bg-card); border: 1px solid var(--line); border-radius: 14px; padding: 30px 32px; }
+.secure__h { font-weight: 800; font-size: 24px; letter-spacing: -0.01em; margin: 8px 0 12px; }
+.secure__lead { font-family: var(--mono); font-size: 13.5px; line-height: 1.7; color: var(--ink-muted); margin: 0 0 24px; max-width: 760px; }
+.secure__subhead { font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-dim); margin: 0 0 12px; }
+.secure__list { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; margin-bottom: 24px; }
+.secure__list:last-child { margin-bottom: 0; }
+.secure__row {
+  display: grid; grid-template-columns: 0.7fr 1fr 1.7fr; gap: 18px;
+  padding: 13px 18px; background: var(--bg); border-top: 1px solid var(--line);
+  font-family: var(--mono); font-size: 13px; align-items: baseline;
+}
+.secure__row:first-child { border-top: none; }
+.secure__row--key { border-left: 2px solid var(--gold); }
+.secure__label { font-weight: 600; color: var(--ink); }
+.secure__value { color: var(--ink-soft); word-break: break-word; }
+.secure__value a { color: var(--gold); }
+.secure__value a:hover { text-decoration: underline; }
+.secure__note { color: var(--ink-dim); }
+
+@media (max-width: 640px) {
+  .secure { padding: 22px 20px; }
+  .secure__row { grid-template-columns: 1fr; gap: 4px; }
+  .secure__row--key { padding-left: 16px; }
+}
+
+/* ============================================================
    FOOTER
    ============================================================ */
 .footer { background: var(--bg-foot); }

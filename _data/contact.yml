@@ -1,0 +1,43 @@
+# Secure-contact callout — fully metadata-driven (rendered by
+# _includes/components/secure_contact.html). Copy lives here, not in HTML.
+# Channels are STUBS: replace placeholder handles/links with real ones before
+# publicizing them. A group flagged `secure: true` gets the accent treatment.
+eyebrow: "Secure contact"
+heading: "Working on something sensitive? Don't use the form."
+lead: >-
+  The intake form below hands your message to a third-party form service —
+  fine for routine project requests, wrong for confidential sources,
+  privileged legal work, or anything that needs to stay off the record. For
+  those, reach a person directly on a channel you trust: no form, no tracking,
+  no middle-man — and you're always talking to someone who does the work.
+
+groups:
+  - label: "Reach a person directly"
+    secure: true
+    channels:
+      - label: "Email + PGP"
+        value: "brian.keegan@colorado.edu"
+        note: "Encrypt to our PGP key — fingerprint and public key available on request."
+        href: "mailto:brian.keegan@colorado.edu"
+      - label: "Secure file drop"
+        value: "link on request"
+        note: "For documents or datasets you can't send in the clear. (SecureDrop / encrypted upload — to be configured.)"
+      - label: "Signal"
+        value: "username on request"
+        note: "End-to-end encrypted. Best for confidential or source-protection matters."
+
+  - label: "Find us — public & social"
+    channels:
+      - label: "GitHub"
+        value: "github.com/CUPIDS-Lab"
+        note: "Code, issues, and public collaboration."
+        href: "https://github.com/CUPIDS-Lab"
+      - label: "LinkedIn"
+        value: "company/cupids-lab"
+        note: "Announcements and professional contact. (Stub — set the real URL.)"
+      - label: "Bluesky"
+        value: "@cupids-lab.bsky.social"
+        note: "Updates and less-sensitive contact. (Stub.)"
+      - label: "Mastodon"
+        value: "@cupids@fosstodon.org"
+        note: "Updates on the fediverse. (Stub.)"

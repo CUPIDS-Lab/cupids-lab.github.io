@@ -103,6 +103,9 @@ layout: default
       <div>{% include forms/subscribe.html %}</div>
     </div>
 
+  {%- when 'secure' -%}
+    {% include components/secure_contact.html data=s.data %}
+
   {%- when 'helpdesk' -%}
     <div class="split split--desk">
       <div>{% include components/steps.html steps=site.data.helpdesk_steps %}</div>

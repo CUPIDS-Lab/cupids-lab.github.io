@@ -17,6 +17,7 @@ sections:
       - { title: "Statistical analysis", body: "Rigorous methods, plainly explained." }
       - { title: "Natural language processing", body: "Making sense of documents and records at scale." }
       - { title: "Responsible AI", body: "Deploying models carefully, with the caveats up front." }
+  - { type: secure, data: contact }
   - { type: helpdesk }
   - type: cards
     heading: "Join the lab"
