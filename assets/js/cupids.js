@@ -68,9 +68,24 @@
   // (susceptible -> infected) spread: every node starts as a palette-colored
   // folder and CUPID's gold "opens" them — the gold spreads along the links to
   // its neighbors. Node + edge colors interpolate between these hues.
-  var FOLDER = new Path2D('M2.81964 7.79683C2.81964 6.80271 3.62553 5.99683 4.61964 5.99683H12.4297C12.9467 5.99683 13.4435 6.197 13.8161 6.55536L16.6732 9.30336C17.0924 9.70651 17.6514 9.9317 18.233 9.9317H25.9713C26.9654 9.9317 27.7713 10.7376 27.7713 11.7317V19.9078L24.2068 29.8838H6.81964C4.6105 29.8838 2.81964 28.0929 2.81964 25.8838V7.79683Z');
+  // Full open file folder (after parent-elements/open-file-folder.svg): a back
+  // tab/panel, a soft mid shadow, and the front pocket — three paths, so it
+  // reads as a complete *open* folder rather than a bare silhouette.
+  var FOLDER_BACK  = new Path2D('M2.81964 7.79683C2.81964 6.80271 3.62553 5.99683 4.61964 5.99683H12.4297C12.9467 5.99683 13.4435 6.197 13.8161 6.55536L16.6732 9.30336C17.0924 9.70651 17.6514 9.9317 18.233 9.9317H25.9713C26.9654 9.9317 27.7713 10.7376 27.7713 11.7317V19.9078L24.2068 29.8838H6.81964C4.6105 29.8838 2.81964 28.0929 2.81964 25.8838V7.79683Z');
+  var FOLDER_MID   = new Path2D('M8.00856 15.5628C8.52664 14.1561 9.88739 13.2188 11.4116 13.2188H25.6241C26.7862 13.2188 26.5159 14.3229 26.1655 15.4102L24.4835 27.102C24.2456 27.8403 23.5476 28.3422 22.7584 28.3422L6.6694 28.3422L6.6593 28.3422C5.93643 28.3402 5.26343 28.1303 4.69914 27.7701L4.69511 27.7676C4.50932 27.5576 3.98357 26.5591 4.25478 25.8653L8.00856 15.5628Z');
+  var FOLDER_FRONT = new Path2D('M8.29999 15.4886C8.87268 13.904 10.3769 12.8481 12.0618 12.8481L28.8637 12.8482C30.1483 12.8482 31.0626 14.0963 30.6753 15.321L26.5118 28.4868C26.2488 29.3185 25.4772 29.8838 24.6049 29.8838L6.81964 29.8838L6.80847 29.8838C6.0094 29.8816 5.26544 29.6451 4.64166 29.2394L4.63721 29.2366C4.26239 28.9921 3.93115 28.6865 3.65753 28.3339C3.53326 28.1737 3.4209 28.0038 3.32172 27.8255C3.69391 27.798 3.8877 27.6138 3.98157 27.4372L8.29999 15.4886Z');
+  // Shade a #rrggbb hex toward white (f>0) or black (f<0) for the folder's tones.
+  function shade(hex, f) {
+    var n = parseInt(hex.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255;
+    var t = f < 0 ? 0 : 255, a = Math.abs(f);
+    return 'rgb(' + Math.round(r + (t - r) * a) + ',' + Math.round(g + (t - g) * a) + ',' + Math.round(b + (t - b) * a) + ')';
+  }
   var SUSCEPTIBLE = ['#ed4e5b', '#f0883e', '#f7c948', '#6fcf97', '#4a9fe6', '#9b6dd6', '#9c6b4a', '#e8e6e0', '#f06fa0'];
-  var INFECTED   = '#cfb87c'; // CU gold — the arrow's gold, opening folders as it spreads
+  var INFECTED   = '#cfb87c'; // edge color for infected nodes (the arrow's gold)
+  // Infected nodes render the site's core mark — a magenta-pink folder pierced
+  // by the gold arrow — drawn straight from the same-origin mark.svg.
+  var MARK_IMG = new Image();
+  MARK_IMG.src = '/assets/brand/mark.svg';
   var SPREAD_MS  = 500;   // half-second infection tick
   var TRANSMIT   = 0.45;  // chance the single per-tick propagation fires
   var RESET_FRAC = 0.88;  // once this fraction is infected, reset & re-seed so it loops
@@ -226,14 +241,25 @@
       }
       ctx.globalAlpha = dotOp;
       for (var m = 0; m < pts.length; m++) {
-        var pm = pts[m], sc = pm.size / 26;   // folder ~node-size tall
-        ctx.save();
-        ctx.translate(pm.x, pm.y);
-        ctx.scale(sc, sc);
-        ctx.translate(-15.3, -17.9);          // center the 32×32 folder art
-        ctx.fillStyle = pm.color;
-        ctx.fill(FOLDER);
-        ctx.restore();
+        var pm = pts[m];
+        if (pm.infected) {
+          // The core mark (pink folder + gold arrow), centered on the node.
+          if (MARK_IMG.complete && MARK_IMG.naturalWidth) {
+            var ms = pm.size * 1.6;           // the mark.svg has padding; size up to match
+            ctx.drawImage(MARK_IMG, pm.x - ms / 2, pm.y - ms / 2, ms, ms);
+          }
+        } else {
+          // Susceptible: a complete open file folder in shades of the node hue.
+          var sc = pm.size / 26;
+          ctx.save();
+          ctx.translate(pm.x, pm.y);
+          ctx.scale(sc, sc);
+          ctx.translate(-15.3, -17.9);        // center the 32×32 folder art
+          ctx.fillStyle = shade(pm.color, 0.16);  ctx.fill(FOLDER_BACK);
+          ctx.fillStyle = shade(pm.color, -0.12); ctx.fill(FOLDER_MID);
+          ctx.fillStyle = pm.color;                ctx.fill(FOLDER_FRONT);
+          ctx.restore();
+        }
       }
       ctx.globalAlpha = 1;
       raf = requestAnimationFrame(draw);
