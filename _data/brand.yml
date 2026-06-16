@@ -61,9 +61,12 @@ variants:
   arrow: "#cfb87c"
 
 # Assets the harness emits into assets/brand/ (SVG, deterministic).
+# `ruby script/generate-brand.rb` writes the SVGs; `node script/rasterize.mjs`
+# exports PNG previews next to them (headless Chrome + Noto Color Emoji).
 assets:
-  - { file: favicon.svg, w: 64,   h: 64,  kind: mark }
-  - { file: avatar.svg,  w: 512,  h: 512, kind: avatar }
-  - { file: og.svg,      w: 1200, h: 630, kind: og }
-  - { file: banner.svg,  w: 1500, h: 500, kind: og }
-  - { file: pattern.svg, w: 240,  h: 240, kind: pattern }
+  - { file: favicon.svg,    w: 64,   h: 64,  kind: mark }
+  - { file: avatar.svg,     w: 512,  h: 512, kind: avatar }
+  - { file: og.svg,         w: 1200, h: 630, kind: og }
+  - { file: banner.svg,     w: 1500, h: 500, kind: og }
+  - { file: pattern.svg,    w: 240,  h: 240, kind: pattern }
+  - { file: background.svg, w: 1600, h: 900, kind: background }

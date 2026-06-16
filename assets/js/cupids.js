@@ -175,7 +175,7 @@
             grad.addColorStop(1, pts[b].color);
             ctx.globalAlpha = lineOp * (1 - 0.7 * d / linkDist);
             ctx.strokeStyle = grad;
-            ctx.lineWidth = 1.5;
+            ctx.lineWidth = 3;
             ctx.beginPath();
             ctx.moveTo(pts[a].x, pts[a].y);
             ctx.lineTo(pts[b].x, pts[b].y);

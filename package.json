@@ -1,0 +1,14 @@
+{
+  "name": "cupids-lab-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tooling for the CUPIDS Lab site (brand asset generation).",
+  "scripts": {
+    "brand": "ruby script/generate-brand.rb",
+    "brand:png": "node script/rasterize.mjs",
+    "brand:all": "ruby script/generate-brand.rb && node script/rasterize.mjs"
+  },
+  "devDependencies": {
+    "puppeteer": "^24.0.0"
+  }
+}

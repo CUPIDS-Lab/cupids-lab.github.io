@@ -89,6 +89,25 @@ def pattern
   doc(240, 240, body)
 end
 
+# A full "heart emoji map" background: a deterministic jittered grid of the
+# palette hearts (with 💘 woven in) on the dark canvas.
+def background(w, h)
+  rng = Random.new(7)
+  step = 120
+  body = +%(<rect width="#{w}" height="#{h}" fill="#{C['bg']}"/>\n)
+  body << %(<g opacity="0.5">\n)
+  (0..(h / step)).each do |row|
+    (0..(w / step)).each do |col|
+      cx = col * step + step / 2 + rng.rand(-24..24)
+      cy = row * step + step / 2 + rng.rand(-24..24)
+      glyph = rng.rand < 0.28 ? PRIMARY : PALETTE[rng.rand(PALETTE.length)]["char"]
+      body << emoji(cx, cy, 30 + rng.rand(34), glyph, rng.rand(-18..18)) << "\n"
+    end
+  end
+  body << %(</g>)
+  doc(w, h, body)
+end
+
 # A single transparent 64x64 heart emoji icon, optionally rotated.
 def heart_icon(glyph, rot)
   doc(64, 64, emoji(32, 32, 46, glyph, rot))
@@ -100,8 +119,9 @@ BRAND["assets"].each do |a|
     case a["kind"]
     when "mark"    then favicon
     when "avatar"  then avatar
-    when "og"      then social(a["w"], a["h"])
-    when "pattern" then pattern
+    when "og"         then social(a["w"], a["h"])
+    when "pattern"    then pattern
+    when "background" then background(a["w"], a["h"])
     end
   next unless svg
   File.write(File.join(OUT, a["file"]), svg)
