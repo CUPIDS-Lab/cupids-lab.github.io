@@ -3,6 +3,7 @@
   <p class="interest__sub">Tell us who you are — we'll point you to the right door.</p>
   <div class="form-card">
     <form class="js-form form-stack"{% if site.form_endpoint != "" %} action="{{ site.form_endpoint }}" method="post" data-endpoint="{{ site.form_endpoint }}"{% endif %}>
+      <input type="hidden" name="_form" value="Join the lab interest">
       <input type="hidden" name="_subject" value="CUPIDS join-the-lab interest">
       <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
       <input class="field" type="text" name="name" placeholder="Your name" required aria-label="Your name">
