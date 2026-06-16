@@ -1,6 +1,7 @@
 ---
 title: "Open-access CUPIDS design guide"
 order: 3
+category: guide
 tag: GUIDE
 summary: "Our operating model — structure, services, curriculum — for other universities to replicate."
 ---

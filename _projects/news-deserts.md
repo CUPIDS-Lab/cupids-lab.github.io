@@ -1,6 +1,7 @@
 ---
 title: "Mapping Colorado's news deserts"
 order: 6
+category: investigation
 tag: INVESTIGATION
 summary: "Where local coverage vanished — and which beats went with it."
 ---

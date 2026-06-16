@@ -64,8 +64,17 @@
     return c;
   }
 
+  // Heart-emoji nodes, each paired with a brand "primary color" that the
+  // connecting edges interpolate between.
+  var HEARTS = [
+    { glyph: '❤️',   color: '#b23a2e' }, // ❤️  red
+    { glyph: '💛',   color: '#cfb87c' }, // 💛  gold
+    { glyph: '💚',   color: '#6fcf97' }, // 💚  green
+    { glyph: '🧡',   color: '#e0a14e' }  // 🧡  amber
+  ];
+  var EMOJI_FONT = '"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
+
   function initCanvas(c) {
-    var color = c.dataset.color || '#cfb87c';
     var count = +(c.dataset.count || 40);
     var linkDist = +(c.dataset.link || 130);
     var dotOp = +(c.dataset.dotop || 0.45);
@@ -76,9 +85,11 @@
     function seed(W, H) {
       pts = [];
       for (var i = 0; i < count; i++) {
+        var hh = HEARTS[(Math.random() * HEARTS.length) | 0];
         pts.push({
           x: Math.random() * W, y: Math.random() * H,
-          vx: (Math.random() - 0.5) * 0.22, vy: (Math.random() - 0.5) * 0.22
+          vx: (Math.random() - 0.5) * 0.22, vy: (Math.random() - 0.5) * 0.22,
+          glyph: hh.glyph, color: hh.color, size: 11 + Math.random() * 13
         });
       }
     }
@@ -114,8 +125,12 @@
           var dx = pts[a].x - pts[b].x, dy = pts[a].y - pts[b].y;
           var d = Math.hypot(dx, dy);
           if (d < linkDist) {
+            // Edge color interpolates between its two endpoint hearts.
+            var grad = ctx.createLinearGradient(pts[a].x, pts[a].y, pts[b].x, pts[b].y);
+            grad.addColorStop(0, pts[a].color);
+            grad.addColorStop(1, pts[b].color);
             ctx.globalAlpha = lineOp * (1 - d / linkDist);
-            ctx.strokeStyle = color;
+            ctx.strokeStyle = grad;
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(pts[a].x, pts[a].y);
@@ -125,11 +140,11 @@
         }
       }
       ctx.globalAlpha = dotOp;
-      ctx.fillStyle = color;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
       for (var m = 0; m < pts.length; m++) {
-        ctx.beginPath();
-        ctx.arc(pts[m].x, pts[m].y, 1.6, 0, 7);
-        ctx.fill();
+        ctx.font = pts[m].size + 'px ' + EMOJI_FONT;
+        ctx.fillText(pts[m].glyph, pts[m].x, pts[m].y);
       }
       ctx.globalAlpha = 1;
       raf = requestAnimationFrame(draw);

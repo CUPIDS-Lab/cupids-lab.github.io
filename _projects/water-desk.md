@@ -1,6 +1,7 @@
 ---
 title: "Water Desk help-desk prototype"
 order: 5
+category: help-desk
 tag: "HELP DESK"
 summary: "Matching students with reporters covering Western water."
 ---

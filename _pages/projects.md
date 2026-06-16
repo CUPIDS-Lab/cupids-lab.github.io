@@ -1,5 +1,6 @@
 ---
 layout: page
+permalink: /projects/
 nav: projects
 eyebrow: Projects
 title: "What we're building, in the open."

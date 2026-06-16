@@ -1,5 +1,6 @@
 ---
 layout: page
+permalink: /people/
 nav: people
 eyebrow: People
 title: "Cross-functional teams, one mission."

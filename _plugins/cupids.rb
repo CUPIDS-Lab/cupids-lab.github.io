@@ -65,16 +65,18 @@ module CupidsFilters
     end
   end
 
-  # Map a collection's docs -> card hashes for the card component, sorted by
-  # `order` then title. `featured` is carried so the parent can split the
-  # flagship item out of the grid. Honors published: false.
+  # Map a collection's docs -> card hashes for the card component.
+  # Ranking metadata: `order` (ordinal, ascending) is the primary sort key;
+  # `category` (a machine-friendly group tag) is carried through so templates
+  # can group or filter. `featured` lets the parent split the flagship item
+  # out of the grid. Honors published: false.
   def collection_cards(name)
     site = @context.registers[:site]
     coll = site && site.collections[name.to_s]
     return [] unless coll
     coll.docs
         .reject { |d| d.data["published"] == false }
-        .sort_by { |d| [(d.data["order"] || 9999), d.data["title"].to_s] }
+        .sort_by { |d| [(d.data["order"] || 9999), d.data["category"].to_s, d.data["title"].to_s] }
         .map do |d|
           {
             "tag"      => d.data["tag"],
@@ -82,6 +84,8 @@ module CupidsFilters
             "body"     => (d.data["summary"] || d.data["description"]).to_s,
             "url"      => d.url,
             "featured" => d.data["featured"] == true,
+            "order"    => d.data["order"],
+            "category" => d.data["category"],
           }
         end
   end

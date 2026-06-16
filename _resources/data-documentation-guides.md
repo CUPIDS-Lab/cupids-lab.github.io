@@ -1,6 +1,7 @@
 ---
 title: "Data documentation guides"
 order: 1
+category: guide
 tag: GUIDE
 summary: "Provenance, limitations, and journalistic applications for every dataset in the archive."
 ---

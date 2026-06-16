@@ -1,6 +1,7 @@
 ---
 title: "Tooling & code"
 order: 4
+category: tool
 tag: ARCHIVE
 summary: "Open-source pipelines and notebooks, free to fork and adapt."
 ---

@@ -1,6 +1,7 @@
 ---
 title: "Advisor — Cybersecurity"
 order: 4
+category: advisor
 summary: "Faculty advisor · to be announced."
 ---
 

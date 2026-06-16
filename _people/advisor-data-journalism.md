@@ -1,6 +1,7 @@
 ---
 title: "Advisor — Data Journalism"
 order: 3
+category: advisor
 summary: "Faculty advisor · to be announced."
 ---
 

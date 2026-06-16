@@ -1,6 +1,7 @@
 ---
 title: "At-risk federal data archive"
 order: 3
+category: archive
 tag: ARCHIVE
 summary: "A growing, documented mirror of the datasets Coloradans depend on."
 ---

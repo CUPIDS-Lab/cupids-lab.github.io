@@ -2,6 +2,7 @@
 title: "Preserving environmental accountability"
 eyebrow: "Featured · CUPIDS × CEJ"
 order: 1
+category: collaboration
 featured: true
 summary: "Identifying, prioritizing, and archiving the federal environmental datasets most critical to Colorado journalism — supported by the 2026 de Castro Research Award."
 ---

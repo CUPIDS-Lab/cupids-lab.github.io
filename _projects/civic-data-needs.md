@@ -1,6 +1,7 @@
 ---
 title: "Colorado civic data needs assessment"
 order: 4
+category: report
 tag: REPORT
 summary: "25–35 interviews mapping the state's data-capacity gaps."
 ---

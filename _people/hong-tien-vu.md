@@ -1,6 +1,7 @@
 ---
 title: Hong Tien Vu
 order: 2
+category: collaborator
 summary: "Director, Center for Environmental Journalism · CUPIDS × CEJ collaboration."
 ---
 

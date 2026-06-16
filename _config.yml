@@ -40,6 +40,10 @@ plugins:
 # Collections — one Markdown file per item; each gets its own child page
 # under the parent section.
 collections:
+  # Top-level pages live in _pages to keep the repo root tidy; each sets its
+  # own `permalink` so URLs are unchanged.
+  pages:
+    output: true
   dispatch:
     output: true
     permalink: /dispatch/:name/
@@ -67,6 +71,7 @@ exclude:
   - Gemfile.lock
   - README.md
   - LICENSE
+  - AGENTS.md
   - vendor
   - .github
   - script

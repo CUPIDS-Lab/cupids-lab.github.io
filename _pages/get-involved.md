@@ -1,5 +1,6 @@
 ---
 layout: page
+permalink: /get-involved/
 nav: getinvolved
 eyebrow: Get involved
 title: "Two ways in."

@@ -1,5 +1,6 @@
 ---
 layout: page
+permalink: /research/
 nav: research
 eyebrow: Research & infrastructure
 title: "The methods behind the mission."
