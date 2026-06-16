@@ -1,17 +1,18 @@
 ---
 layout: default
 ---
-{%- comment -%} Hand-built home showcase, driven by `home.*` front matter and
-  _data (pillars, archive). {%- endcomment -%}
+{%- comment -%} Hand-built home showcase. Hero/mission/description come from
+  _config.yml; the featured project from _projects (featured: true); the rest
+  from `home.*` front matter and _data (pillars, archive). {%- endcomment -%}
 {%- assign h = page.home -%}
 
-{% include components/hero.html variant="home" eyebrow=h.hero.eyebrow title=h.hero.title lead=h.hero.lead %}
+{% include components/hero.html variant="home" eyebrow=site.hero_eyebrow title=site.tagline lead=site.description %}
 
 <!-- mission -->
 <section class="band band--card">
   <div class="band__inner">
     <div class="kicker kicker--gold">Our mission <span class="heart">&#9829;</span></div>
-    <p class="mission">{{ h.mission }}</p>
+    <p class="mission">{{ site.mission }}</p>
   </div>
 </section>
 
@@ -66,19 +67,22 @@ layout: default
   </div>
 </section>
 
-<!-- featured -->
+<!-- featured (inherits from the _projects doc marked featured: true) -->
+{%- assign feat = site.projects | where: "featured", true | sort: "order" | first -%}
+{%- if feat -%}
 <section class="band">
   <div class="band__inner split split--feature feature">
     <div>
-      <div class="kicker kicker--gold" style="font-weight:600; letter-spacing:0.12em;">{{ h.featured.eyebrow }}</div>
-      <h2>{{ h.featured.title }}</h2>
-      <p>{{ h.featured.body }}</p>
-      <a class="feature__more" href="{{ h.featured.link_to | relative_url }}">{{ h.featured.link_label }}</a>
-      <div class="feature__meta">{{ h.featured.meta }}</div>
+      <div class="kicker kicker--gold" style="font-weight:600; letter-spacing:0.12em;">{{ feat.eyebrow }}</div>
+      <h2>{{ feat.title }}</h2>
+      <p>{{ feat.summary }}</p>
+      <a class="feature__more" href="{{ feat.url | relative_url }}">{{ h.featured.link_label }}</a>
+      <div class="feature__meta">{{ feat.meta }}</div>
     </div>
     <div class="placeholder placeholder--4x3"><span>{{ h.featured.caption }}</span></div>
   </div>
 </section>
+{%- endif -%}
 
 <!-- dispatch signup -->
 <section class="band">

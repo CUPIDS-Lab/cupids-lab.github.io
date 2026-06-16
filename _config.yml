@@ -5,11 +5,13 @@
 
 title: CUPIDS Lab
 tagline: We preserve the data democracy depends on.
-description: >-
-  The University of Colorado Public Interest Data Science Laboratory —
-  archiving at-risk public datasets, building data infrastructure, and
-  matching technical capacity with the journalists and civic groups who
-  need it.
+description: "A research lab at the University of Colorado archiving at-risk public datasets, building data infrastructure, sharing resources, and matching technical capacity with the journalists and civic groups who need it."
+
+# Home hero + mission — single source of truth (the home page and SEO read
+# these; `tagline` is the hero headline, `description` is the hero lead).
+hero_eyebrow: "University of Colorado · Public Interest Data Science"
+mission: "We train students in data science while providing pro-bono technical capacity to the journalists, lawyers, and nonprofits keeping Colorado accountable."
+location: "Boulder, Colorado"
 
 # Served at the org root: https://cupids-lab.github.io
 url: "https://cupids-lab.github.io"

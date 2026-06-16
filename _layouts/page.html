@@ -35,7 +35,8 @@ layout: default
     {% if s.heading %}<h2 class="h-section h-section--sm">{{ s.heading }}</h2>{% endif %}
     {% if s.body %}<p class="prose">{{ s.body }}</p>{% endif %}
     {%- assign all = s.name | collection_cards -%}
-    {%- assign items = all | where_exp: "c", "c.featured != true" -%}
+    {%- if s.only_featured -%}{%- assign items = all | where: "featured", true -%}
+    {%- else -%}{%- assign items = all | where_exp: "c", "c.featured != true" -%}{%- endif -%}
     {%- if s.category %}{% assign items = items | where: "category", s.category %}{% endif -%}
     {%- if items != empty -%}
       {% include components/card_grid.html items=items cols=s.cols %}

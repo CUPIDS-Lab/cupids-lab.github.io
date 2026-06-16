@@ -1,78 +1,46 @@
 # cupids-lab.github.io
 
-**CUPIDS Lab** — the University of Colorado Public Interest Data Science
-Laboratory. We preserve the data democracy depends on: archiving at-risk
-public datasets, building data infrastructure, sharing resources, and
-matching technical capacity with the journalists and civic groups who need
-it.
+**CUPIDS Lab** — the University of Colorado Public Interest Data Science Laboratory. We preserve the data democracy depends on: archiving at-risk public datasets, building data infrastructure, sharing resources, and matching technical capacity with the journalists and civic groups who need it.
 
-A static [Jekyll](https://jekyllrb.com) site deployed to GitHub Pages. The
-design is the "data-forward / technical" direction: dark theme, IBM Plex Mono
-+ Public Sans, black + CU gold, with the CUPIDS matchmaker heart (`<3` / ♥)
-threaded throughout.
+A static [Jekyll](https://jekyllrb.com) site deployed to GitHub Pages — dark, data-forward design (IBM Plex Mono + Public Sans, black + CU gold) with the CUPIDS matchmaker heart (`<3` / 💘) threaded throughout.
 
 ---
 
 ## How it's built
 
-Content lives in **Markdown + YAML data**; presentation lives in **layouts,
-component includes, and Liquid filters**. No page is hand-written HTML.
+Content lives in **Markdown + YAML**; presentation lives in **layouts, component includes, and Liquid filters**. No page is hand-written HTML, and shared values live in exactly one place.
 
 ```
-index.md, projects.md, people.md, …   Markdown pages — front matter + a
-                                       Markdown body (the hero lead)
-_dispatch/*.md                         the Dispatch — one file per issue
-_projects/ _people/ _resources/*.md    one file per item; each gets its own
-                                       child page, linked from the parent
-_data/*.yml                            reference data (director, featured
-                                       project, datasets, pillars, nav, …)
-_layouts/        default · home · page (section dispatcher) · dispatch
-_includes/components/*.html            reusable "functions": card, card_grid,
-                                       placeholder_grid/panel, chips, cta,
-                                       director, archive_table, hero, steps
-_plugins/cupids.rb                     custom Liquid filters ("converters")
-assets/                                self-hosted fonts, CSS, ~5 KB JS
+_config.yml            Site identity: title, tagline (hero headline),
+                       description (hero lead), mission, hero_eyebrow, location
+_pages/*.md            Top-level pages (each sets its own permalink)
+_dispatch/*.md         the Dispatch — one Markdown file per issue
+_projects/ _people/ _resources/*.md
+                       collections — one file per item; each gets a child page,
+                       linked from its parent
+_data/*.yml            reference data: people (director), datasets (archive),
+                       pillars, focus areas, navigation, contact, brand, steps
+_layouts/              default · home · page (section dispatcher) · dispatch ·
+                       detail (collection item)
+_includes/components/  card, card_grid, placeholder_grid/panel, chips, cta,
+                       director, archive_table, hero, steps, secure_contact
+_plugins/cupids.rb     custom Liquid filters ("converters")
+assets/                self-hosted fonts, CSS, JS, generated brand assets
 ```
 
 ### Pages are data, not markup
 
-Every page selects a layout and declares its content in front matter. A page's
-**Markdown body becomes the hero lead**, and `sections:` compose the body from
-components:
+Every page selects a layout and declares its content in front matter; its Markdown body becomes the hero lead, and `sections:` compose the rest from components. A section's data is inline (`items:`), pulled from `_data` via a dotted `data:` path (resolved by `site_data`), or pulled from a collection via `name:`.
 
-```yaml
----
-layout: page
-nav: people
-eyebrow: People
-title: "Cross-functional teams, one mission."
-sections:
-  - { type: director, data: people.director }      # pulls _data/people.yml
-  - { type: cards, heading: "Collaborators & advisors", cols: 4, data: people.advisors }
-  - { type: cta, title: "…", label: "Join the lab →", to: "/get-involved/" }
----
-CUPIDS draws students and faculty from information science, journalism, …
-```
+Section `type`s: `cards`, `collection`, `chips`, `archive`, `director`, `cta`, `dispatch_list`, `subscribe`, `helpdesk`, `interest`, `secure`.
 
-Section `type`s: `cards`, `chips`, `archive`, `director`, `cta`,
-`dispatch_list`, `subscribe`, `helpdesk`, `interest`. A section's list can be
-inline (`items:`) or pulled from a data file via `data:` (a dotted path like
-`people.advisors`, resolved by the `site_data` filter).
+The **home** page is special: its hero (`hero_eyebrow` + `tagline` + `description`) and `mission` come from `_config.yml`, and its featured block is inherited from the `_projects` doc marked `featured: true` — so none of that is duplicated in `index.md`.
 
 ### Liquid filters ("converters") — `_plugins/cupids.rb`
 
-The design's computed rules are abstracted into filters so templates stay
-declarative:
+Computed design rules are abstracted into filters so templates stay declarative: `accent_color` (tag → accent), `bullet_color`, `tone_class`, `site_data` (dotted path into `_data`), `smart_url`, `dispatch_cards`, `collection_cards`.
 
-- `accent_color` — tag → accent (INVESTIGATION→red, REPORT/RAPID/ISSUE→amber, GUIDE/ARCHIVE→green, else gold)
-- `bullet_color` — `green|amber|red|gold` → hex
-- `tone_class` — archive status tone → CSS class
-- `site_data` — resolve a dotted path into `_data`
-- `smart_url` — baseurl-prefix internal links, leave external/mailto alone
-- `dispatch_cards` — map Dispatch collection docs → card data
-
-> Custom plugins run because the site builds via GitHub Actions (not the
-> legacy `github-pages` gem). Keep deploying through the included workflow.
+> Custom plugins run because the site builds via GitHub Actions (not the legacy `github-pages` gem). Keep deploying through the included workflow.
 
 ---
 
@@ -80,35 +48,34 @@ declarative:
 
 | To change… | Edit… |
 |---|---|
-| A page's intro / sections | that page's `.md` file |
+| Site identity (hero, mission, description, location) | `_config.yml` |
+| A page's intro / sections | that page's file in `_pages/` |
 | A project / person / resource (each has a child page) | add/edit a file in `_projects/`, `_people/`, `_resources/` |
+| The featured project (home + projects page) | the `_projects` doc with `featured: true` (`_projects/cej.md`) |
 | The director block | `_data/people.yml` |
-| The featured project card | `_data/projects.yml` |
-| Research focus areas | `_data/focus_areas.yml` |
-| Home pillars | `_data/pillars.yml` |
-| Navigation | `_data/navigation.yml` |
+| Research focus areas · home pillars · navigation | `_data/focus_areas.yml` · `_data/pillars.yml` · `_data/navigation.yml` |
+| Secure-contact channels | `_data/contact.yml` |
+| Brand metadata | `_data/brand.yml` (then regenerate — see below) |
 | A Dispatch issue | add a file to `_dispatch/` |
 
-Items in the `_projects`, `_people`, and `_resources` collections each render
-a **child page** (`/projects/<name>/`, etc.) and are listed as cards — linked
-to that page — on the parent. An item flagged `featured: true` is shown via the
-parent's bespoke block (featured card / director) and omitted from the grid.
+Collection items each render a **child page** (`/projects/<name>/`, etc.) and appear as linked cards on the parent. An item flagged `featured: true` is shown via the parent's bespoke block and omitted from the grid.
 
 ### Placeholders are data-driven
 
-The **projects grid**, **Dispatch list**, and **public data archive** render
-on-brand placeholder tiles while their data source is empty. They fill in
-automatically when you add content — no template changes:
-
-- add project cards under `more:` in `_data/projects.yml`
-- add datasets under `datasets:` in `_data/archive.yml`
-- add a `_dispatch/*.md` issue with `published: true`
-
-(`_dispatch/2026-05-15-example-ozone.md` is an unpublished template to copy.)
-The funded **Featured · CUPIDS × CEJ** project and the People/Guides lists are
-real content.
+The **projects grid**, **Dispatch list**, and **public data archive** render on-brand placeholder tiles while their source has no entries, and fill in automatically when you add content — no template changes. Add a `_projects/*.md` file, publish a `_dispatch/*.md` issue (`published: true`), or add rows under `datasets:` in `_data/archive.yml`. (`_dispatch/2026-05-15-example-ozone.md` is an unpublished template to copy.)
 
 ---
+
+## Brand assets
+
+`_data/brand.yml` is the single source of truth for the brand (the Cupid `💘` motif + the Unicode color-heart palette). Regenerate the SVG/PNG assets in `assets/brand/` with:
+
+```bash
+npm install          # once, for the PNG rasterizer (headless Chrome)
+npm run brand:all    # ruby script/generate-brand.rb && node script/rasterize.mjs
+```
+
+See `AGENTS.md` for the full brand spec. We render emoji via open-licensed fonts (Noto Color Emoji for PNGs) and never bundle proprietary artwork.
 
 ## Local development
 
@@ -123,19 +90,11 @@ LANG=C.UTF-8 bundle exec htmlproofer ./_site \
 
 ## Performance & privacy
 
-No external CDN / font / API requests — everything is same-origin:
-
-- **Fonts self-hosted.** IBM Plex Mono + Public Sans (OFL, latin `woff2`) in
-  `assets/fonts/`, via `@font-face` with `font-display: swap`. No Google Fonts.
-- **No third-party JS.** The particle hero background and heart-burst easter
-  egg are ~5 KB of vanilla JS in `assets/js/cupids.js`. Animation is disabled
-  under `prefers-reduced-motion`.
+No external CDN / font / API requests — everything is same-origin. Fonts are self-hosted (IBM Plex Mono + Public Sans, OFL, latin `woff2`) via `@font-face` with `font-display: swap`. The hero heart-emoji network (an SI "spread" simulation) and the heart-burst easter egg are hand-written vanilla JS in `assets/js/cupids.js`, and all animation is disabled under `prefers-reduced-motion`.
 
 ## Forms
 
-The help-desk, join-interest, and newsletter forms show a client-side
-confirmation and send nothing by default. To wire them to a backend, set a
-[Formspree](https://formspree.io) endpoint in `_config.yml`:
+The help-desk, join-interest, and newsletter forms show a client-side confirmation and send nothing by default. To wire them to a backend, set a [Formspree](https://formspree.io) endpoint in `_config.yml`:
 
 ```yaml
 form_endpoint: "https://formspree.io/f/xxxxxxxx"
@@ -143,15 +102,10 @@ form_endpoint: "https://formspree.io/f/xxxxxxxx"
 
 ## Deployment (GitHub Pages)
 
-Deployed by GitHub Actions. **One-time setup:** Settings → Pages → Build and
-deployment → Source = **GitHub Actions**.
-
-- `.github/workflows/ci.yml` — build + HTML/link validation on every push/PR.
-- `.github/workflows/pages.yml` — build + deploy on pushes to `main`.
+Deployed by GitHub Actions. **One-time setup:** Settings → Pages → Build and deployment → Source = **GitHub Actions**. `.github/workflows/ci.yml` builds and link-checks every push/PR; `.github/workflows/pages.yml` builds and deploys on pushes to `main`.
 
 ## License
 
-Site code under [`LICENSE`](LICENSE). Bundled fonts under the SIL Open Font
-License (see `assets/fonts/`).
+Site code under [`LICENSE`](LICENSE). Bundled fonts under the SIL Open Font License (see `assets/fonts/`).
 
 Matchmaking data &amp; democracy — made with ♥ in Boulder.

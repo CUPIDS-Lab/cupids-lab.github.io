@@ -4,12 +4,7 @@
 # publicizing them. A group flagged `secure: true` gets the accent treatment.
 eyebrow: "Secure contact"
 heading: "Working on something sensitive? Don't use the form."
-lead: >-
-  The intake form below hands your message to a third-party form service —
-  fine for routine project requests, wrong for confidential sources,
-  privileged legal work, or anything that needs to stay off the record. For
-  those, reach a person directly on a channel you trust: no form, no tracking,
-  no middle-man — and you're always talking to someone who does the work.
+lead: "The intake form below hands your message to a third-party form service — fine for routine project requests, wrong for confidential sources, privileged legal work, or anything that needs to stay off the record. For those, reach a person directly on a channel you trust: no form, no tracking, no middle-man — and you're always talking to someone who does the work."
 
 groups:
   - label: "Reach a person directly"

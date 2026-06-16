@@ -11,8 +11,7 @@ summary: "We reconstructed a decade of Front Range air quality from archived EPA
 published: false
 ---
 
-This is a template for a CUPIDS Dispatch issue. Write the body in Markdown —
-it renders on the issue's own page at `/dispatch/<this-file>/`.
+This is a template for a CUPIDS Dispatch issue. Write the body in Markdown — it renders on the issue's own page at `/dispatch/<this-file>/`.
 
 ## What we found
 
