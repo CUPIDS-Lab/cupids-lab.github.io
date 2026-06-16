@@ -4,12 +4,9 @@
 # ============================================================
 
 title: CUPIDS Lab
-tagline: We preserve the data democracy depends on.
+tagline: Defending the data democracy depends on.
 description: >-
-  The University of Colorado Public Interest Data Science Laboratory —
-  archiving at-risk public datasets, building data infrastructure, and
-  matching technical capacity with the journalists and civic groups who
-  need it.
+  The University of Colorado Public Interest Data Science Laboratory (CUPIDS Lab) is archiving at-risk public datasets, building data infrastructure, and providing technical capacity for civic groups who need it.
 
 # Served at the org root: https://cupids-lab.github.io
 url: "https://cupids-lab.github.io"
