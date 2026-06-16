@@ -1,5 +1,6 @@
 ---
 layout: home
+permalink: /
 nav: home
 title: CUPIDS Lab
 description: >-

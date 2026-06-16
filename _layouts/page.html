@@ -36,6 +36,7 @@ layout: default
     {% if s.body %}<p class="prose">{{ s.body }}</p>{% endif %}
     {%- assign all = s.name | collection_cards -%}
     {%- assign items = all | where_exp: "c", "c.featured != true" -%}
+    {%- if s.category %}{% assign items = items | where: "category", s.category %}{% endif -%}
     {%- if items != empty -%}
       {% include components/card_grid.html items=items cols=s.cols %}
     {%- elsif s.placeholder -%}
@@ -101,6 +102,9 @@ layout: default
       </div>
       <div>{% include forms/subscribe.html %}</div>
     </div>
+
+  {%- when 'secure' -%}
+    {% include components/secure_contact.html data=s.data %}
 
   {%- when 'helpdesk' -%}
     <div class="split split--desk">

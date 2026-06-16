@@ -1,0 +1,26 @@
+{%- comment -%}
+  Secure-contact callout — rendered entirely from metadata. Source is
+  `include.data` (a dotted _data path, default "contact"): { eyebrow, heading,
+  lead, groups: [ { label, secure, channels: [ {label,value,note,href} ] } ] }.
+  No copy is hard-coded here.
+{%- endcomment -%}
+{%- assign key = include.data | default: 'contact' -%}
+{%- assign c = key | site_data -%}
+<div class="secure">
+  {%- if c.eyebrow %}<div class="kicker kicker--gold">{{ c.eyebrow }} <span class="heart">&#9829;</span></div>{% endif -%}
+  {%- if c.heading %}<h2 class="secure__h">{{ c.heading }}</h2>{% endif -%}
+  {%- if c.lead %}<p class="secure__lead">{{ c.lead }}</p>{% endif -%}
+
+  {%- for g in c.groups %}
+  {%- if g.label %}<div class="secure__subhead">{{ g.label }}</div>{% endif %}
+  <div class="secure__list">
+    {%- for ch in g.channels %}
+    <div class="secure__row{% if g.secure %} secure__row--key{% endif %}">
+      <span class="secure__label{% if g.secure %} gold{% endif %}">{{ ch.label }}</span>
+      <span class="secure__value">{% if ch.href %}<a href="{{ ch.href }}"{% if ch.href contains '://' %} rel="noopener"{% endif %}>{{ ch.value }}</a>{% else %}{{ ch.value }}{% endif %}</span>
+      <span class="secure__note">{{ ch.note }}</span>
+    </div>
+    {%- endfor %}
+  </div>
+  {%- endfor %}
+</div>

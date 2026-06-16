@@ -15,3 +15,4 @@ footer:
   - { label: "/research",  url: "/research/" }
   - { label: "/dispatch",  url: "/dispatch/" }
   - { label: "/resources", url: "/resources/" }
+  - { label: "/policies",  url: "/policies/" }

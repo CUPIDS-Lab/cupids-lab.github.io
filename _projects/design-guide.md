@@ -1,6 +1,7 @@
 ---
 title: "Open-access CUPIDS design guide"
 order: 7
+category: guide
 tag: GUIDE
 summary: "A replicable model for other universities to follow."
 ---

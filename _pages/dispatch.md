@@ -1,5 +1,6 @@
 ---
 layout: page
+permalink: /dispatch/
 nav: dispatch
 eyebrow: The CUPIDS Dispatch
 title: "A monthly read on data, journalism & democracy."

@@ -2,6 +2,7 @@
 title: Brian C. Keegan
 eyebrow: Director
 order: 1
+category: director
 featured: true
 tag: Director
 summary: "Associate Professor, Department of Information Science · CU Boulder"

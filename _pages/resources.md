@@ -1,5 +1,6 @@
 ---
 layout: page
+permalink: /resources/
 nav: resources
 eyebrow: Resources
 title: "Open data, open guides, open source."

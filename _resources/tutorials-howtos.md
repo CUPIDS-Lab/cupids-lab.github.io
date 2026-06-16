@@ -1,6 +1,7 @@
 ---
 title: "Tutorials & how-tos"
 order: 2
+category: guide
 tag: GUIDE
 summary: "Practical walkthroughs for finding, cleaning, and visualizing public data."
 ---
