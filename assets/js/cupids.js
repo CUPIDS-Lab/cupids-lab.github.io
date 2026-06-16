@@ -79,14 +79,11 @@
   var SPREAD_MS  = 500;   // half-second infection tick
   var TRANSMIT   = 0.45;  // chance the single per-tick propagation fires
   var RESET_FRAC = 0.88;  // once this fraction is infected, reset & re-seed so it loops
-  // Viewport scaling: keep heart density (and the look) consistent desktop↔mobile.
-  var AREA_PER_NODE = 12000; // px² of hero per heart (data-count is the upper cap)
-  var SIZE_REF = 1100;       // hero width at which hearts render full-size
-  // Constant-density (linear-in-area) scaling left phones too sparse: a hero at
-  // a quarter of the desktop area got a quarter of the hearts. Discount the
-  // falloff polynomially — raise the cap-fraction to a power < 1 — so the count
-  // sags gently toward small viewports while desktop still tops out at the cap.
-  var DENSITY_FALLOFF = 0.5; // 1 = linear (old), →0 = flatter (denser mobile)
+  // Fixed node count: the same number of hearts on every viewport. Only their
+  // size and edge width scale with the hero width, so a phone shows the same
+  // network as desktop — just smaller, never sparser.
+  var SIZE_REF = 1100;   // hero width at which hearts + edges render full-size
+  var BASE_EDGE = 3;     // link width (px) at full size, scaled to the viewport
   // Prevent-overlap, adapted from ForceAtlas2's anti-collision ("adjustSizes":
   // https://github.com/bhargavchippada/forceatlas2). Each heart has a radius
   // (~half its glyph size); overlapping pairs get separated every frame.
@@ -95,7 +92,7 @@
   var OVERLAP_PAD = 2;    // extra px of breathing room between hearts
 
   function initCanvas(c) {
-    var maxCount = +(c.dataset.count || 40);  // desktop cap
+    var nodeCount = +(c.dataset.count || 32);  // fixed heart count (no viewport scaling)
     var baseLink = +(c.dataset.link || 130);
     var dotOp = +(c.dataset.dotop || 0.45);
     var lineOp = +(c.dataset.lineop || 0.14);
@@ -103,19 +100,17 @@
     var raf = null;
     var timer = null;        // SI spread interval
     var linkDist = baseLink; // recomputed per seed for the current viewport
+    var edgeW = BASE_EDGE;   // link width, recomputed per seed for the viewport
 
-    // Node count scales with hero AREA (constant density) and heart size +
-    // link distance scale with hero WIDTH — so a phone isn't a crowded,
-    // fast-spreading clump and desktop isn't sparse.
+    // Fixed count of hearts on every viewport; only the heart size, link
+    // distance and edge width scale with hero WIDTH — so a phone shows the same
+    // network as desktop, just rendered smaller.
     function seed(W, H) {
       var scale = Math.max(0.6, Math.min(1, W / SIZE_REF));
-      // Fraction of the cap a constant-density field would want here, then
-      // discounted so it falls off slower than linearly with shrinking area.
-      var frac = Math.min(1, (W * H) / AREA_PER_NODE / maxCount);
-      var n = Math.max(6, Math.round(maxCount * Math.pow(frac, DENSITY_FALLOFF)));
       linkDist = baseLink * scale;
+      edgeW = BASE_EDGE * scale;
       pts = [];
-      for (var i = 0; i < n; i++) {
+      for (var i = 0; i < nodeCount; i++) {
         var s = SUSCEPTIBLE[(Math.random() * SUSCEPTIBLE.length) | 0];
         pts.push({
           x: Math.random() * W, y: Math.random() * H,
@@ -227,7 +222,7 @@
             grad.addColorStop(1, pts[b].color);
             ctx.globalAlpha = lineOp * (1 - 0.7 * d / linkDist);
             ctx.strokeStyle = grad;
-            ctx.lineWidth = 3;
+            ctx.lineWidth = edgeW;
             ctx.beginPath();
             ctx.moveTo(pts[a].x, pts[a].y);
             ctx.lineTo(pts[b].x, pts[b].y);
