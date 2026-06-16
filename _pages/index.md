@@ -9,9 +9,9 @@ description: >-
   with the journalists and civic groups who need it.
 home:
   hero:
-    eyebrow: "University of Colorado Public Interest Data Science"
+    eyebrow: "University of Colorado Public Interest Data Science Lab"
     title: "Defending the data democracy depends on."
-    lead: "A research lab at the University of Colorado archiving at-risk public datasets, building data infrastructure, sharing resources, and matching technical capacity with the journalists and civic groups who need it."
+    lead: "A research lab rescuing at-risk public datasets, building data infrastructure, sharing resources, and supporting journalists and civic groups."
   mission: "We train students in data science while providing pro-bono technical capacity to the journalists, lawyers, and nonprofits keeping Colorado accountable."
   moment:
     kicker: "The moment — what's disappearing"
