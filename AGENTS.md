@@ -4,7 +4,7 @@ Guidance for coding agents working in this repository.
 
 ## What this is
 
-The website for **CUPIDS Lab** (University of Colorado Public Interest Data Science Laboratory) — a static **Jekyll 4** site deployed to GitHub Pages via GitHub Actions. Design direction: dark / data-forward, IBM Plex Mono + Public Sans, black + CU gold, with the matchmaker heart (`<3` / ♥) motif.
+The website for **CUPIDS Lab** (University of Colorado Public Interest Data Science Laboratory) — a static **Jekyll 4** site deployed to GitHub Pages via GitHub Actions. Design direction: dark / data-forward, IBM Plex Mono + Public Sans, black + CU gold, with the **folder-with-arrow** motif (CUPID's golden arrow piercing open a file folder).
 
 ## Golden rules
 
@@ -39,25 +39,25 @@ Loose files in the repo root are intentionally minimal: `README.md`, `LICENSE`, 
 
 ## Brand identity
 
-The brand is a dark, data-forward identity with a recurring **Cupid motif — a heart pierced by a gold arrow** (the 💘 "heart with arrow"). The canonical metadata (prompt, palette, colors, fonts, mark, asset specs) lives in **`_data/brand.yml`**; edit there, then regenerate.
+The brand is a dark, data-forward identity built on the **"folder with arrow"** conceit: the data the public interest depends on, stored in file folders and pierced open by CUPID's golden arrow. The canonical metadata (prompt, palette, colors, fonts, mark, asset specs) lives in **`_data/brand.yml`**; edit there, then regenerate.
 
-**Brand prompt:** *A dark, data-forward identity for a public-interest data lab: a near-black canvas, CU gold accents, an IBM Plex Mono wordmark, and a recurring Cupid motif — a heart pierced by a gold arrow — drawn in the Unicode "color heart" palette. Restrained and civic, with a little matchmaker playfulness.*
+**Brand prompt:** *A dark, data-forward identity for a public-interest data lab: a near-black canvas, CU gold accents, an IBM Plex Mono `cupids-lab` wordmark, and a central conceit — a magenta-pink open file folder pierced by CUPID's golden arrow (matchmaking data and democracy). A palette of color folders colors the decorative art. Restrained and civic, with a little matchmaker playfulness.*
 
-**Heart palette** — the Unicode "`<color>` heart" emojis (per [Hearts in Unicode](https://en.wikipedia.org/wiki/Hearts_in_Unicode); black `🖤` is omitted because it disappears on the dark canvas):
+**Color-folder palette** — each hue renders as a recolored file folder (the per-color `folders/` collection + the decorative art):
 
-| Name | Emoji | Hex |
-|------|-------|-----|
-| red | ❤️ | `#ed4e5b` |
-| orange | 🧡 | `#f0883e` |
-| yellow | 💛 | `#f7c948` |
-| green | 💚 | `#6fcf97` |
-| blue | 💙 | `#4a9fe6` |
-| purple | 💜 | `#9b6dd6` |
-| brown | 🤎 | `#9c6b4a` |
-| white | 🤍 | `#e8e6e0` |
-| pink (arrow) | 💘 | `#f06fa0` |
+| Name | Hex |
+|------|-----|
+| red | `#ed4e5b` |
+| orange | `#f0883e` |
+| yellow | `#f7c948` |
+| green | `#6fcf97` |
+| blue | `#4a9fe6` |
+| purple | `#9b6dd6` |
+| brown | `#9c6b4a` |
+| white | `#e8e6e0` |
+| pink | `#f06fa0` |
 
-The mark is the **`💘` "heart with arrow" emoji** itself, rendered as SVG `<text>` so it uses the viewer's color-emoji font (on Apple devices it's the Apple glyph). We do **not** embed Apple's proprietary artwork. Core UI colors mirror the CSS tokens in `assets/css/style.css`.
+The mark is the **folder-with-arrow** artwork — the cleaned seed at `assets/brand/parent-elements/folder-arrow-seed.svg` (a magenta-pink open file folder with a CU-gold arrow through it), embedded as-is. It's emitted as `favicon.svg`, `avatar.svg`, and a transparent **`mark.svg`** rendered inline across the site chrome (header, footer, heading accents `.mark-accent`, form-success) — the interactive ones (`.spark`) trigger the folder-burst easter egg. Edit the seed to change the artwork. Core UI colors mirror the CSS tokens in `assets/css/style.css`.
 
 **Generation harness:** `script/generate-brand.rb` digests `_data/brand.yml` and emits deterministic SVGs into `assets/brand/`:
 
@@ -67,9 +67,9 @@ node script/rasterize.mjs          # PNG previews (needs `npm install` first)
 # or both:  npm run brand:all
 ```
 
-`generate-brand.rb` emits SVGs: `favicon.svg`, `avatar.svg` (profile image, heart-with-arrow), `og.svg` (1200×630 social card), `banner.svg`, `pattern.svg` (tiling), `background.svg` (1600×900 "heart emoji map"), and a `hearts/` collection — one per palette color (e.g. `hearts/green.svg`) for reuse as list bullets, scatter art, or icons.
+`generate-brand.rb` emits SVGs: `favicon.svg`, **`mark.svg`** (transparent mark for inline chrome), `avatar.svg` (profile lockup: folder-with-arrow + wordmark), `og.svg` (1200×630 social card), `banner.svg`, `pattern.svg` (tiling), `background.svg` (1600×900 "folder map"), and a **`folders/`** collection — one recolored file folder per palette hue (e.g. `folders/green.svg`) for list bullets, scatter art, or icons.
 
-`rasterize.mjs` exports PNG previews next to the SVGs via **headless Chrome** (so emoji render in color — **Noto Color Emoji** on Linux/CI, an open-licensed font; we never bundle Apple's proprietary artwork) and embeds the self-hosted wordmark fonts. `og.png` is wired as the site's `og:image` (`image:` in `_config.yml`). `cupids.js` renders the same color-emoji hearts on the hero canvas via `fillText`. Commit regenerated assets; `script/`, `node_modules/`, and `package*.json` are excluded from the Jekyll build.
+`rasterize.mjs` exports PNG previews next to the SVGs via **headless Chrome** and embeds the self-hosted wordmark fonts. All artwork is our own vectors (folders + arrow), so no emoji fonts are needed. `og.png` is wired as the site's `og:image` (`image:` in `_config.yml`). `cupids.js` renders the same color folders on the hero canvas (a `Path2D` folder filled per node) with an SI "spread" where CUPID's gold opens them. Commit regenerated assets; `script/`, `node_modules/`, and `package*.json` are excluded from the Jekyll build.
 
 ## Build & test
 
