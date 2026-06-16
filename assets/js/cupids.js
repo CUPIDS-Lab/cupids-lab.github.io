@@ -82,6 +82,12 @@
   // Viewport scaling: keep heart density (and the look) consistent desktop↔mobile.
   var AREA_PER_NODE = 12000; // px² of hero per heart (data-count is the upper cap)
   var SIZE_REF = 1100;       // hero width at which hearts render full-size
+  // Prevent-overlap, adapted from ForceAtlas2's anti-collision ("adjustSizes":
+  // https://github.com/bhargavchippada/forceatlas2). Each heart has a radius
+  // (~half its glyph size); overlapping pairs get separated every frame.
+  var PREVENT_OVERLAP = true;
+  var NODE_RADIUS = 0.42; // heart radius as a fraction of glyph size
+  var OVERLAP_PAD = 2;    // extra px of breathing room between hearts
 
   function initCanvas(c) {
     var maxCount = +(c.dataset.count || 40);  // desktop cap
@@ -157,6 +163,33 @@
       }
     }
 
+    // Prevent-overlap: ForceAtlas2's anti-collision idea (nodes have size and
+    // repel when their circles intersect), projected to positions rather than
+    // applied as a force — stable for this drifting, non-force-directed field.
+    function resolveOverlap(w, h) {
+      for (var a = 0; a < pts.length; a++) {
+        var pa = pts[a];
+        for (var b = a + 1; b < pts.length; b++) {
+          var pb = pts[b];
+          var dx = pb.x - pa.x, dy = pb.y - pa.y;
+          var d = Math.sqrt(dx * dx + dy * dy);
+          var minD = (pa.size + pb.size) * NODE_RADIUS + OVERLAP_PAD;
+          if (d > 0 && d < minD) {
+            var push = (minD - d) / 2, ux = dx / d, uy = dy / d;
+            pa.x -= ux * push; pa.y -= uy * push;
+            pb.x += ux * push; pb.y += uy * push;
+          } else if (d === 0) {
+            pa.x += Math.random() - 0.5; pa.y += Math.random() - 0.5;
+          }
+        }
+      }
+      for (var i = 0; i < pts.length; i++) {
+        var p = pts[i];
+        if (p.x < 0) p.x = 0; else if (p.x > w) p.x = w;
+        if (p.y < 0) p.y = 0; else if (p.y > h) p.y = h;
+      }
+    }
+
     var ctx = c.getContext('2d');
     function draw() {
       if (!c.isConnected) { cancelAnimationFrame(raf); return; }
@@ -171,6 +204,7 @@
         if (p.x < 0) p.x = 0; else if (p.x > w) p.x = w;
         if (p.y < 0) p.y = 0; else if (p.y > h) p.y = h;
       }
+      if (PREVENT_OVERLAP) resolveOverlap(w, h);
       for (var a = 0; a < pts.length; a++) {
         for (var b = a + 1; b < pts.length; b++) {
           var dx = pts[a].x - pts[b].x, dy = pts[a].y - pts[b].y;
