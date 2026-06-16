@@ -11,7 +11,7 @@ home:
     ledger:
       - { label: "EPA air quality monitoring", status: "REMOVED", tone: red }
       - { label: "USGS streamflow records", status: "AT RISK", tone: amber }
-      - { label: "NOAA climate projections", status: "ARCHIVED BY CUPIDS", tone: green }
+      - { label: "NOAA climate projections", status: "AT RISK", tone: amber }
     stats:
       - { num: "½", label: "of Colorado's newspaper journalists lost since 2005." }
       - { num: "300→70", label: "reporters at the Denver Post, then and now." }
