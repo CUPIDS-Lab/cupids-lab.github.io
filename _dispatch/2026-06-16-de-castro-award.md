@@ -10,12 +10,10 @@ summary: "CMDI's 2026 de Castro Research and Creative Work Award seeds a CUPIDS�
 published: true
 ---
 
-BOULDER, Colo. — The University of Colorado Public Interest Data Science (CUPIDS) Clinic and the Center for Environmental Journalism (CEJ) have been awarded the 2026 de Castro Research and Creative Work Award from the College of Communication, Media, Design and Information (CMDI) — seed funding to launch a partnership defending the federal environmental data Colorado reporting depends on.
+The University of Colorado Public Interest Data Science (CUPIDS) Clinic and the [Center for Environmental Journalism](https://www.colorado.edu/cej) (CEJ) have been awarded a 2026 [de Castro Research and Creative Work Award](https://www.colorado.edu/cmdi/faculty-staff/cmci-grants/de-castro-research-and-creative-work-award#accordion-e828a848fc3fda1b5ca7341209ceaea0a-1) from the College of Communication, Media, Design and Information (CMDI) as seed funding to launch a partnership defending the federal environmental data Colorado's environmental journalists and watchdogs depend on.
 
-Since early 2025, federal agencies have removed, restricted, or quietly altered hundreds of datasets on air quality, water, and emissions — often without announcement. The award funds a founding project led by CUPIDS director Brian Keegan (Information Science) and CEJ director Hong Tien Vu (Journalism) to identify, archive, and document the datasets most critical to Colorado journalism and civic accountability, and to make them publicly accessible.
+Since January 2025, federal agencies have removed, restricted, or quietly altered hundreds of datasets on air quality, water, and emissions with little input or announcement. The new de Castro Award funds a year-long collaboration between CUPIDS Lab director Brian Keegan (Information Science) and CEJ director Hong Tien Vu (Journalism) to identify, archive, and document the datasets most critical to Colorado journalism and civic accountability, and to make them publicly accessible.
 
-"When the data disappears, the public's ability to hold polluters and regulators accountable disappears with it," said Keegan.
+Over the funded year, the team will build a documented archive of at-risk federal datasets from the EPA, USGS, NOAA, and BLM records, run data skills workshops for journalists and civic groups, pilot a CUPIDS help desk within CEJ's Water Desk, and interview 25–35 Colorado practitioners on the impact of federal data loss.
 
-Over the funded year, the team will build a documented archive of at-risk EPA, USGS, NOAA, and BLM records, run data-skills workshops for journalists and civic groups, pilot a CUPIDS help desk within CEJ's Water Desk, and interview 25–35 Colorado practitioners on the impact of federal data loss.
-
-The de Castro Award recognizes scholarship of central societal significance — including environmental and water justice — paired with a strong public-facing dimension.
+The de Castro Award recognizes scholarship of central societal significance paired with a strong public-facing dimension. For more information on how to get involved, please visit the [CUPIDS Lab](https://cupids-lab.github.io/get-involved/).
