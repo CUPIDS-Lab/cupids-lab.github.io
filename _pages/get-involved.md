@@ -4,7 +4,7 @@ permalink: /get-involved/
 nav: getinvolved
 eyebrow: Get involved
 title: "Three ways in."
-title_heart: true
+title_mark: true
 hero_actions:
   - { label: "Request help", to: "#request-help", style: "btn--gold" }
   - { label: "Join the lab", to: "#join-the-lab" }

@@ -1,7 +1,7 @@
 /* ============================================================
    CUPIDS Lab — Direction 2: dark, data-forward / technical.
    Black + CU gold, IBM Plex Mono + Public Sans, with the
-   matchmaker heart threaded throughout.
+   folder-with-arrow motif threaded throughout.
    ============================================================ */
 
 /* ---- Self-hosted fonts (no Google Fonts / external CDN calls).
@@ -70,7 +70,7 @@
 
   /* Brand */
   --gold:      #cfb87c;  /* CU gold */
-  --red:       #b23a2e;  /* matchmaker heart */
+  --red:       #b23a2e;  /* alert / at-risk accent */
   --green:     #6fcf97;  /* preserved */
   --amber:     #e0a14e;  /* at-risk */
 
@@ -106,7 +106,9 @@ a { color: inherit; text-decoration: none; }
 .wrap { max-width: var(--maxw); margin: 0 auto; padding-left: 32px; padding-right: 32px; }
 
 .mono { font-family: var(--mono); }
-.heart { color: var(--red); }
+/* The folder-with-arrow mark used as a small inline accent next to headings. */
+.mark-accent { display: inline-block; height: 0.82em; width: auto; vertical-align: -0.1em; }
+.spark { cursor: pointer; }
 .gold  { color: var(--gold); }
 .green { color: var(--green); }
 .amber { color: var(--amber); }
@@ -390,7 +392,7 @@ textarea.field { resize: vertical; }
 .btn--submit { padding: 13px 20px; font-size: 13px; }
 
 .form-done { text-align: center; padding: 28px 8px; }
-.form-done__heart { font-size: 40px; margin-bottom: 14px; color: var(--red); }
+.form-done__mark { width: 52px; height: 52px; margin: 0 auto 14px; display: block; }
 .form-done h3 { font-weight: 800; font-size: 22px; margin: 0 0 10px; }
 .form-done p { font-family: var(--mono); font-size: 13px; line-height: 1.6; color: var(--ink-muted); margin: 0; }
 

@@ -2,7 +2,7 @@
 
 **CUPIDS Lab** — the University of Colorado Public Interest Data Science Laboratory. We preserve the data democracy depends on: archiving at-risk public datasets, building data infrastructure, sharing resources, and matching technical capacity with the journalists and civic groups who need it.
 
-A static [Jekyll](https://jekyllrb.com) site deployed to GitHub Pages — dark, data-forward design (IBM Plex Mono + Public Sans, black + CU gold) with the CUPIDS matchmaker heart (`<3` / 💘) threaded throughout.
+A static [Jekyll](https://jekyllrb.com) site deployed to GitHub Pages — dark, data-forward design (IBM Plex Mono + Public Sans, black + CU gold) with the CUPIDS "folder with arrow" motif — data, stored in folders and pierced open by Cupid's golden arrow — threaded throughout.
 
 ---
 
@@ -68,7 +68,7 @@ The **projects grid**, **Dispatch list**, and **public data archive** render on-
 
 ## Brand assets
 
-`_data/brand.yml` is the single source of truth for the brand (the Cupid `💘` motif + the Unicode color-heart palette). Regenerate the SVG/PNG assets in `assets/brand/` with:
+`_data/brand.yml` is the single source of truth for the brand (the "folder with arrow" motif + the color-folder palette). Regenerate the SVG/PNG assets in `assets/brand/` with:
 
 ```bash
 npm install          # once, for the PNG rasterizer (headless Chrome)
@@ -90,7 +90,7 @@ LANG=C.UTF-8 bundle exec htmlproofer ./_site \
 
 ## Performance & privacy
 
-No external CDN / font / API requests — everything is same-origin. Fonts are self-hosted (IBM Plex Mono + Public Sans, OFL, latin `woff2`) via `@font-face` with `font-display: swap`. The hero heart-emoji network (an SI "spread" simulation) and the heart-burst easter egg are hand-written vanilla JS in `assets/js/cupids.js`, and all animation is disabled under `prefers-reduced-motion`.
+No external CDN / font / API requests — everything is same-origin. Fonts are self-hosted (IBM Plex Mono + Public Sans, OFL, latin `woff2`) via `@font-face` with `font-display: swap`. The hero color-folder network (an SI "spread" simulation, where Cupid's gold "opens" the folders) and the folder-burst easter egg are hand-written vanilla JS in `assets/js/cupids.js`, and all animation is disabled under `prefers-reduced-motion`.
 
 ## Forms
 
@@ -108,4 +108,4 @@ Deployed by GitHub Actions. **One-time setup:** Settings → Pages → Build and
 
 Site code under [`LICENSE`](LICENSE). Bundled fonts under the SIL Open Font License (see `assets/fonts/`).
 
-Matchmaking data &amp; democracy — made with ♥ in Boulder.
+Matchmaking data &amp; democracy — made with 📂 in Boulder.

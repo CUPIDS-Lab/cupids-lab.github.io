@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Rasterize the brand SVGs in assets/brand/ (and assets/brand/hearts/) to PNG
+// Rasterize the brand SVGs in assets/brand/ (and assets/brand/folders/) to PNG
 // previews via headless Chrome, so emoji render in full color (Noto Color
 // Emoji on Linux/CI) and the wordmark uses our self-hosted fonts. PNGs travel
 // where SVGs don't (social cards, slides, chat, READMEs). Open-licensed fonts
@@ -52,8 +52,8 @@ async function render(dir, file) {
   return { out: join(dir, out).replace(ROOT + "/", ""), w: w * scale, h: h * scale, kb: buf.length / 1024 };
 }
 
-// Top-level brand assets, then the hearts/ collection.
-const dirs = [BRAND, join(BRAND, "hearts")].filter(existsSync);
+// Top-level brand assets, then the folders/ collection.
+const dirs = [BRAND, join(BRAND, "folders")].filter(existsSync);
 let n = 0;
 for (const dir of dirs) {
   for (const file of readdirSync(dir).filter((f) => f.endsWith(".svg"))) {

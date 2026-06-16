@@ -9,28 +9,25 @@ tagline: "Defending the data democracy depends on."
 
 # A short brand prompt the harness "digests" (and that you could hand to a
 # designer or an image model).
-prompt: 'A brand and graphic identity for an academic public interest data lab. A black terminal with monospace fonts and syntax initially feels intimidating and cold. A near-black canvas, CU gold accents, an IBM Plex Mono "cupids-lab" wordmark. The recurring Cupid idiom is a "heart with arrow" drawn as 8-bit pixel art — a retro, terminal / coding-agent nod rather than the proprietary emoji. The Unicode "color heart" palette still provides variation in the decorative art, and the ASCII heart "<3" lives on as playful microcopy. Restrained and civic with a little matchmaker playfulness.'
+prompt: 'A brand and graphic identity for an academic public interest data lab. A black terminal with monospace fonts and syntax initially feels intimidating and cold. A near-black canvas, CU gold accents, an IBM Plex Mono "cupids-lab" wordmark. The central conceit is a "folder with arrow" — the data the public interest depends on, stored in file folders and pierced open by CUPID''s golden arrow (matchmaking data and democracy). A palette of color folders provides variation in the decorative art. Restrained and civic, with a little matchmaker playfulness.'
 
-# Recurring motif emoji. The mark itself is now drawn as 8-bit pixel art (see
-# `mark:` below + script/generate-brand.rb); `primary` is still used for the
-# decorative color-emoji palette art (og/banner/pattern/background) and the
-# hero canvas. `wordmark_glyph` is no longer part of the wordmark — the ASCII
-# heart survives only as playful microcopy (e.g. the subscribe confirmation).
-emoji:
-  primary: "💘"        # heart with arrow (Cupid) — used in the palette art + hero
-  wordmark_glyph: "<3" # legacy motif; kept for microcopy, not rendered in the wordmark
-  # The Unicode "<color> heart" palette we draw from (black omitted — it
-  # disappears on the dark canvas).
+# The central motif is the "folder with arrow" — CUPID's golden arrow piercing
+# open a file folder (see `mark:` + the seed at
+# assets/brand/parent-elements/folder-arrow-seed.svg). The decorative art draws
+# from a palette of color folders — the same hues used as CSS accents.
+motif:
+  primary: "folder-with-arrow"   # the data, in folders, pierced + opened by the arrow
+  # The color-folder palette (each renders as a recolored file folder).
   palette:
-    - { name: red,    char: "❤️", color: "#ed4e5b" }
-    - { name: orange, char: "🧡", color: "#f0883e" }
-    - { name: yellow, char: "💛", color: "#f7c948" }
-    - { name: green,  char: "💚", color: "#6fcf97" }
-    - { name: blue,   char: "💙", color: "#4a9fe6" }
-    - { name: purple, char: "💜", color: "#9b6dd6" }
-    - { name: brown,  char: "🤎", color: "#9c6b4a" }
-    - { name: white,  char: "🤍", color: "#e8e6e0" }
-    - { name: pink,   char: "💘", color: "#f06fa0" }
+    - { name: red,    color: "#ed4e5b" }
+    - { name: orange, color: "#f0883e" }
+    - { name: yellow, color: "#f7c948" }
+    - { name: green,  color: "#6fcf97" }
+    - { name: blue,   color: "#4a9fe6" }
+    - { name: purple, color: "#9b6dd6" }
+    - { name: brown,  color: "#9c6b4a" }
+    - { name: white,  color: "#e8e6e0" }
+    - { name: pink,   color: "#f06fa0" }
 
 # Core colors (mirror of the CSS tokens in assets/css/style.css).
 colors:
@@ -47,29 +44,20 @@ fonts:
   display: "Public Sans"
   mono: "IBM Plex Mono"
 
-# The heart-with-arrow mark, redrawn as 8-bit pixel art (a retro / terminal
-# nod) after the Apple "heart with arrow" 💘: a hot-magenta heart pierced by a
-# blue arrow — a small blue heart for the tip, a silver metallic shaft, and
-# blue feather fletching. Pure <rect>s, so it's license-clean (an original
-# pixel redraw, not Apple's artwork) and renders identically everywhere.
+# The logo mark: a CU-gold arrow piercing a magenta-pink open file folder. The
+# artwork is the cleaned seed at assets/brand/parent-elements/folder-arrow-seed.svg,
+# embedded as-is by script/generate-brand.rb — edit the seed to change it. Colors
+# are recorded here for reference only (they live in the seed):
 mark:
-  style: "8-bit"          # pixel-art "heart with arrow" (not the proprietary emoji)
-  heart:    "#fb1e9e"     # hot magenta-pink heart body
-  heart_hi: "#ff9dd4"     # glossy upper-left sheen
-  heart_lo: "#cf0a7d"     # lower-right rim shadow
-  shaft:    "#ced3db"     # silver/metallic arrow shaft
-  shaft_hi: "#f1f3f7"     # shaft highlight
-  shaft_lo: "#959ba8"     # shaft shadow
-  blue:     "#4596e0"     # blue heart-tip + feathers
-  blue_hi:  "#7fbaf0"     # blue highlight
-  blue_lo:  "#2c69a6"     # blue feather veins / shadow
+  style: "svg-seed"
+  folder: "#d63384"   # magenta-pink open folder (gradient #d63384 → #e374ab)
+  arrow:  "#cfb87c"   # CU gold (deeper shaft #b8984c)
 
-# Standalone heart icon per palette color, emitted to assets/brand/hearts/ as
-# both SVG and PNG (e.g. hearts/green.svg, hearts/green.png) for reuse as list
-# bullets, scatter art, etc.
+# Per-color file folder, emitted to assets/brand/folders/ as both SVG and PNG
+# (e.g. folders/green.svg, folders/green.png) for reuse as list bullets, scatter
+# art, or icons.
 variants:
-  dir: hearts
-  rotations: [0]
+  dir: folders
 
 # Assets the harness emits into assets/brand/ (SVG, deterministic).
 # `ruby script/generate-brand.rb` writes the SVGs; `node script/rasterize.mjs`
