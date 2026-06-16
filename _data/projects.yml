@@ -1,8 +1,8 @@
-# Projects. `featured` renders as a full-width card; `more` fills the grid.
-# `more` is intentionally empty — the grid shows placeholders until you add
-# entries here (e.g. { tag: INVESTIGATION, title: "...", body: "..." }).
+# Featured project card on the Projects page. The rest are individual
+# Markdown files in the `_projects/` collection (each with its own child page).
 featured:
   - title: "Preserving environmental accountability"
+    url: /projects/cej/
     body: "In partnership with the Center for Environmental Journalism, CUPIDS is identifying, prioritizing, and archiving the federal environmental datasets most critical to Colorado journalism — and equipping reporters to use them when primary sources go dark. Supported by the 2026 de Castro Research Award, with Hong Tien Vu, Director, CEJ."
     bullets:
       - { text: "EPA air & water quality data", accent: green }
@@ -11,5 +11,3 @@ featured:
       - { text: "EPA GHGRP emissions records", accent: amber }
       - { text: "BLM & Forest Service land data", accent: amber }
       - { text: "Pesticide registration data", accent: green }
-
-more: []

@@ -37,11 +37,21 @@ plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
 
-# The Dispatch is a collection — one Markdown file per issue.
+# Collections — one Markdown file per item; each gets its own child page
+# under the parent section.
 collections:
   dispatch:
     output: true
     permalink: /dispatch/:name/
+  projects:
+    output: true
+    permalink: /projects/:name/
+  people:
+    output: true
+    permalink: /people/:name/
+  resources:
+    output: true
+    permalink: /resources/:name/
 
 # jekyll-feed: generate the Dispatch feed from the collection
 feed:
@@ -73,3 +83,27 @@ defaults:
       type: dispatch
     values:
       layout: dispatch
+  - scope:
+      path: ""
+      type: projects
+    values:
+      layout: detail
+      eyebrow: Project
+      back: /projects/
+      back_label: Projects
+  - scope:
+      path: ""
+      type: people
+    values:
+      layout: detail
+      eyebrow: People
+      back: /people/
+      back_label: People
+  - scope:
+      path: ""
+      type: resources
+    values:
+      layout: detail
+      eyebrow: Resource
+      back: /resources/
+      back_label: Resources

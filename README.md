@@ -22,8 +22,10 @@ component includes, and Liquid filters**. No page is hand-written HTML.
 index.md, projects.md, people.md, …   Markdown pages — front matter + a
                                        Markdown body (the hero lead)
 _dispatch/*.md                         the Dispatch — one file per issue
-_data/*.yml                            reference data (people, guides,
-                                       projects, datasets, nav, …)
+_projects/ _people/ _resources/*.md    one file per item; each gets its own
+                                       child page, linked from the parent
+_data/*.yml                            reference data (director, featured
+                                       project, datasets, pillars, nav, …)
 _layouts/        default · home · page (section dispatcher) · dispatch
 _includes/components/*.html            reusable "functions": card, card_grid,
                                        placeholder_grid/panel, chips, cta,
@@ -79,12 +81,18 @@ declarative:
 | To change… | Edit… |
 |---|---|
 | A page's intro / sections | that page's `.md` file |
-| People (director + advisors) | `_data/people.yml` |
-| Guides & tools | `_data/guides.yml` |
+| A project / person / resource (each has a child page) | add/edit a file in `_projects/`, `_people/`, `_resources/` |
+| The director block | `_data/people.yml` |
+| The featured project card | `_data/projects.yml` |
 | Research focus areas | `_data/focus_areas.yml` |
 | Home pillars | `_data/pillars.yml` |
 | Navigation | `_data/navigation.yml` |
 | A Dispatch issue | add a file to `_dispatch/` |
+
+Items in the `_projects`, `_people`, and `_resources` collections each render
+a **child page** (`/projects/<name>/`, etc.) and are listed as cards — linked
+to that page — on the parent. An item flagged `featured: true` is shown via the
+parent's bespoke block (featured card / director) and omitted from the grid.
 
 ### Placeholders are data-driven
 

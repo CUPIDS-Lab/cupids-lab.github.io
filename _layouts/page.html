@@ -31,6 +31,17 @@ layout: default
       {% include components/placeholder_grid.html count=s.count cols=s.cols label=s.label %}
     {%- endif -%}
 
+  {%- when 'collection' -%}
+    {% if s.heading %}<h2 class="h-section h-section--sm">{{ s.heading }}</h2>{% endif %}
+    {% if s.body %}<p class="prose">{{ s.body }}</p>{% endif %}
+    {%- assign all = s.name | collection_cards -%}
+    {%- assign items = all | where_exp: "c", "c.featured != true" -%}
+    {%- if items != empty -%}
+      {% include components/card_grid.html items=items cols=s.cols %}
+    {%- elsif s.placeholder -%}
+      {% include components/placeholder_grid.html count=s.count cols=s.cols label=s.label %}
+    {%- endif -%}
+
   {%- when 'chips' -%}
     {%- assign items = s.items -%}
     {%- if s.data %}{% assign items = s.data | site_data %}{% endif -%}
