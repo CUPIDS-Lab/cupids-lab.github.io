@@ -4,7 +4,11 @@
 # Brand asset harness. Digests the brand prompt + metadata in _data/brand.yml
 # (see AGENTS.md "## Brand identity") and emits deterministic SVG assets into
 # assets/brand/ — favicon, avatar/profile image, OG/social card, banner, and a
-# tiling pattern — all built around the recurring "heart with arrow" motif.
+# tiling pattern — all built around the recurring "heart with arrow" emoji 💘.
+#
+# The emoji is rendered as SVG <text>, so it uses the viewer's color-emoji font
+# (on Apple devices it IS the Apple glyph). We deliberately do NOT embed Apple's
+# proprietary artwork — that keeps the repo license-clean.
 #
 # Usage:  ruby script/generate-brand.rb
 require "yaml"
@@ -15,27 +19,18 @@ BRAND = YAML.load_file(File.join(ROOT, "_data", "brand.yml"))
 OUT   = File.join(ROOT, "assets", "brand")
 FileUtils.mkdir_p(OUT)
 
-C       = BRAND["colors"]
-MARK    = BRAND["mark"]
-PALETTE = BRAND["emoji"]["palette"]
-MONO    = "#{BRAND['fonts']['mono']}, ui-monospace, monospace"
-SANS    = "#{BRAND['fonts']['display']}, system-ui, sans-serif"
+C          = BRAND["colors"]
+PALETTE    = BRAND["emoji"]["palette"]
+PRIMARY    = BRAND["emoji"]["primary"]
+# Single-quote family names so they sit cleanly inside double-quoted SVG attrs.
+MONO       = "'#{BRAND['fonts']['mono']}', ui-monospace, monospace"
+SANS       = "'#{BRAND['fonts']['display']}', system-ui, sans-serif"
+EMOJI_FONT = "'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif"
 
-# A heart-with-arrow centered at (cx,cy), `size` tall, in `heart`/`arrow`
-# colors. Unit artwork lives in a ~72-tall box centered on (50,46).
-def heart_arrow(cx, cy, size, heart, arrow)
-  k = size / 72.0
-  sw = 7
-  <<~SVG
-    <g transform="translate(#{cx} #{cy}) scale(#{format('%.4f', k)}) translate(-50 -46)">
-      <path d="M50 82 C 22 62 10 45 10 30 C 10 18 19 10 30 10 C 39 10 47 16 50 24 C 53 16 61 10 70 10 C 81 10 90 18 90 30 C 90 45 78 62 50 82 Z" fill="#{heart}"/>
-      <g fill="none" stroke="#{arrow}" stroke-width="#{sw}" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="6" y1="74" x2="94" y2="26"/>
-        <polyline points="80,22 94,26 90,40"/>
-        <polyline points="2,60 6,74 20,70"/>
-      </g>
-    </g>
-  SVG
+# An emoji glyph centered at (cx,cy), `size` tall, optionally rotated.
+def emoji(cx, cy, size, glyph, rot = 0)
+  t = %(<text x="#{cx}" y="#{cy}" font-size="#{size}" text-anchor="middle" dominant-baseline="central" font-family="#{EMOJI_FONT}">#{glyph}</text>)
+  rot.zero? ? t : %(<g transform="rotate(#{rot} #{cx} #{cy})">#{t}</g>)
 end
 
 def doc(w, h, body)
@@ -52,26 +47,23 @@ def wordmark(x, y, size, anchor: "start")
   SVG
 end
 
-# Row of small color-varied heart-arrows (the palette), centered on cx.
+# A row of the palette heart emoji, centered on cx.
 def palette_row(cx, y, gap, size)
   total = (PALETTE.length - 1) * gap
   startx = cx - total / 2.0
-  PALETTE.each_with_index.map do |p, i|
-    heart_arrow(startx + i * gap, y, size, p["color"], C["gold"])
-  end.join("\n")
+  PALETTE.each_with_index.map { |p, i| emoji(startx + i * gap, y, size, p["char"]) }.join("\n")
 end
 
 def favicon
-  body = %(<rect width="64" height="64" rx="13" fill="#{C['bg']}"/>\n) + heart_arrow(32, 33, 46, MARK["heart"], MARK["arrow"])
-  doc(64, 64, body)
+  doc(64, 64, %(<rect width="64" height="64" rx="13" fill="#{C['bg']}"/>\n) + emoji(32, 32, 46, PRIMARY))
 end
 
 def avatar
   body = +""
   body << %(<rect width="512" height="512" rx="96" fill="#{C['bg']}"/>\n)
   body << %(<rect x="14" y="14" width="484" height="484" rx="84" fill="none" stroke="#{C['panel']}" stroke-width="2"/>\n)
-  body << heart_arrow(256, 224, 300, MARK["heart"], MARK["arrow"])
-  body << wordmark(256, 430, 52, anchor: "middle")
+  body << emoji(256, 220, 300, PRIMARY)
+  body << "\n" << wordmark(256, 430, 52, anchor: "middle")
   doc(512, 512, body)
 end
 
@@ -79,11 +71,11 @@ def social(w, h)
   body = +""
   body << %(<rect width="#{w}" height="#{h}" fill="#{C['bg']}"/>\n)
   body << %(<rect x="0" y="0" width="#{w}" height="10" fill="#{C['gold']}"/>\n)
-  body << %(<text x="80" y="#{h * 0.30}" font-family="#{MONO}" font-size="26" letter-spacing="0.16em" fill="#{C['green']}">UNIVERSITY OF COLORADO · PUBLIC INTEREST DATA SCIENCE</text>\n)
-  body << wordmark(80, h * 0.30 + 96, 92)
-  body << %(<text x="80" y="#{h * 0.30 + 176}" font-family="#{SANS}" font-weight="800" font-size="60" fill="#{C['ink']}">#{BRAND['tagline']}</text>\n)
-  body << heart_arrow(w - 200, h * 0.42, 320, MARK["heart"], MARK["arrow"])
-  body << palette_row(w / 2.0, h - 70, 72, 40)
+  body << %(<text x="80" y="#{(h * 0.30).round}" font-family="#{MONO}" font-size="26" letter-spacing="0.16em" fill="#{C['green']}">UNIVERSITY OF COLORADO · PUBLIC INTEREST DATA SCIENCE</text>\n)
+  body << wordmark(80, (h * 0.30).round + 96, 92)
+  body << %(<text x="80" y="#{(h * 0.30).round + 176}" font-family="#{SANS}" font-weight="800" font-size="60" fill="#{C['ink']}">#{BRAND['tagline']}</text>\n)
+  body << emoji(w - 210, (h * 0.46).round, 300, PRIMARY)
+  body << "\n" << palette_row(w / 2.0, h - 64, 78, 46)
   doc(w, h, body)
 end
 
@@ -91,17 +83,15 @@ def pattern
   body = +""
   body << %(<rect width="240" height="240" fill="#{C['bg']}"/>\n)
   spots = [[60, 60, 0], [180, 110, 3], [110, 190, 6], [210, 220, 1], [30, 200, 4]]
-  body << %(<g opacity="0.5">\n)
-  spots.each { |x, y, i| body << heart_arrow(x, y, 34, PALETTE[i % PALETTE.length]["color"], C["gold"]) }
+  body << %(<g opacity="0.6">\n)
+  spots.each { |x, y, i| body << emoji(x, y, 40, PALETTE[i % PALETTE.length]["char"]) << "\n" }
   body << %(</g>)
   doc(240, 240, body)
 end
 
-# A single transparent 64x64 heart-with-arrow icon, optionally rotated.
-def heart_icon(color, rot, arrow)
-  inner = heart_arrow(32, 33, 44, color, arrow)
-  body = rot.zero? ? inner : %(<g transform="rotate(#{rot} 32 32)">\n#{inner}</g>)
-  doc(64, 64, body)
+# A single transparent 64x64 heart emoji icon, optionally rotated.
+def heart_icon(glyph, rot)
+  doc(64, 64, emoji(32, 32, 46, glyph, rot))
 end
 
 generated = []
@@ -121,21 +111,19 @@ end
 puts "Generated #{generated.length} brand assets in assets/brand/:"
 generated.each { |f| puts "  - #{f}" }
 
-# Heart-with-arrow variant collection: every palette color × each rotation.
+# Heart emoji variant collection: every palette heart × each rotation.
 v = BRAND["variants"]
 if v
   vdir = File.join(OUT, v["dir"])
   FileUtils.mkdir_p(vdir)
-  arrow = v["arrow"] || C["gold"]
   hearts = []
   PALETTE.each do |p|
     v["rotations"].each do |r|
       suffix = r.zero? ? "" : (r.negative? ? "-l#{r.abs}" : "-r#{r}")
       fname = "#{p['name']}#{suffix}.svg"
-      File.write(File.join(vdir, fname), heart_icon(p["color"], r, arrow))
+      File.write(File.join(vdir, fname), heart_icon(p["char"], r))
       hearts << fname
     end
   end
-  puts "Generated #{hearts.length} heart-with-arrow variants in assets/brand/#{v['dir']}/."
+  puts "Generated #{hearts.length} heart-emoji variants in assets/brand/#{v['dir']}/."
 end
-

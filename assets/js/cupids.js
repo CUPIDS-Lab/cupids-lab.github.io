@@ -64,48 +64,18 @@
     return c;
   }
 
-  // The Unicode "<color> heart" palette (black omitted — it vanishes on the
-  // dark hero). Each node is drawn as a heart-with-arrow (Cupid) filled in one
-  // of these colors; edges interpolate their endpoints' colors.
-  var HEART_COLORS = [
-    '#ed4e5b', // red heart
-    '#f0883e', // orange heart
-    '#f7c948', // yellow heart
-    '#6fcf97', // green heart
-    '#4a9fe6', // blue heart
-    '#9b6dd6', // purple heart
-    '#9c6b4a', // brown heart
-    '#e8e6e0', // white heart
-    '#f06fa0'  // heart-with-arrow pink
+  // Real heart emoji nodes — the Cupid 💘 ("heart with arrow") is the recurring
+  // motif, woven through the Unicode color-heart palette. Drawn with the
+  // platform's color-emoji font (so on Apple devices these ARE the Apple
+  // glyphs). Each glyph maps to a color the edges interpolate between. 💘 is
+  // weighted so the arrow heart dominates.
+  var HEARTS = [
+    { g: '💘', c: '#f06fa0' }, { g: '💘', c: '#f06fa0' }, { g: '💘', c: '#f06fa0' },
+    { g: '❤️', c: '#ed4e5b' }, { g: '🧡', c: '#f0883e' }, { g: '💛', c: '#f7c948' },
+    { g: '💚', c: '#6fcf97' }, { g: '💙', c: '#4a9fe6' }, { g: '💜', c: '#9b6dd6' },
+    { g: '🤎', c: '#9c6b4a' }, { g: '🤍', c: '#e8e6e0' }
   ];
-
-  // Draw a heart-with-arrow centered at (cx, cy), ~s tall, filled `color`,
-  // pierced by a gold Cupid's arrow.
-  function drawHeartArrow(ctx, cx, cy, s, color) {
-    var w = s, h = s, x = cx, y = cy - h * 0.32, tch = h * 0.3;
-    ctx.beginPath();
-    ctx.moveTo(x, y + tch);
-    ctx.bezierCurveTo(x, y, x - w / 2, y, x - w / 2, y + tch);
-    ctx.bezierCurveTo(x - w / 2, y + (h + tch) / 2, x, y + (h + tch) / 2 + h * 0.06, x, y + h);
-    ctx.bezierCurveTo(x, y + (h + tch) / 2 + h * 0.06, x + w / 2, y + (h + tch) / 2, x + w / 2, y + tch);
-    ctx.bezierCurveTo(x + w / 2, y, x, y, x, y + tch);
-    ctx.closePath();
-    ctx.fillStyle = color;
-    ctx.fill();
-
-    var ang = -0.38, half = s * 0.85, oy = h * 0.12, hl = s * 0.26;
-    var tipx = cx + Math.cos(ang) * half, tipy = cy + Math.sin(ang) * half + oy;
-    var tailx = cx - Math.cos(ang) * half, taily = cy - Math.sin(ang) * half + oy;
-    ctx.strokeStyle = '#cfb87c';
-    ctx.lineWidth = Math.max(1, s * 0.05);
-    ctx.lineCap = 'round';
-    ctx.beginPath();
-    ctx.moveTo(tailx, taily); ctx.lineTo(tipx, tipy);            // shaft
-    ctx.moveTo(tipx, tipy); ctx.lineTo(tipx - Math.cos(ang - 0.55) * hl, tipy - Math.sin(ang - 0.55) * hl); // head
-    ctx.moveTo(tipx, tipy); ctx.lineTo(tipx - Math.cos(ang + 0.55) * hl, tipy - Math.sin(ang + 0.55) * hl);
-    ctx.moveTo(tailx, taily); ctx.lineTo(tailx + Math.cos(ang + 0.6) * hl, taily + Math.sin(ang + 0.6) * hl); // fletch
-    ctx.stroke();
-  }
+  var EMOJI_FONT = '"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
 
   function initCanvas(c) {
     var count = +(c.dataset.count || 40);
@@ -118,11 +88,12 @@
     function seed(W, H) {
       pts = [];
       for (var i = 0; i < count; i++) {
+        var hh = HEARTS[(Math.random() * HEARTS.length) | 0];
         pts.push({
           x: Math.random() * W, y: Math.random() * H,
           vx: (Math.random() - 0.5) * 0.22, vy: (Math.random() - 0.5) * 0.22,
-          color: HEART_COLORS[(Math.random() * HEART_COLORS.length) | 0],
-          size: 11 + Math.random() * 26   // ~doubled size range vs. before
+          glyph: hh.g, color: hh.c,
+          size: 14 + Math.random() * 30   // ~doubled size range vs. before
         });
       }
     }
@@ -173,8 +144,11 @@
         }
       }
       ctx.globalAlpha = dotOp;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
       for (var m = 0; m < pts.length; m++) {
-        drawHeartArrow(ctx, pts[m].x, pts[m].y, pts[m].size, pts[m].color);
+        ctx.font = pts[m].size + 'px ' + EMOJI_FONT;
+        ctx.fillText(pts[m].glyph, pts[m].x, pts[m].y);
       }
       ctx.globalAlpha = 1;
       raf = requestAnimationFrame(draw);
