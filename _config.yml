@@ -33,7 +33,7 @@ github_url: https://github.com/CUPIDS-Lab
 # client-side "thank you" confirmation (no data is sent anywhere).
 # When set (e.g. https://formspree.io/f/xxxxxxxx) the help-desk, join,
 # and subscribe forms POST to it.
-form_endpoint: ""
+form_endpoint: "https://formspree.io/f/xzdqwppy"
 
 # Build settings ---------------------------------------------
 markdown: kramdown
