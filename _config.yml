@@ -15,6 +15,11 @@ description: >-
 url: "https://cupids-lab.github.io"
 baseurl: ""
 
+# Social-share image (generated PNG preview; see script/rasterize.mjs).
+image: /assets/brand/og.png
+twitter:
+  card: summary_large_image
+
 lang: en
 author: CUPIDS Lab
 email: brian.keegan@colorado.edu
@@ -75,6 +80,9 @@ exclude:
   - vendor
   - .github
   - script
+  - node_modules
+  - package.json
+  - package-lock.json
   - "*.gem"
 
 # Default front matter --------------------------------------
@@ -83,6 +91,7 @@ defaults:
       path: ""
     values:
       layout: page
+      image: /assets/brand/og.png   # default social-share image (jekyll-seo-tag)
   - scope:
       path: ""
       type: dispatch

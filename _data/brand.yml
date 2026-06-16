@@ -52,18 +52,20 @@ mark:
   heart: "#b23a2e"   # red heart
   arrow: "#cfb87c"   # gold arrow
 
-# Standalone heart-with-arrow icon variants — every palette color crossed with
-# these rotations — emitted to assets/brand/hearts/ for reuse as list bullets,
-# scatter art, etc. (e.g. hearts/green.svg, hearts/green-r12.svg).
+# Standalone heart icon per palette color, emitted to assets/brand/hearts/ as
+# both SVG and PNG (e.g. hearts/green.svg, hearts/green.png) for reuse as list
+# bullets, scatter art, etc.
 variants:
   dir: hearts
-  rotations: [-12, 0, 12]
-  arrow: "#cfb87c"
+  rotations: [0]
 
 # Assets the harness emits into assets/brand/ (SVG, deterministic).
+# `ruby script/generate-brand.rb` writes the SVGs; `node script/rasterize.mjs`
+# exports PNG previews next to them (headless Chrome + Noto Color Emoji).
 assets:
-  - { file: favicon.svg, w: 64,   h: 64,  kind: mark }
-  - { file: avatar.svg,  w: 512,  h: 512, kind: avatar }
-  - { file: og.svg,      w: 1200, h: 630, kind: og }
-  - { file: banner.svg,  w: 1500, h: 500, kind: og }
-  - { file: pattern.svg, w: 240,  h: 240, kind: pattern }
+  - { file: favicon.svg,    w: 64,   h: 64,  kind: mark }
+  - { file: avatar.svg,     w: 512,  h: 512, kind: avatar }
+  - { file: og.svg,         w: 1200, h: 630, kind: og }
+  - { file: banner.svg,     w: 1500, h: 500, kind: og }
+  - { file: pattern.svg,    w: 240,  h: 240, kind: pattern }
+  - { file: background.svg, w: 1600, h: 900, kind: background }

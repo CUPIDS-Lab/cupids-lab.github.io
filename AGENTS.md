@@ -60,10 +60,14 @@ The mark is the **`💘` "heart with arrow" emoji** itself, rendered as SVG `<te
 **Generation harness:** `script/generate-brand.rb` digests `_data/brand.yml` and emits deterministic SVGs into `assets/brand/`:
 
 ```bash
-ruby script/generate-brand.rb
+ruby script/generate-brand.rb     # SVGs
+node script/rasterize.mjs          # PNG previews (needs `npm install` first)
+# or both:  npm run brand:all
 ```
 
-It produces: `favicon.svg`, `avatar.svg` (profile image), `og.svg` (1200×630 social card), `banner.svg`, `pattern.svg` (tiling background), and a `hearts/` collection — every palette color × a few rotations (e.g. `hearts/green.svg`, `hearts/green-r12.svg`) for reuse as list bullets, scatter art, or icons. `cupids.js` renders the same color-emoji hearts on the hero canvas via `fillText`. Commit regenerated assets; `script/` is excluded from the build.
+`generate-brand.rb` emits SVGs: `favicon.svg`, `avatar.svg` (profile image, heart-with-arrow), `og.svg` (1200×630 social card), `banner.svg`, `pattern.svg` (tiling), `background.svg` (1600×900 "heart emoji map"), and a `hearts/` collection — one per palette color (e.g. `hearts/green.svg`) for reuse as list bullets, scatter art, or icons.
+
+`rasterize.mjs` exports PNG previews next to the SVGs via **headless Chrome** (so emoji render in color — **Noto Color Emoji** on Linux/CI, an open-licensed font; we never bundle Apple's proprietary artwork) and embeds the self-hosted wordmark fonts. `og.png` is wired as the site's `og:image` (`image:` in `_config.yml`). `cupids.js` renders the same color-emoji hearts on the hero canvas via `fillText`. Commit regenerated assets; `script/`, `node_modules/`, and `package*.json` are excluded from the Jekyll build.
 
 ## Build & test
 
