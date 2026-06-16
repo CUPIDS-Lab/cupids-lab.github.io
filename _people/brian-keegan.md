@@ -5,6 +5,7 @@ order: 1
 category: director
 featured: true
 tag: Director
+photo: /assets/img/headshots/keegan.png
 summary: "Associate Professor, Department of Information Science · CU Boulder"
 ---
 A computational social scientist with eighteen years studying how people collaborate online — on Wikipedia, Reddit, Twitter, and beyond. That research has always depended on open data, and on watching access to it systematically erode as platforms enclosed the information commons.

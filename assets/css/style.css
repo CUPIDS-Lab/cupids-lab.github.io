@@ -349,6 +349,11 @@ a.card:hover, .card--link:hover { border-color: var(--line-3); transform: transl
 .placeholder--panel { min-height: 220px; }
 .placeholder span { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); }
 
+/* ---------- Headshot (real photo for the 1×1 director slot + profile pages) ---------- */
+.headshot { display: block; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-card); object-fit: cover; }
+.headshot--1x1 { width: 100%; max-width: 360px; aspect-ratio: 1 / 1; }
+.headshot--profile { float: right; width: 200px; height: 200px; margin: 4px 0 22px 28px; }
+
 /* ---------- Director ---------- */
 .director__role { font-family: var(--mono); font-size: 13px; color: var(--ink-dim); margin-bottom: 20px; }
 .director h2 { font-weight: 800; font-size: 32px; letter-spacing: -0.01em; margin: 0 0 4px; }
@@ -495,6 +500,7 @@ textarea.field { resize: vertical; }
   .ledger { font-size: 15px; line-height: 1.9; }
   .footer__grid { grid-template-columns: 1fr; }
   .subscribe-form { flex-direction: column; }
+  .headshot--profile { float: none; width: 160px; height: 160px; margin: 0 0 20px; }
 
   /* collapsible nav */
   .nav__toggle { display: inline-block; }

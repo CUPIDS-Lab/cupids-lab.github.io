@@ -144,6 +144,19 @@ module CupidsFilters
     "#{base}#{u}"
   end
 
+  # True when the site has a static file at the given site-absolute path
+  # (e.g. "/assets/img/headshots/vu.png"). Lets a template reference an
+  # optional asset and skip the markup when the file hasn't been added yet —
+  # the page degrades gracefully (and the link checker stays green) until the
+  # image lands, then renders automatically once it does.
+  def static_exists(path)
+    needle = path.to_s.sub(%r{\A/+}, "")
+    return false if needle.empty?
+    site = @context.registers[:site]
+    return false unless site
+    site.static_files.any? { |f| f.relative_path.to_s.sub(%r{\A/+}, "") == needle }
+  end
+
   private
 
   # A vocabulary entry ({label, accent}) for a kind key, from _data/dispatch.yml.

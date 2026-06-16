@@ -1,7 +1,12 @@
 {%- comment -%} Director block. Param: include.person = { name, role, bio, email, github } {%- endcomment -%}
 {%- assign p = include.person -%}
+{%- assign has_photo = p.photo | static_exists -%}
 <div class="split split--director director">
+  {%- if has_photo -%}
+  <img class="headshot headshot--1x1" src="{{ p.photo | relative_url }}" alt="{{ p.name }}">
+  {%- else -%}
   <div class="placeholder placeholder--1x1"><span>[ headshot ]</span></div>
+  {%- endif -%}
   <div>
     <div class="kicker kicker--gold" style="letter-spacing:0.08em;">Director</div>
     <h2>{% if p.url %}<a href="{{ p.url | relative_url }}">{{ p.name }}</a>{% else %}{{ p.name }}{% endif %}</h2>

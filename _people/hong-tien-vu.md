@@ -2,6 +2,7 @@
 title: Hong Tien Vu
 order: 2
 category: collaborator
+photo: /assets/img/headshots/vu.png
 summary: "Director, Center for Environmental Journalism"
 ---
 
