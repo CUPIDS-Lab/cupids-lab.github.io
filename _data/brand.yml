@@ -1,0 +1,69 @@
+# ============================================================
+#  Brand identity — single source of truth.
+#  Human spec + prompt live in AGENTS.md ("## Brand identity").
+#  Regenerate assets:  ruby script/generate-brand.rb
+# ============================================================
+name: "CUPIDS Lab"
+wordmark: "cupids-lab"
+tagline: "We preserve the data democracy depends on."
+
+# A short brand prompt the harness "digests" (and that you could hand to a
+# designer or an image model).
+prompt: >-
+  A dark, data-forward identity for a public-interest data lab: a near-black
+  canvas, CU gold accents, an IBM Plex Mono wordmark, and a recurring Cupid
+  motif — a heart pierced by a gold arrow — drawn in the Unicode "color heart"
+  palette. Restrained and civic, with a little matchmaker playfulness.
+
+# Recurring motif emoji.
+emoji:
+  primary: "💘"        # heart with arrow (Cupid) — the recurring theme
+  wordmark_glyph: "<3"
+  # The Unicode "<color> heart" palette we draw from (black omitted — it
+  # disappears on the dark canvas).
+  palette:
+    - { name: red,    char: "❤️", color: "#ed4e5b" }
+    - { name: orange, char: "🧡", color: "#f0883e" }
+    - { name: yellow, char: "💛", color: "#f7c948" }
+    - { name: green,  char: "💚", color: "#6fcf97" }
+    - { name: blue,   char: "💙", color: "#4a9fe6" }
+    - { name: purple, char: "💜", color: "#9b6dd6" }
+    - { name: brown,  char: "🤎", color: "#9c6b4a" }
+    - { name: white,  char: "🤍", color: "#e8e6e0" }
+    - { name: pink,   char: "💘", color: "#f06fa0" }
+
+# Core colors (mirror of the CSS tokens in assets/css/style.css).
+colors:
+  bg: "#0e0f12"
+  panel: "#16181d"
+  ink: "#e8e6e0"
+  muted: "#8a8f98"
+  gold: "#cfb87c"
+  red: "#b23a2e"
+  green: "#6fcf97"
+  amber: "#e0a14e"
+
+fonts:
+  display: "Public Sans"
+  mono: "IBM Plex Mono"
+
+# How the heart-with-arrow mark is colored.
+mark:
+  heart: "#b23a2e"   # red heart
+  arrow: "#cfb87c"   # gold arrow
+
+# Standalone heart-with-arrow icon variants — every palette color crossed with
+# these rotations — emitted to assets/brand/hearts/ for reuse as list bullets,
+# scatter art, etc. (e.g. hearts/green.svg, hearts/green-r12.svg).
+variants:
+  dir: hearts
+  rotations: [-12, 0, 12]
+  arrow: "#cfb87c"
+
+# Assets the harness emits into assets/brand/ (SVG, deterministic).
+assets:
+  - { file: favicon.svg, w: 64,   h: 64,  kind: mark }
+  - { file: avatar.svg,  w: 512,  h: 512, kind: avatar }
+  - { file: og.svg,      w: 1200, h: 630, kind: og }
+  - { file: banner.svg,  w: 1500, h: 500, kind: og }
+  - { file: pattern.svg, w: 240,  h: 240, kind: pattern }

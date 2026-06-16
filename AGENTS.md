@@ -35,6 +35,36 @@ assets/                self-hosted fonts, css/style.css, js/cupids.js
 
 Loose files in the repo root are intentionally minimal: `README.md`, `LICENSE`, `AGENTS.md`, `robots.txt`, plus Jekyll infra (`_config.yml`, `Gemfile`, `Gemfile.lock`) which **must** stay at the root.
 
+## Brand identity
+
+The brand is a dark, data-forward identity with a recurring **Cupid motif — a heart pierced by a gold arrow** (the 💘 "heart with arrow"). The canonical metadata (prompt, palette, colors, fonts, mark, asset specs) lives in **`_data/brand.yml`**; edit there, then regenerate.
+
+**Brand prompt:** *A dark, data-forward identity for a public-interest data lab: a near-black canvas, CU gold accents, an IBM Plex Mono wordmark, and a recurring Cupid motif — a heart pierced by a gold arrow — drawn in the Unicode "color heart" palette. Restrained and civic, with a little matchmaker playfulness.*
+
+**Heart palette** — the Unicode "`<color>` heart" emojis (per [Hearts in Unicode](https://en.wikipedia.org/wiki/Hearts_in_Unicode); black `🖤` is omitted because it disappears on the dark canvas):
+
+| Name | Emoji | Hex |
+|------|-------|-----|
+| red | ❤️ | `#ed4e5b` |
+| orange | 🧡 | `#f0883e` |
+| yellow | 💛 | `#f7c948` |
+| green | 💚 | `#6fcf97` |
+| blue | 💙 | `#4a9fe6` |
+| purple | 💜 | `#9b6dd6` |
+| brown | 🤎 | `#9c6b4a` |
+| white | 🤍 | `#e8e6e0` |
+| pink (arrow) | 💘 | `#f06fa0` |
+
+The mark itself is a **red heart (`#b23a2e`) + gold arrow (`#cfb87c`)`**. Core UI colors mirror the CSS tokens in `assets/css/style.css`.
+
+**Generation harness:** `script/generate-brand.rb` digests `_data/brand.yml` and emits deterministic SVGs into `assets/brand/`:
+
+```bash
+ruby script/generate-brand.rb
+```
+
+It produces: `favicon.svg`, `avatar.svg` (profile image), `og.svg` (1200×630 social card), `banner.svg`, `pattern.svg` (tiling background), and a `hearts/` collection — every palette color × a few rotations (e.g. `hearts/green.svg`, `hearts/green-r12.svg`) for reuse as list bullets, scatter art, or icons. `cupids.js` draws the same heart-with-arrow motif procedurally on the hero canvas. Commit regenerated assets; `script/` is excluded from the build.
+
 ## Build & test
 
 ```bash
