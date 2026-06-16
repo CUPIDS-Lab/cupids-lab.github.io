@@ -77,7 +77,7 @@
   var INFECTED   = { g: '💘', c: '#f06fa0' }; // the Cupid heart that spreads
   var EMOJI_FONT = '"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
   var SPREAD_MS  = 500;   // half-second infection tick
-  var TRANSMIT   = 0.45;  // chance an infected node infects a given neighbor per tick
+  var TRANSMIT   = 0.45;  // chance the single per-tick propagation fires
   var RESET_FRAC = 0.88;  // once this fraction is infected, reset & re-seed so it loops
   // Viewport scaling: keep heart density (and the look) consistent desktop↔mobile.
   var AREA_PER_NODE = 12000; // px² of hero per heart (data-count is the upper cap)
@@ -128,8 +128,10 @@
       for (var i = 0; i < n; i++) infect(pts[(Math.random() * pts.length) | 0]);
     }
 
-    // One SI step: infected nodes spread 💘 to connected (in-range) neighbors.
-    // Decisions use the state at tick start; saturation triggers a reset.
+    // One SI step. Cap: at most ONE new infection per tick — collect the
+    // susceptible hearts adjacent to an infected one, then infect a single
+    // random one. This keeps dense networks from igniting all at once, so the
+    // spread rate is independent of how crowded the field is. Saturation resets.
     function spreadTick() {
       if (!c.isConnected) { if (timer) { clearInterval(timer); timer = null; } return; }
       if (!pts || !pts.length) return;
@@ -139,16 +141,17 @@
       // Saturated: refresh the ENTIRE network — new positions, new hearts, new
       // patient zero — so the spread restarts on a fresh graph.
       if (inf >= pts.length * RESET_FRAC) { seed(c._w, c._h); return; }
-      var d2 = linkDist * linkDist, toInfect = [];
-      for (var a = 0; a < pts.length; a++) {
-        if (!pts[a].infected) continue;
-        for (var b = 0; b < pts.length; b++) {
-          if (b === a || pts[b].infected) continue;
+      if (Math.random() >= TRANSMIT) return;        // this tick doesn't propagate
+      var d2 = linkDist * linkDist, candidates = [];
+      for (var b = 0; b < pts.length; b++) {
+        if (pts[b].infected) continue;
+        for (var a = 0; a < pts.length; a++) {
+          if (!pts[a].infected) continue;
           var dx = pts[a].x - pts[b].x, dy = pts[a].y - pts[b].y;
-          if (dx * dx + dy * dy < d2 && Math.random() < TRANSMIT) toInfect.push(pts[b]);
+          if (dx * dx + dy * dy < d2) { candidates.push(pts[b]); break; }
         }
       }
-      for (k = 0; k < toInfect.length; k++) infect(toInfect[k]);
+      if (candidates.length) infect(candidates[(Math.random() * candidates.length) | 0]);
     }
 
     // Resize backing store; seed on first valid size, rescale on later changes.
