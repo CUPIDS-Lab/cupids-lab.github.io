@@ -96,7 +96,7 @@
         pts.push({
           x: Math.random() * W, y: Math.random() * H,
           vx: (Math.random() - 0.5) * 0.22, vy: (Math.random() - 0.5) * 0.22,
-          baseGlyph: s.g, baseColor: s.c, glyph: s.g, color: s.c, infected: false,
+          glyph: s.g, color: s.c, infected: false,
           size: 14 + Math.random() * 30   // ~doubled size range vs. before
         });
       }
@@ -104,7 +104,6 @@
     }
 
     function infect(p) { p.infected = true; p.glyph = INFECTED.g; p.color = INFECTED.c; }
-    function cure(p) { p.infected = false; p.glyph = p.baseGlyph; p.color = p.baseColor; }
 
     // Patient zero (a few seeds, scaled to the network size).
     function seedInfections() {
@@ -121,11 +120,9 @@
       var inf = 0, k;
       for (k = 0; k < pts.length; k++) if (pts[k].infected) inf++;
       if (inf === 0) { seedInfections(); return; }
-      if (inf >= pts.length * RESET_FRAC) {
-        for (k = 0; k < pts.length; k++) cure(pts[k]);
-        seedInfections();
-        return;
-      }
+      // Saturated: refresh the ENTIRE network — new positions, new hearts, new
+      // patient zero — so the spread restarts on a fresh graph.
+      if (inf >= pts.length * RESET_FRAC) { seed(c._w, c._h); return; }
       var d2 = linkDist * linkDist, toInfect = [];
       for (var a = 0; a < pts.length; a++) {
         if (!pts[a].infected) continue;

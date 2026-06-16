@@ -24,15 +24,15 @@ sections:
     cols: 3
     body: "A pipeline from undergraduate engagement through graduate study to professional practice."
     items:
-      - { title: "Graduate Fellows", body: "Two-year appointments with full funding — tuition, stipend, and research support. Fellows lead student teams, manage infrastructure, and produce original data journalism." }
-      - { title: "Visiting Fellows", body: "One-semester or full-year fellowships for working journalists, lawyers, policy researchers, and civic technologists. Stipend, workspace, and university access." }
-      - { title: "Undergraduate Fellows", body: "Competitive fellowships with hourly compensation, mentorship, and portfolio-building. The pipeline that identifies talent early and develops it." }
+      - { title: "Graduate Researchers", body: "Two-year research appointments leading student teams, managing infrastructure, and producing original data journalism. Funding and stipend details to be confirmed." }
+      - { title: "Visiting Researchers", body: "One-semester or full-year appointments for working journalists, lawyers, policy researchers, and civic technologists — workspace and university access. Stipend details to be confirmed." }
+      - { title: "Undergraduate Researchers", body: "Competitive positions with mentorship and portfolio-building — the pipeline that identifies talent early and develops it. Compensation details to be confirmed." }
   - type: cards
     heading: "For organizations & funders"
     cols: 2
     items:
       - { title: "For partner organizations", body: "Colorado's media organizations, civic groups, and professional associations can collaborate through sponsored projects, in-kind contributions, and joint funding proposals." }
-      - { title: "For funders", body: "Named fellowships and sponsored infrastructure offer tangible, visible impact. We work with CU Advancement to align philanthropic priorities with public-interest outcomes." }
+      - { title: "For funders", body: "Named research positions and sponsored infrastructure offer tangible, visible impact. We work with CU Advancement to align philanthropic priorities with public-interest outcomes." }
   - { type: interest }
 ---
-Need data help for your newsroom or nonprofit? Let Cupid play matchmaker. Want to do the work? Join the lab as a student, fellow, or partner.
+Need data help for your newsroom or nonprofit? Let Cupid play matchmaker. Want to do the work? Join the lab as a student, researcher, or partner.
