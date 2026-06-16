@@ -12,4 +12,4 @@ A computational social scientist with eighteen years studying how people collabo
 He has taught "Information Expositions" for eight years, serves as Vice Chair of one of the nation's first cannabis licensing boards, and writes a data-driven column for the Boulder Reporting Lab. CUPIDS is the synthesis of that research, teaching, and civic work.
 
 - **Email:** [brian.keegan@colorado.edu](mailto:brian.keegan@colorado.edu)
-- **GitHub:** [github.com/CUPIDS-Lab](https://github.com/CUPIDS-Lab)
+- **GitHub:** [github.com/brianckeegan/](https://github.com/brianckeegan/)
