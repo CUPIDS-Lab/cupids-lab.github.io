@@ -5,7 +5,7 @@ order: 1
 category: director
 featured: true
 tag: Director
-photo: /assets/img/headshots/keegan.png
+photo: /assets/img/headshots/brian-keegan.png
 summary: "Associate Professor, Department of Information Science · CU Boulder"
 ---
 Professor Keegan is a computational social scientist, an associate professor in the Department of Information Science at the University of Colorado Boulder, and director of the CUPIDS Lab. He holds courtesy appointments in the Department of Computer Science and is an affiliate of the ATLAS Institute, Institute for Behavioral Research, American Politics Research Lab, and REACH.
