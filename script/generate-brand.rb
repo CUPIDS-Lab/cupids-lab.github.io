@@ -47,11 +47,13 @@ def wordmark(x, y, size, anchor: "start")
   SVG
 end
 
-# A row of the palette heart emoji, centered on cx.
+# The rainbow heart bar, centered on cx — the Cupid 💘 leads, then the rest of
+# the color-heart palette (the duplicate pink/💘 entry is dropped).
 def palette_row(cx, y, gap, size)
-  total = (PALETTE.length - 1) * gap
+  chars = [PRIMARY] + PALETTE.map { |p| p["char"] }.reject { |ch| ch == PRIMARY }
+  total = (chars.length - 1) * gap
   startx = cx - total / 2.0
-  PALETTE.each_with_index.map { |p, i| emoji(startx + i * gap, y, size, p["char"]) }.join("\n")
+  chars.each_with_index.map { |ch, i| emoji(startx + i * gap, y, size, ch) }.join("\n")
 end
 
 def favicon
@@ -71,11 +73,9 @@ def social(w, h)
   body = +""
   body << %(<rect width="#{w}" height="#{h}" fill="#{C['bg']}"/>\n)
   body << %(<rect x="0" y="0" width="#{w}" height="10" fill="#{C['gold']}"/>\n)
-  body << %(<text x="80" y="#{(h * 0.30).round}" font-family="#{MONO}" font-size="26" letter-spacing="0.16em" fill="#{C['green']}">UNIVERSITY OF COLORADO · PUBLIC INTEREST DATA SCIENCE</text>\n)
-  body << wordmark(80, (h * 0.30).round + 96, 92)
-  body << %(<text x="80" y="#{(h * 0.30).round + 176}" font-family="#{SANS}" font-weight="800" font-size="60" fill="#{C['ink']}">#{BRAND['tagline']}</text>\n)
-  body << emoji(w - 210, (h * 0.46).round, 300, PRIMARY)
-  body << "\n" << palette_row(w / 2.0, h - 64, 78, 46)
+  body << %(<text x="80" y="#{(h * 0.40).round}" font-family="#{MONO}" font-size="26" letter-spacing="0.16em" fill="#{C['green']}">UNIVERSITY OF COLORADO · PUBLIC INTEREST DATA SCIENCE</text>\n)
+  body << wordmark(80, (h * 0.40).round + 96, 92)
+  body << "\n" << palette_row(w / 2.0, h - 70, 78, 46)
   doc(w, h, body)
 end
 
