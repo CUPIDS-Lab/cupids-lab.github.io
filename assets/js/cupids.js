@@ -43,45 +43,71 @@
     } catch (err) {}
   }
 
-  /* ---------- particle-links background ---------- */
-  function sizeCanvas(c) {
+  /* ---------- particle-links background ----------
+     Robust against first-load reflow on mobile: the hero grows after the
+     web fonts load (font-display: swap), and the mobile toolbar / rotation
+     can resize it too. We seed particles only once the canvas has a real
+     measured size, and on any later box change we re-size the backing store
+     AND rescale existing particle positions so the network never stretches,
+     bunches, or pops. */
+  function measure(c) {
     var r = c.getBoundingClientRect();
-    if (!r.width || !r.height) return;
+    if (!r.width || !r.height) return null;
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    c.width = r.width * dpr;
-    c.height = r.height * dpr;
+    var pw = Math.round(r.width * dpr), ph = Math.round(r.height * dpr);
+    if (c.width !== pw || c.height !== ph) {
+      c.width = pw; c.height = ph;
+    }
     var ctx = c.getContext('2d');
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     c._w = r.width; c._h = r.height;
+    return c;
   }
 
   function initCanvas(c) {
-    sizeCanvas(c);
     var color = c.dataset.color || '#cfb87c';
     var count = +(c.dataset.count || 40);
     var linkDist = +(c.dataset.link || 130);
     var dotOp = +(c.dataset.dotop || 0.45);
     var lineOp = +(c.dataset.lineop || 0.14);
-    var W = c._w || 900, H = c._h || 400;
-    var pts = [];
-    for (var i = 0; i < count; i++) {
-      pts.push({
-        x: Math.random() * W, y: Math.random() * H,
-        vx: (Math.random() - 0.5) * 0.22, vy: (Math.random() - 0.5) * 0.22
-      });
+    var pts = null;          // seeded lazily, once we have real dimensions
+    var raf = null;
+
+    function seed(W, H) {
+      pts = [];
+      for (var i = 0; i < count; i++) {
+        pts.push({
+          x: Math.random() * W, y: Math.random() * H,
+          vx: (Math.random() - 0.5) * 0.22, vy: (Math.random() - 0.5) * 0.22
+        });
+      }
     }
+
+    // Resize backing store; seed on first valid size, rescale on later changes.
+    function sync() {
+      var prevW = c._w, prevH = c._h;
+      if (!measure(c)) return;
+      if (!pts) {
+        seed(c._w, c._h);
+      } else if (prevW && prevH && (prevW !== c._w || prevH !== c._h)) {
+        var sx = c._w / prevW, sy = c._h / prevH;
+        for (var i = 0; i < pts.length; i++) { pts[i].x *= sx; pts[i].y *= sy; }
+      }
+    }
+
     var ctx = c.getContext('2d');
-    var raf;
     function draw() {
       if (!c.isConnected) { cancelAnimationFrame(raf); return; }
       var w = c._w, h = c._h;
-      if (!w || !h) { sizeCanvas(c); raf = requestAnimationFrame(draw); return; }
+      if (!w || !h || !pts) { sync(); raf = requestAnimationFrame(draw); return; }
       ctx.clearRect(0, 0, w, h);
       for (var k = 0; k < pts.length; k++) {
         var p = pts[k];
         p.x += p.vx; p.y += p.vy;
         if (p.x < 0 || p.x > w) p.vx *= -1;
         if (p.y < 0 || p.y > h) p.vy *= -1;
+        if (p.x < 0) p.x = 0; else if (p.x > w) p.x = w;
+        if (p.y < 0) p.y = 0; else if (p.y > h) p.y = h;
       }
       for (var a = 0; a < pts.length; a++) {
         for (var b = a + 1; b < pts.length; b++) {
@@ -108,9 +134,24 @@
       ctx.globalAlpha = 1;
       raf = requestAnimationFrame(draw);
     }
+
+    sync();
+
+    // Re-sync whenever the hero box actually changes (font load, rotation,
+    // mobile toolbar show/hide) — events alone don't cover these.
+    if (typeof ResizeObserver !== 'undefined') {
+      var ro = new ResizeObserver(function () { sync(); });
+      ro.observe(c);
+    }
+    // Belt-and-suspenders: resync once webfonts land (they grow the hero).
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function () { sync(); }).catch(function () {});
+    }
+
     draw();
-    return c;
+    return { el: c, sync: sync };
   }
+
 
   /* ---------- forms: optional Formspree POST, then confirm ---------- */
   function wireForm(form) {
@@ -156,7 +197,13 @@
         function (c) { canvases.push(initCanvas(c)); }
       );
       window.addEventListener('resize', function () {
-        canvases.forEach(function (c) { if (c.isConnected) sizeCanvas(c); });
+        canvases.forEach(function (o) { if (o.el.isConnected) o.sync(); });
+      }, { passive: true });
+      // Mobile orientation change reflows the hero after a tick.
+      window.addEventListener('orientationchange', function () {
+        setTimeout(function () {
+          canvases.forEach(function (o) { if (o.el.isConnected) o.sync(); });
+        }, 200);
       });
     }
 
