@@ -1,10 +1,10 @@
 {%- comment -%}
-  Hero. Params: variant ("home"|"child"), eyebrow, title, title_heart, lead,
+  Hero. Params: variant ("home"|"child"), eyebrow, title, title_mark, lead,
   actions (optional list of { label, to, style } -> in-hero buttons).
   Carries the subtle particle-links canvas (tuned per variant).
 {%- endcomment -%}
 {%- assign variant = include.variant | default: 'child' -%}
-{%- comment -%} Fixed 32 hearts on every viewport; size/edge width scale, not the count. {%- endcomment -%}
+{%- comment -%} Fixed 32 folders on every viewport; size/edge width scale, not the count. {%- endcomment -%}
 {%- if variant == 'home' -%}
   {%- assign pcount = 32 -%}{%- assign plink = 140 -%}{%- assign pdot = '0.55' -%}{%- assign pline = '0.34' -%}
 {%- else -%}
@@ -14,7 +14,7 @@
   <canvas class="cupids-particles hero__canvas" data-color="#cfb87c" data-count="{{ pcount }}" data-link="{{ plink }}" data-dotop="{{ pdot }}" data-lineop="{{ pline }}" aria-hidden="true"></canvas>
   <div class="hero__inner">
     {%- if include.eyebrow %}<div class="eyebrow">{{ include.eyebrow }}</div>{% endif -%}
-    <h1>{{ include.title }}{% if include.title_heart %} <span aria-hidden="true">&#9829;</span>{% endif %}</h1>
+    <h1>{{ include.title }}{% if include.title_mark %} <img class="mark-accent" src="{{ '/assets/brand/mark.svg' | relative_url }}" alt="" aria-hidden="true">{% endif %}</h1>
     {%- if include.lead %}<div class="hero__lead">{{ include.lead }}</div>{% endif -%}
     {%- if include.actions and include.actions != empty -%}
     <div class="hero__actions">

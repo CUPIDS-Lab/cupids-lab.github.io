@@ -7,7 +7,7 @@
 {%- assign key = include.data | default: 'contact' -%}
 {%- assign c = key | site_data -%}
 <div class="secure">
-  {%- if c.eyebrow %}<div class="kicker kicker--gold">{{ c.eyebrow }} <span class="heart">&#9829;</span></div>{% endif -%}
+  {%- if c.eyebrow %}<div class="kicker kicker--gold">{{ c.eyebrow }} <img class="mark-accent spark" src="{{ '/assets/brand/mark.svg' | relative_url }}" alt="" role="button" tabindex="0" aria-label="folder with arrow"></div>{% endif -%}
   {%- if c.heading %}<h2 class="secure__h">{{ c.heading }}</h2>{% endif -%}
   {%- if c.lead %}<p class="secure__lead">{{ c.lead }}</p>{% endif -%}
 

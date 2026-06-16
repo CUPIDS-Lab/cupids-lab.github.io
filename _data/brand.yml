@@ -9,24 +9,25 @@ tagline: "Defending the data democracy depends on."
 
 # A short brand prompt the harness "digests" (and that you could hand to a
 # designer or an image model).
-prompt: 'A brand and graphic identity for an academic public interest data lab. A black terminal with monospace fonts and syntax intially feels intimindating and cold. A near-black canvas, CU gold accents, an IBM Plex Mono wordmark. But there are recurring heart motifs using both ASCII heart "<3" as "wordmark_glyph" and Unicode emoji hearts — particularly "heart with arrow". The Unicode "color heart" palette provides some variation. Restrained and civic with a little emoji heart playfulness.'
+prompt: 'A brand and graphic identity for an academic public interest data lab. A black terminal with monospace fonts and syntax initially feels intimidating and cold. A near-black canvas, CU gold accents, an IBM Plex Mono "cupids-lab" wordmark. The central conceit is a "folder with arrow" — the data the public interest depends on, stored in file folders and pierced open by CUPID''s golden arrow (matchmaking data and democracy). A palette of color folders provides variation in the decorative art. Restrained and civic, with a little matchmaker playfulness.'
 
-# Recurring motif emoji.
-emoji:
-  primary: "💘"        # heart with arrow (Cupid) — the recurring theme
-  wordmark_glyph: "<3"
-  # The Unicode "<color> heart" palette we draw from (black omitted — it
-  # disappears on the dark canvas).
+# The central motif is the "folder with arrow" — CUPID's golden arrow piercing
+# open a file folder (see `mark:` + the seed at
+# assets/brand/parent-elements/folder-arrow-seed.svg). The decorative art draws
+# from a palette of color folders — the same hues used as CSS accents.
+motif:
+  primary: "folder-with-arrow"   # the data, in folders, pierced + opened by the arrow
+  # The color-folder palette (each renders as a recolored file folder).
   palette:
-    - { name: red,    char: "❤️", color: "#ed4e5b" }
-    - { name: orange, char: "🧡", color: "#f0883e" }
-    - { name: yellow, char: "💛", color: "#f7c948" }
-    - { name: green,  char: "💚", color: "#6fcf97" }
-    - { name: blue,   char: "💙", color: "#4a9fe6" }
-    - { name: purple, char: "💜", color: "#9b6dd6" }
-    - { name: brown,  char: "🤎", color: "#9c6b4a" }
-    - { name: white,  char: "🤍", color: "#e8e6e0" }
-    - { name: pink,   char: "💘", color: "#f06fa0" }
+    - { name: red,    color: "#ed4e5b" }
+    - { name: orange, color: "#f0883e" }
+    - { name: yellow, color: "#f7c948" }
+    - { name: green,  color: "#6fcf97" }
+    - { name: blue,   color: "#4a9fe6" }
+    - { name: purple, color: "#9b6dd6" }
+    - { name: brown,  color: "#9c6b4a" }
+    - { name: white,  color: "#e8e6e0" }
+    - { name: pink,   color: "#f06fa0" }
 
 # Core colors (mirror of the CSS tokens in assets/css/style.css).
 colors:
@@ -43,23 +44,27 @@ fonts:
   display: "Public Sans"
   mono: "IBM Plex Mono"
 
-# How the heart-with-arrow mark is colored.
+# The logo mark: a CU-gold arrow piercing a magenta-pink open file folder. The
+# artwork is the cleaned seed at assets/brand/parent-elements/folder-arrow-seed.svg,
+# embedded as-is by script/generate-brand.rb — edit the seed to change it. Colors
+# are recorded here for reference only (they live in the seed):
 mark:
-  heart: "#f06fa0"   # pink heart
-  arrow: "#4a9fe6"   # blue arrow
+  style: "svg-seed"
+  folder: "#d63384"   # magenta-pink open folder (gradient #d63384 → #e374ab)
+  arrow:  "#cfb87c"   # CU gold (deeper shaft #b8984c)
 
-# Standalone heart icon per palette color, emitted to assets/brand/hearts/ as
-# both SVG and PNG (e.g. hearts/green.svg, hearts/green.png) for reuse as list
-# bullets, scatter art, etc.
+# Per-color file folder, emitted to assets/brand/folders/ as both SVG and PNG
+# (e.g. folders/green.svg, folders/green.png) for reuse as list bullets, scatter
+# art, or icons.
 variants:
-  dir: hearts
-  rotations: [0]
+  dir: folders
 
 # Assets the harness emits into assets/brand/ (SVG, deterministic).
 # `ruby script/generate-brand.rb` writes the SVGs; `node script/rasterize.mjs`
 # exports PNG previews next to them (headless Chrome + Noto Color Emoji).
 assets:
   - { file: favicon.svg,    w: 64,   h: 64,  kind: mark }
+  - { file: mark.svg,       w: 96,   h: 96,  kind: pixmark }   # transparent, inline (nav/footer)
   - { file: avatar.svg,     w: 512,  h: 512, kind: avatar }
   - { file: og.svg,         w: 1200, h: 630, kind: og }
   - { file: banner.svg,     w: 1500, h: 500, kind: og }
