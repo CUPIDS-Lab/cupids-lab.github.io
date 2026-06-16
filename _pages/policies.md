@@ -18,10 +18,10 @@ This website is deliberately minimal and auditable:
 
 - **Static, server-less.** It's a static [Jekyll](https://jekyllrb.com) build served by GitHub Pages — no application server, database, or session store collecting visitor data.
 - **No third-party tracking.** No analytics, advertising, social, or A/B-testing scripts; no tracking cookies or fingerprinting.
-- **No external requests.** Fonts are self-hosted and all JavaScript is first-party, so your browser doesn't call out to Google Fonts, CDNs, or other third parties that would see your IP address.
+- **No third-party requests on page load.** Fonts are self-hosted and all JavaScript is first-party, so simply visiting the site doesn't call out to Google Fonts, CDNs, analytics, or other third parties that would see your IP address. (The one time data leaves to a third party is when *you* submit a form — see below.)
 - **Open source.** The full source is public at [github.com/CUPIDS-Lab](https://github.com/CUPIDS-Lab), so anyone can verify these claims.
 - **Encrypted transport.** Served over HTTPS.
-- **A web form is not a secure channel.** The optional intake form, where enabled, posts to a third-party form handler. It's fine for routine requests and explicitly *not* for sensitive disclosures — see **Secure contact** on the [Get Involved](/get-involved/) page.
+- **A web form is not a secure channel.** Our intake and newsletter forms submit to [**Formspree**](https://formspree.io), a third-party form processor — your message and whatever you put in it are transmitted to and stored by Formspree under [its own privacy policy](https://formspree.io/legal/privacy-policy/), then emailed to us. That's fine for routine, non-sensitive requests; it is explicitly **not** for confidential sources, privileged material, or anything you need kept off third-party servers. For those, use **Secure contact** on the [Get Involved](/get-involved/) page.
 
 ## Our disclosure infrastructure stays off CU IT
 

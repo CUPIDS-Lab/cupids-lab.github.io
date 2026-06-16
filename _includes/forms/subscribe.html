@@ -1,5 +1,7 @@
 <div>
   <form class="js-form subscribe-form"{% if site.form_endpoint != "" %} action="{{ site.form_endpoint }}" method="post" data-endpoint="{{ site.form_endpoint }}"{% endif %}>
+    <input type="hidden" name="_subject" value="New CUPIDS Dispatch subscriber">
+    <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
     <input class="field" type="email" name="email" placeholder="you@email.com" required aria-label="Email address">
     <button class="btn btn--gold btn--submit" type="submit">Subscribe</button>
   </form>

@@ -256,31 +256,49 @@
     return { el: c, sync: sync };
   }
 
+  // AJAX form submit to Formspree (or any endpoint set via data-endpoint).
+  // Shows the on-brand success state on a 2xx, surfaces validation errors
+  // otherwise, and re-enables the button. With no endpoint it just confirms
+  // (the design's client-side fallback).
   function wireForm(form) {
+    var card = form.parentNode;
+    var success = card.querySelector('.js-form-success');
+    var btn = form.querySelector('button[type="submit"]');
+    var label = btn ? btn.innerHTML : '';
+    var endpoint = form.getAttribute('data-endpoint');
+
+    function reveal() { if (success) { form.style.display = 'none'; success.hidden = false; } }
+    function resetBtn() { if (btn) { btn.disabled = false; btn.innerHTML = label; } }
+    function showError(msg) {
+      var el = card.querySelector('.js-form-error');
+      if (!el) {
+        el = document.createElement('div');
+        el.className = 'js-form-error form-error';
+        el.setAttribute('role', 'alert');
+        form.parentNode.insertBefore(el, form.nextSibling);
+      }
+      el.textContent = msg || "Sorry — that didn't send. Please try again, or reach us directly.";
+      el.hidden = false;
+    }
+
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      var success = form.parentNode.querySelector('.js-form-success');
-      var endpoint = form.getAttribute('data-endpoint');
-
-      function reveal() {
-        if (success) {
-          form.style.display = 'none';
-          success.hidden = false;
-        }
-      }
-
-      if (endpoint) {
-        var btn = form.querySelector('button[type="submit"]');
-        if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
-        fetch(endpoint, {
-          method: 'POST',
-          body: new FormData(form),
-          headers: { 'Accept': 'application/json' }
-        }).then(function () { reveal(); })
-          .catch(function () { reveal(); });
-      } else {
-        reveal();
-      }
+      if (!endpoint) { reveal(); return; }
+      var prev = card.querySelector('.js-form-error'); if (prev) prev.hidden = true;
+      if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+      fetch(endpoint, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      }).then(function (res) {
+        if (res.ok) { reveal(); return; }
+        return res.json().then(function (data) {
+          var msg = data && data.errors && data.errors.length
+            ? data.errors.map(function (er) { return er.message; }).join(' ')
+            : null;
+          showError(msg); resetBtn();
+        }).catch(function () { showError(); resetBtn(); });
+      }).catch(function () { showError(); resetBtn(); });
     });
   }
 
