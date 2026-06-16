@@ -3,10 +3,11 @@
   Carries the subtle particle-links canvas (tuned per variant).
 {%- endcomment -%}
 {%- assign variant = include.variant | default: 'child' -%}
+{%- comment -%} Fixed 32 hearts on every viewport; size/edge width scale, not the count. {%- endcomment -%}
 {%- if variant == 'home' -%}
-  {%- assign pcount = 48 -%}{%- assign plink = 140 -%}{%- assign pdot = '0.55' -%}{%- assign pline = '0.34' -%}
+  {%- assign pcount = 32 -%}{%- assign plink = 140 -%}{%- assign pdot = '0.55' -%}{%- assign pline = '0.34' -%}
 {%- else -%}
-  {%- assign pcount = 34 -%}{%- assign plink = 135 -%}{%- assign pdot = '0.5' -%}{%- assign pline = '0.28' -%}
+  {%- assign pcount = 32 -%}{%- assign plink = 135 -%}{%- assign pdot = '0.5' -%}{%- assign pline = '0.28' -%}
 {%- endif -%}
 <section class="hero hero--{{ variant }}">
   <canvas class="cupids-particles hero__canvas" data-color="#cfb87c" data-count="{{ pcount }}" data-link="{{ plink }}" data-dotop="{{ pdot }}" data-lineop="{{ pline }}" aria-hidden="true"></canvas>
