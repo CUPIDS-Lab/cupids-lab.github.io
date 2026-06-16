@@ -86,6 +86,8 @@ module CupidsFilters
             "featured" => d.data["featured"] == true,
             "order"    => d.data["order"],
             "category" => d.data["category"],
+            "meta"     => d.data["meta"],
+            "bullets"  => d.data["bullets"],
           }
         end
   end

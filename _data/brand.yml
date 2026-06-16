@@ -9,8 +9,7 @@ tagline: "Defending the data democracy depends on."
 
 # A short brand prompt the harness "digests" (and that you could hand to a
 # designer or an image model).
-prompt: >-
-  A brand and graphic identity for an academic public interest data lab. A black terminal with monospace fonts and syntax intially feels intimindating and cold. A near-black canvas, CU gold accents, an IBM Plex Mono wordmark. But there are recurring heart motifs using both ASCII heart "<3" as "wordmark_glyph" and Unicode emoji hearts — particularly "heart with arrow". The Unicode "color heart" palette provides some variation. Restrained and civic with a little emoji heart playfulness.
+prompt: 'A brand and graphic identity for an academic public interest data lab. A black terminal with monospace fonts and syntax intially feels intimindating and cold. A near-black canvas, CU gold accents, an IBM Plex Mono wordmark. But there are recurring heart motifs using both ASCII heart "<3" as "wordmark_glyph" and Unicode emoji hearts — particularly "heart with arrow". The Unicode "color heart" palette provides some variation. Restrained and civic with a little emoji heart playfulness.'
 
 # Recurring motif emoji.
 emoji:

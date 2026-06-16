@@ -2,17 +2,10 @@
 layout: home
 permalink: /
 nav: home
-title: CUPIDS Lab
-description: >-
-  A research lab at the University of Colorado archiving at-risk public
-  datasets, building data infrastructure, and matching technical capacity
-  with the journalists and civic groups who need it.
+# Hero, mission, and description live in _config.yml; the featured project is
+# inherited from _projects/ (featured: true). This file holds only the
+# home-specific showcase content below.
 home:
-  hero:
-    eyebrow: "University of Colorado Public Interest Data Science Lab"
-    title: "Defending the data democracy depends on."
-    lead: "A research lab rescuing at-risk public datasets, building data infrastructure, sharing resources, and supporting journalists and civic groups."
-  mission: "We train students in data science while providing pro-bono technical capacity to the journalists, lawyers, and nonprofits keeping Colorado accountable."
   moment:
     kicker: "The moment — what's disappearing"
     ledger:
@@ -26,11 +19,6 @@ home:
   pillars_heading: "How the lab works"
   pillars_sub: "Three pillars, one public-interest mission."
   featured:
-    eyebrow: "Featured · CUPIDS × CEJ"
-    title: "Preserving environmental accountability"
-    body: "With the Center for Environmental Journalism, we're systematically identifying, archiving, and documenting the at-risk federal datasets Colorado's reporters depend on — air quality, streamflow, climate projections, and methane emissions."
     link_label: "See the project →"
-    link_to: "/projects/"
-    meta: "2026–27 · de Castro Research Award"
     caption: "[ data viz — at-risk dataset map ]"
 ---

@@ -5,7 +5,7 @@
   <div>
     <div class="kicker kicker--gold" style="letter-spacing:0.08em;">Director</div>
     <h2>{% if p.url %}<a href="{{ p.url | relative_url }}">{{ p.name }}</a>{% else %}{{ p.name }}{% endif %}</h2>
-    <div class="director__role">{{ p.role }}</div>
+    <div class="director__role">{{ p.role }}{% if p.pronouns %} · {{ p.pronouns }}{% endif %}</div>
     <p class="director__bio">{{ p.bio }}</p>
     <div class="director__links">
       <a class="gold" href="mailto:{{ p.email }}">{{ p.email }}</a>

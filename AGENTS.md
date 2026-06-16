@@ -11,7 +11,9 @@ The website for **CUPIDS Lab** (University of Colorado Public Interest Data Scie
 1. **No external requests.** Everything is same-origin: fonts are self-hosted in `assets/fonts/` (`@font-face`), and JS is hand-written in `assets/js/cupids.js`. Do **not** add Google Fonts, CDNs, analytics, or third-party scripts/libraries.
 2. **Content is data, not markup.** Author content in Markdown + YAML; keep presentation in `_layouts`, `_includes/components`, and the Liquid filters in `_plugins/`. Don't hand-write page HTML.
 3. **Reuse the components and filters** rather than duplicating markup/inline styles. Match the existing dark theme tokens (CSS vars in `assets/css/style.css`).
-4. **Keep CI green.** Build + link-check before pushing (see below).
+4. **Don't repeat content.** Shared values have one home: site identity (title, tagline, description, mission, hero eyebrow, location) in `_config.yml`; per-item content in `_data/*.yml` or the collections. Pages and layouts *retrieve* these — never hard-code a copy that can drift.
+5. **One line per paragraph.** Write each paragraph on a single line (no hard wraps); blank lines separate paragraphs. Only break a line where HTML rendering needs it — e.g. an explicit `<br>`, or a `white-space: pre-line` block like the director bio.
+6. **Keep CI green.** Build + link-check before pushing (see below).
 
 ## Layout of the repo
 
@@ -22,8 +24,8 @@ _dispatch/             Dispatch collection — one Markdown file per issue.
 _projects/ _people/ _resources/
                        Collections — one file per item; each gets a child page
                        and is listed (as a card) on its parent page.
-_data/*.yml            Reference data: director block, featured project,
-                       datasets (archive), pillars, focus areas, nav, steps.
+_data/*.yml            Reference data: director block, datasets (archive),
+                       pillars, focus areas, nav, contact, brand, steps.
 _layouts/              default · home · page (section dispatcher) · dispatch ·
                        detail (collection item)
 _includes/components/  card, card_grid, placeholder_grid, placeholder_panel,
@@ -82,7 +84,9 @@ LANG=C.UTF-8 bundle exec htmlproofer ./_site \
 
 ## Pages (the `page` layout)
 
-A page declares `sections:` in front matter; each is dispatched to a component. Section `type`s: `cards`, `collection`, `chips`, `archive`, `director`, `cta`, `dispatch_list`, `subscribe`, `helpdesk`, `interest`. A list is inline (`items:`) or pulled from `_data` via a dotted `data:` path, or from a collection via `name:`. The page's Markdown body becomes the hero lead.
+A page declares `sections:` in front matter; each is dispatched to a component. Section `type`s: `cards`, `collection`, `chips`, `archive`, `director`, `cta`, `dispatch_list`, `subscribe`, `helpdesk`, `interest`. A list is inline (`items:`) or pulled from `_data` via a dotted `data:` path, or from a collection via `name:` (add `only_featured: true` to render just the flagship item, e.g. the projects featured card). The page's Markdown body becomes the hero lead.
+
+The **home** page (`home` layout) is special: its hero comes from `_config.yml` (`hero_eyebrow` + `tagline` headline + `hero_lead`) and `mission`, and its featured block is inherited from the `_projects` doc marked `featured: true` — none of that is duplicated in `index.md`, which holds only the home-specific showcase (the "moment" ledger/stats, pillar headings, featured caption). (`description` is the separate SEO/meta description.)
 
 ## Collections & ranking metadata
 
