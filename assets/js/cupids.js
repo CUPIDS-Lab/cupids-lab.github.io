@@ -82,6 +82,11 @@
   // Viewport scaling: keep heart density (and the look) consistent desktop↔mobile.
   var AREA_PER_NODE = 12000; // px² of hero per heart (data-count is the upper cap)
   var SIZE_REF = 1100;       // hero width at which hearts render full-size
+  // Constant-density (linear-in-area) scaling left phones too sparse: a hero at
+  // a quarter of the desktop area got a quarter of the hearts. Discount the
+  // falloff polynomially — raise the cap-fraction to a power < 1 — so the count
+  // sags gently toward small viewports while desktop still tops out at the cap.
+  var DENSITY_FALLOFF = 0.5; // 1 = linear (old), →0 = flatter (denser mobile)
   // Prevent-overlap, adapted from ForceAtlas2's anti-collision ("adjustSizes":
   // https://github.com/bhargavchippada/forceatlas2). Each heart has a radius
   // (~half its glyph size); overlapping pairs get separated every frame.
@@ -104,7 +109,10 @@
     // fast-spreading clump and desktop isn't sparse.
     function seed(W, H) {
       var scale = Math.max(0.6, Math.min(1, W / SIZE_REF));
-      var n = Math.max(6, Math.min(maxCount, Math.round((W * H) / AREA_PER_NODE)));
+      // Fraction of the cap a constant-density field would want here, then
+      // discounted so it falls off slower than linearly with shrinking area.
+      var frac = Math.min(1, (W * H) / AREA_PER_NODE / maxCount);
+      var n = Math.max(6, Math.round(maxCount * Math.pow(frac, DENSITY_FALLOFF)));
       linkDist = baseLink * scale;
       pts = [];
       for (var i = 0; i < n; i++) {
