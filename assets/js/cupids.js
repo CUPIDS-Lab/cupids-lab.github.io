@@ -79,25 +79,35 @@
   var SPREAD_MS  = 500;   // half-second infection tick
   var TRANSMIT   = 0.45;  // chance an infected node infects a given neighbor per tick
   var RESET_FRAC = 0.88;  // once this fraction is infected, reset & re-seed so it loops
+  // Viewport scaling: keep heart density (and the look) consistent desktop↔mobile.
+  var AREA_PER_NODE = 12000; // px² of hero per heart (data-count is the upper cap)
+  var SIZE_REF = 1100;       // hero width at which hearts render full-size
 
   function initCanvas(c) {
-    var count = +(c.dataset.count || 40);
-    var linkDist = +(c.dataset.link || 130);
+    var maxCount = +(c.dataset.count || 40);  // desktop cap
+    var baseLink = +(c.dataset.link || 130);
     var dotOp = +(c.dataset.dotop || 0.45);
     var lineOp = +(c.dataset.lineop || 0.14);
     var pts = null;          // seeded lazily, once we have real dimensions
     var raf = null;
     var timer = null;        // SI spread interval
+    var linkDist = baseLink; // recomputed per seed for the current viewport
 
+    // Node count scales with hero AREA (constant density) and heart size +
+    // link distance scale with hero WIDTH — so a phone isn't a crowded,
+    // fast-spreading clump and desktop isn't sparse.
     function seed(W, H) {
+      var scale = Math.max(0.6, Math.min(1, W / SIZE_REF));
+      var n = Math.max(6, Math.min(maxCount, Math.round((W * H) / AREA_PER_NODE)));
+      linkDist = baseLink * scale;
       pts = [];
-      for (var i = 0; i < count; i++) {
+      for (var i = 0; i < n; i++) {
         var s = SUSCEPTIBLE[(Math.random() * SUSCEPTIBLE.length) | 0];
         pts.push({
           x: Math.random() * W, y: Math.random() * H,
           vx: (Math.random() - 0.5) * 0.22, vy: (Math.random() - 0.5) * 0.22,
           glyph: s.g, color: s.c, infected: false,
-          size: 14 + Math.random() * 30   // ~doubled size range vs. before
+          size: (14 + Math.random() * 30) * scale
         });
       }
       seedInfections();
