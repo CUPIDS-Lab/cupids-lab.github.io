@@ -28,11 +28,11 @@ sections:
     id: join-the-lab
     heading: "Join the lab"
     cols: 3
-    body: "A pipeline from undergraduate engagement through graduate study to professional practice."
+    body: "A pipeline from undergraduate engagement through graduate study to professional practice — open across disciplines, methods, and career stages."
     items:
-      - { title: "Graduate Researchers", body: "Two-year research appointments leading student teams, managing infrastructure, and producing original data journalism. Funding and stipend details to be confirmed." }
-      - { title: "Visiting Researchers", body: "One-semester or full-year appointments for working journalists, lawyers, policy researchers, and civic technologists — workspace and university access. Stipend details to be confirmed." }
-      - { title: "Undergraduate Researchers", body: "Competitive positions with mentorship and portfolio-building — the pipeline that identifies talent early and develops it. Compensation details to be confirmed." }
+      - { title: "Graduate Researchers", body: "Two-year appointments — open across disciplines — leading student teams, building data infrastructure, and producing original data journalism. Funding and stipend details to be confirmed.", url: "/get-involved/graduate-researchers/" }
+      - { title: "Visiting Researchers", body: "One-semester or full-year appointments for mid-career journalists, lawyers, policy researchers, and civic technologists — workspace and university access. Stipend details to be confirmed.", url: "/get-involved/visiting-researchers/" }
+      - { title: "Undergraduate Researchers", body: "Competitive, mentored positions open to every major — real skills, a public-interest portfolio, and the start of the pipeline. Compensation details to be confirmed.", url: "/get-involved/undergraduate-researchers/" }
   - type: cards
     id: organizations-funders
     heading: "For organizations & funders"
