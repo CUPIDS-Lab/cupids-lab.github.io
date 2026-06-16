@@ -104,7 +104,7 @@ Items in `_projects`, `_people`, `_resources` (and `_dispatch`) are individual M
 
 ## Custom Liquid filters (`_plugins/cupids.rb`)
 
-`accent_color` · `bullet_color` · `tone_class` · `site_data` (dotted-path data lookup) · `smart_url` · `dispatch_cards` · `collection_cards`.
+`accent_color` · `bullet_color` · `tone_class` · `site_data` (dotted-path data lookup) · `smart_url` · `static_exists` (true when a referenced static asset is present) · `dispatch_cards` · `collection_cards`.
 
 > These run only because the site is built with `bundle exec jekyll build` in the GitHub Actions workflow — **not** the legacy `github-pages` gem (which runs in safe mode and ignores `_plugins/`). Keep deploying through Actions.
 

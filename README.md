@@ -38,7 +38,7 @@ The **home** page is special: its hero (`hero_eyebrow` + `tagline` + `hero_lead`
 
 ### Liquid filters ("converters") — `_plugins/cupids.rb`
 
-Computed design rules are abstracted into filters so templates stay declarative: `accent_color` (tag → accent), `bullet_color`, `tone_class`, `site_data` (dotted path into `_data`), `smart_url`, `dispatch_cards`, `collection_cards`.
+Computed design rules are abstracted into filters so templates stay declarative: `accent_color` (tag → accent), `bullet_color`, `tone_class`, `site_data` (dotted path into `_data`), `smart_url`, `static_exists` (true when a referenced static asset is present), `dispatch_cards`, `collection_cards`.
 
 > Custom plugins run because the site builds via GitHub Actions (not the legacy `github-pages` gem). Keep deploying through the included workflow.
 
