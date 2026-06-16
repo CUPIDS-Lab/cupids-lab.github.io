@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="CUPIDS Lab">
+<metadata>CUPIDS Lab — generated from _data/brand.yml. A dark, data-forward identity for a public-interest data lab: a near-black canvas, CU gold accents, an IBM Plex Mono wordmark, and a recurring Cupid motif — a heart pierced by a gold arrow — drawn in the Unicode "color heart" palette. Restrained and civic, with a little matchmaker playfulness.</metadata>
+<g transform="rotate(12 32 32)">
+<g transform="translate(32 33) scale(0.6111) translate(-50 -46)">
+  <path d="M50 82 C 22 62 10 45 10 30 C 10 18 19 10 30 10 C 39 10 47 16 50 24 C 53 16 61 10 70 10 C 81 10 90 18 90 30 C 90 45 78 62 50 82 Z" fill="#ed4e5b"/>
+  <g fill="none" stroke="#cfb87c" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="6" y1="74" x2="94" y2="26"/>
+    <polyline points="80,22 94,26 90,40"/>
+    <polyline points="2,60 6,74 20,70"/>
+  </g>
+</g>
+</g>
+</svg>
