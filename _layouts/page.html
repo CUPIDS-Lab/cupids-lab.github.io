@@ -12,11 +12,11 @@ layout: default
 {%- assign lead = page.intro -%}
 {%- if body != blank -%}{%- assign lead = body -%}{%- endif -%}
 
-{% include components/hero.html variant="child" eyebrow=page.eyebrow title=page.title title_heart=page.title_heart lead=lead %}
+{% include components/hero.html variant="child" eyebrow=page.eyebrow title=page.title title_heart=page.title_heart lead=lead actions=page.hero_actions %}
 
 {% for s in page.sections %}
 {%- assign alt = forloop.index0 | modulo: 2 -%}
-<section class="band{% if alt == 1 %} band--alt{% endif %}">
+<section class="band{% if alt == 1 %} band--alt{% endif %}"{% if s.id %} id="{{ s.id }}"{% endif %}>
   <div class="band__inner band__inner--page">
   {%- case s.type -%}
 
