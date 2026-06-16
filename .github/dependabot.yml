@@ -1,0 +1,37 @@
+# Dependabot version updates — keep the site's dependencies current.
+# Docs: https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuring-dependabot-version-updates
+#
+# Ecosystems in this repo:
+#   • bundler        — Jekyll 4 + plugins   (Gemfile, Gemfile.lock)
+#   • npm            — brand-asset tooling   (package.json, package-lock.json)
+#   • github-actions — CI + Pages workflows  (.github/workflows/)
+version: 2
+updates:
+  # --- Ruby gems (Jekyll + plugins) -------------------------------------
+  - package-ecosystem: "bundler"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # Batch low-risk minor + patch bumps into one PR; majors open on their own.
+    groups:
+      bundler:
+        update-types: ["minor", "patch"]
+
+  # --- npm (brand-asset tooling, e.g. puppeteer) ------------------------
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      npm:
+        update-types: ["minor", "patch"]
+
+  # --- GitHub Actions (CI + Pages workflows) ----------------------------
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # Action bumps are low-risk; group them all into a single PR.
+    groups:
+      github-actions:
+        patterns: ["*"]
