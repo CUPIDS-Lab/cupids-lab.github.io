@@ -12,7 +12,7 @@ Content lives in **Markdown + YAML**; presentation lives in **layouts, component
 
 ```
 _config.yml            Site identity: title, tagline (hero headline),
-                       description (hero lead), mission, hero_eyebrow, location
+                       hero_lead, description (SEO), mission, hero_eyebrow, location
 _pages/*.md            Top-level pages (each sets its own permalink)
 _dispatch/*.md         the Dispatch — one Markdown file per issue
 _projects/ _people/ _resources/*.md
@@ -34,7 +34,7 @@ Every page selects a layout and declares its content in front matter; its Markdo
 
 Section `type`s: `cards`, `collection`, `chips`, `archive`, `director`, `cta`, `dispatch_list`, `subscribe`, `helpdesk`, `interest`, `secure`.
 
-The **home** page is special: its hero (`hero_eyebrow` + `tagline` + `description`) and `mission` come from `_config.yml`, and its featured block is inherited from the `_projects` doc marked `featured: true` — so none of that is duplicated in `index.md`.
+The **home** page is special: its hero (`hero_eyebrow` + `tagline` + `hero_lead`) and `mission` come from `_config.yml` (with `description` as the separate SEO description), and its featured block is inherited from the `_projects` doc marked `featured: true` — so none of that is duplicated in `index.md`.
 
 ### Liquid filters ("converters") — `_plugins/cupids.rb`
 

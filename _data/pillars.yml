@@ -1,7 +1,7 @@
 # The three pillars on the home page.
 - num: "01"
   title: Research Newsroom
-  body: "Cross-disciplinary student teams ship a monthly dispatch — explainers, dataset guides, and original investigations."
+  body: "Cross-disciplinary teams ship a monthly dispatch — explainers, dataset guides, and original investigations."
   more: "Read the Dispatch →"
   url: /dispatch/
 - num: "02"

@@ -86,7 +86,7 @@ LANG=C.UTF-8 bundle exec htmlproofer ./_site \
 
 A page declares `sections:` in front matter; each is dispatched to a component. Section `type`s: `cards`, `collection`, `chips`, `archive`, `director`, `cta`, `dispatch_list`, `subscribe`, `helpdesk`, `interest`. A list is inline (`items:`) or pulled from `_data` via a dotted `data:` path, or from a collection via `name:` (add `only_featured: true` to render just the flagship item, e.g. the projects featured card). The page's Markdown body becomes the hero lead.
 
-The **home** page (`home` layout) is special: its hero comes from `_config.yml` (`hero_eyebrow` + `tagline` headline + `description` lead) and `mission`, and its featured block is inherited from the `_projects` doc marked `featured: true` — none of that is duplicated in `index.md`, which holds only the home-specific showcase (the "moment" ledger/stats, pillar headings, featured caption).
+The **home** page (`home` layout) is special: its hero comes from `_config.yml` (`hero_eyebrow` + `tagline` headline + `hero_lead`) and `mission`, and its featured block is inherited from the `_projects` doc marked `featured: true` — none of that is duplicated in `index.md`, which holds only the home-specific showcase (the "moment" ledger/stats, pillar headings, featured caption). (`description` is the separate SEO/meta description.)
 
 ## Collections & ranking metadata
 
