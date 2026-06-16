@@ -1,0 +1,16 @@
+# Controlled vocabulary for Dispatch issue tags.
+#
+# A dispatch file sets `kind:` to one of the keys below (plus an optional
+# integer `issue:`); the layout and the dispatch_cards filter compose the
+# displayed tag — e.g. `ISSUE 01 · ANNOUNCEMENT` — and pick its accent color
+# from here. Add a kind to this list before using it; an unknown kind still
+# renders (label = the key, upper-cased) but logs a build warning.
+#
+# `accent` keys map to the palette in _plugins/cupids.rb (gold|red|amber|green).
+kinds:
+  announcement:  { label: "ANNOUNCEMENT",   accent: gold }
+  investigation: { label: "INVESTIGATION",  accent: red }
+  rapid:         { label: "RAPID RESPONSE", accent: amber }
+  report:        { label: "REPORT",         accent: amber }
+  guide:         { label: "DATASET GUIDE",  accent: green }
+  archive:       { label: "ARCHIVE",        accent: green }

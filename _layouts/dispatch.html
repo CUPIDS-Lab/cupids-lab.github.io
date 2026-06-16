@@ -1,12 +1,15 @@
 ---
 layout: default
 ---
-{%- comment -%} A single Dispatch issue. {%- endcomment -%}
+{%- comment -%} A single Dispatch issue. Tag, byline (authors linked to their
+  _people pages), and reading time are all derived — see _plugins/cupids.rb. {%- endcomment -%}
+{%- assign authors = page.authors | default: page.author -%}
+{%- assign issue_tag = page | dispatch_tag -%}
 {%- capture byline -%}
-{%- if page.author %}By {{ page.author }}{% endif %}{% if page.date %} · {{ page.date | date: "%b %Y" }}{% endif %}{% if page.reading_time %} · {{ page.reading_time }}{% endif %}
+{%- if authors %}By {{ authors | author_byline }}{% endif %}{% if page.date %} · {{ page.date | date: "%b %Y" }}{% endif %} · {{ content | reading_time }}
 {%- endcapture -%}
 
-{% include components/hero.html variant="child" eyebrow=page.tag title=page.title lead=byline %}
+{% include components/hero.html variant="child" eyebrow=issue_tag title=page.title lead=byline %}
 
 <section class="band">
   <div class="band__inner band__inner--page">
