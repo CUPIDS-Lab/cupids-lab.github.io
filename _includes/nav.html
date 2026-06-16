@@ -4,7 +4,10 @@
 <header class="nav">
   <div class="nav__inner">
     <div class="brand">
-      <a href="{{ '/' | relative_url }}">cupids<span class="green">-</span>lab</a><span class="heart" title="give a little love" role="button" tabindex="0" aria-label="hearts">&lt;3</span>
+      <a class="brand__lockup" href="{{ '/' | relative_url }}">
+        <img class="brand__mark" src="{{ '/assets/brand/mark.svg' | relative_url }}" alt="" width="30" height="30">
+        <span class="brand__word">cupids<span class="green">-</span>lab</span>
+      </a>
     </div>
     <button class="nav__toggle" aria-expanded="false" aria-label="Toggle navigation">menu</button>
     <nav class="nav__links" aria-label="Primary">

@@ -136,11 +136,11 @@ a { color: inherit; text-decoration: none; }
   padding: 16px 32px; gap: 16px;
 }
 .brand {
-  font-family: var(--mono); font-size: 17px; font-weight: 600;
+  font-family: var(--mono); font-size: 21px; font-weight: 600;
   letter-spacing: 0.01em; white-space: nowrap;
 }
-.brand a { cursor: pointer; }
-.brand .heart { cursor: pointer; }
+.brand__lockup { display: inline-flex; align-items: center; gap: 12px; cursor: pointer; }
+.brand__mark { display: block; flex: none; }
 .nav__links {
   display: flex; align-items: center; gap: 22px;
   font-family: var(--mono); font-size: 13px;
@@ -457,8 +457,7 @@ textarea.field { resize: vertical; }
    ============================================================ */
 .footer { background: var(--bg-foot); }
 .footer__grid { max-width: var(--maxw); margin: 0 auto; padding: 48px 32px 36px; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 32px; }
-.footer__brand { font-family: var(--mono); font-size: 17px; font-weight: 600; margin-bottom: 12px; }
-.footer__brand .heart { cursor: pointer; }
+.footer__brand { font-family: var(--mono); font-size: 19px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
 .footer__about { font-size: 13.5px; line-height: 1.6; color: var(--ink-faint); max-width: 320px; margin: 0; }
 .footer__col { font-family: var(--mono); font-size: 13px; display: flex; flex-direction: column; gap: 10px; }
 .footer__col a, .footer__col span { color: var(--ink-dim); }

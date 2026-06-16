@@ -4,7 +4,7 @@ Guidance for coding agents working in this repository.
 
 ## What this is
 
-The website for **CUPIDS Lab** (University of Colorado Public Interest Data Science Laboratory) — a static **Jekyll 4** site deployed to GitHub Pages via GitHub Actions. Design direction: dark / data-forward, IBM Plex Mono + Public Sans, black + CU gold, with the matchmaker heart (`<3` / ♥) motif.
+The website for **CUPIDS Lab** (University of Colorado Public Interest Data Science Laboratory) — a static **Jekyll 4** site deployed to GitHub Pages via GitHub Actions. Design direction: dark / data-forward, IBM Plex Mono + Public Sans, black + CU gold, with the matchmaker **heart-with-arrow** motif (drawn as 8-bit pixel art).
 
 ## Golden rules
 
@@ -41,7 +41,7 @@ Loose files in the repo root are intentionally minimal: `README.md`, `LICENSE`, 
 
 The brand is a dark, data-forward identity with a recurring **Cupid motif — a heart pierced by a gold arrow** (the 💘 "heart with arrow"). The canonical metadata (prompt, palette, colors, fonts, mark, asset specs) lives in **`_data/brand.yml`**; edit there, then regenerate.
 
-**Brand prompt:** *A dark, data-forward identity for a public-interest data lab: a near-black canvas, CU gold accents, an IBM Plex Mono wordmark, and a recurring Cupid motif — a heart pierced by a gold arrow — drawn in the Unicode "color heart" palette. Restrained and civic, with a little matchmaker playfulness.*
+**Brand prompt:** *A dark, data-forward identity for a public-interest data lab: a near-black canvas, CU gold accents, an IBM Plex Mono `cupids-lab` wordmark, and a recurring Cupid motif — a heart pierced by a gold arrow, drawn as 8-bit pixel art (a retro / terminal nod). The Unicode "color heart" palette colors the decorative art. Restrained and civic, with a little matchmaker playfulness.*
 
 **Heart palette** — the Unicode "`<color>` heart" emojis (per [Hearts in Unicode](https://en.wikipedia.org/wiki/Hearts_in_Unicode); black `🖤` is omitted because it disappears on the dark canvas):
 
@@ -57,7 +57,7 @@ The brand is a dark, data-forward identity with a recurring **Cupid motif — a 
 | white | 🤍 | `#e8e6e0` |
 | pink (arrow) | 💘 | `#f06fa0` |
 
-The mark is the **`💘` "heart with arrow" emoji** itself, rendered as SVG `<text>` so it uses the viewer's color-emoji font (on Apple devices it's the Apple glyph). We do **not** embed Apple's proprietary artwork. Core UI colors mirror the CSS tokens in `assets/css/style.css`.
+The mark is the **"heart with arrow" idiom redrawn as 8-bit pixel art** — pure SVG `<rect>`s generated from the `mark:` colors in `_data/brand.yml` (a retro / terminal nod, and license-clean: no proprietary emoji artwork). It's emitted as `favicon.svg`, `avatar.svg`, and a transparent **`mark.svg`** that is rendered inline in the site header & footer beside the wordmark. The wordmark is now clean — the ASCII `<3` is no longer appended (it survives only as playful microcopy). The color-emoji palette still colors the decorative art (social card, banner, pattern, background) and the hero canvas. Core UI colors mirror the CSS tokens in `assets/css/style.css`.
 
 **Generation harness:** `script/generate-brand.rb` digests `_data/brand.yml` and emits deterministic SVGs into `assets/brand/`:
 
@@ -67,9 +67,9 @@ node script/rasterize.mjs          # PNG previews (needs `npm install` first)
 # or both:  npm run brand:all
 ```
 
-`generate-brand.rb` emits SVGs: `favicon.svg`, `avatar.svg` (profile image, heart-with-arrow), `og.svg` (1200×630 social card), `banner.svg`, `pattern.svg` (tiling), `background.svg` (1600×900 "heart emoji map"), and a `hearts/` collection — one per palette color (e.g. `hearts/green.svg`) for reuse as list bullets, scatter art, or icons.
+`generate-brand.rb` emits SVGs: `favicon.svg`, **`mark.svg`** (transparent 8-bit mark for inline chrome), `avatar.svg` (profile lockup: pixel heart-with-arrow + wordmark), `og.svg` (1200×630 social card), `banner.svg`, `pattern.svg` (tiling), `background.svg` (1600×900 "heart emoji map"), and a `hearts/` collection — one per palette color (e.g. `hearts/green.svg`) for reuse as list bullets, scatter art, or icons. The pixel mark's fineness is one knob — `HEART_RES` in `generate-brand.rb`.
 
-`rasterize.mjs` exports PNG previews next to the SVGs via **headless Chrome** (so emoji render in color — **Noto Color Emoji** on Linux/CI, an open-licensed font; we never bundle Apple's proprietary artwork) and embeds the self-hosted wordmark fonts. `og.png` is wired as the site's `og:image` (`image:` in `_config.yml`). `cupids.js` renders the same color-emoji hearts on the hero canvas via `fillText`. Commit regenerated assets; `script/`, `node_modules/`, and `package*.json` are excluded from the Jekyll build.
+`rasterize.mjs` exports PNG previews next to the SVGs via **headless Chrome** and embeds the self-hosted wordmark fonts. The pixel mark is font-independent; the decorative palette art's color emoji render via **Noto Color Emoji** on Linux/CI (an open-licensed font — we never bundle Apple's proprietary artwork). `og.png` is wired as the site's `og:image` (`image:` in `_config.yml`). `cupids.js` renders the same color-emoji hearts on the hero canvas via `fillText`. Commit regenerated assets; `script/`, `node_modules/`, and `package*.json` are excluded from the Jekyll build.
 
 ## Build & test
 

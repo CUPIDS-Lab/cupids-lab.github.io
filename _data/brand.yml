@@ -9,12 +9,16 @@ tagline: "Defending the data democracy depends on."
 
 # A short brand prompt the harness "digests" (and that you could hand to a
 # designer or an image model).
-prompt: 'A brand and graphic identity for an academic public interest data lab. A black terminal with monospace fonts and syntax intially feels intimindating and cold. A near-black canvas, CU gold accents, an IBM Plex Mono wordmark. But there are recurring heart motifs using both ASCII heart "<3" as "wordmark_glyph" and Unicode emoji hearts — particularly "heart with arrow". The Unicode "color heart" palette provides some variation. Restrained and civic with a little emoji heart playfulness.'
+prompt: 'A brand and graphic identity for an academic public interest data lab. A black terminal with monospace fonts and syntax initially feels intimidating and cold. A near-black canvas, CU gold accents, an IBM Plex Mono "cupids-lab" wordmark. The recurring Cupid idiom is a "heart with arrow" drawn as 8-bit pixel art — a retro, terminal / coding-agent nod rather than the proprietary emoji. The Unicode "color heart" palette still provides variation in the decorative art, and the ASCII heart "<3" lives on as playful microcopy. Restrained and civic with a little matchmaker playfulness.'
 
-# Recurring motif emoji.
+# Recurring motif emoji. The mark itself is now drawn as 8-bit pixel art (see
+# `mark:` below + script/generate-brand.rb); `primary` is still used for the
+# decorative color-emoji palette art (og/banner/pattern/background) and the
+# hero canvas. `wordmark_glyph` is no longer part of the wordmark — the ASCII
+# heart survives only as playful microcopy (e.g. the subscribe confirmation).
 emoji:
-  primary: "💘"        # heart with arrow (Cupid) — the recurring theme
-  wordmark_glyph: "<3"
+  primary: "💘"        # heart with arrow (Cupid) — used in the palette art + hero
+  wordmark_glyph: "<3" # legacy motif; kept for microcopy, not rendered in the wordmark
   # The Unicode "<color> heart" palette we draw from (black omitted — it
   # disappears on the dark canvas).
   palette:
@@ -43,10 +47,16 @@ fonts:
   display: "Public Sans"
   mono: "IBM Plex Mono"
 
-# How the heart-with-arrow mark is colored.
+# The heart-with-arrow mark, redrawn as 8-bit pixel art (a retro / terminal
+# nod) instead of the Apple emoji glyph — pure <rect>s, so it's license-clean
+# and renders identically everywhere. These colors drive script/generate-brand.rb.
 mark:
-  heart: "#f06fa0"   # pink heart
-  arrow: "#4a9fe6"   # blue arrow
+  style: "8-bit"          # pixel-art "heart with arrow" (not the proprietary emoji)
+  heart:    "#f06fa0"     # pink heart body
+  heart_hi: "#ffb3d1"     # upper-left highlight (8-bit sheen)
+  heart_lo: "#c44f86"     # lower-right shadow
+  arrow:    "#e7b53f"     # Cupid's golden arrow
+  arrow_lo: "#b07f2c"     # arrow shadow / fletching
 
 # Standalone heart icon per palette color, emitted to assets/brand/hearts/ as
 # both SVG and PNG (e.g. hearts/green.svg, hearts/green.png) for reuse as list
@@ -60,6 +70,7 @@ variants:
 # exports PNG previews next to them (headless Chrome + Noto Color Emoji).
 assets:
   - { file: favicon.svg,    w: 64,   h: 64,  kind: mark }
+  - { file: mark.svg,       w: 96,   h: 96,  kind: pixmark }   # transparent, inline (nav/footer)
   - { file: avatar.svg,     w: 512,  h: 512, kind: avatar }
   - { file: og.svg,         w: 1200, h: 630, kind: og }
   - { file: banner.svg,     w: 1500, h: 500, kind: og }
