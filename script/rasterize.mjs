@@ -1,11 +1,12 @@
 #!/usr/bin/env node
-// Rasterize the brand SVGs in assets/brand/ to PNG previews via headless
-// Chrome, so emoji render in full color (Noto Color Emoji on Linux/CI) and the
-// wordmark uses our self-hosted fonts. Open-licensed fonts only — we do not
-// bundle proprietary emoji artwork.
+// Rasterize the brand SVGs in assets/brand/ (and assets/brand/hearts/) to PNG
+// previews via headless Chrome, so emoji render in full color (Noto Color
+// Emoji on Linux/CI) and the wordmark uses our self-hosted fonts. PNGs travel
+// where SVGs don't (social cards, slides, chat, READMEs). Open-licensed fonts
+// only — we do not bundle proprietary emoji artwork.
 //
 // Usage:  node script/rasterize.mjs        (needs `npm install` first)
-import { readFileSync, writeFileSync, readdirSync } from "fs";
+import { readFileSync, writeFileSync, readdirSync, existsSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import puppeteer from "puppeteer";
@@ -27,7 +28,6 @@ const fontCss = FACES.map(([fam, wt, file]) => {
   return `@font-face{font-family:'${fam}';font-weight:${wt};font-display:block;src:url(data:font/woff2;base64,${b64}) format('woff2')}`;
 }).join("\n");
 
-const svgs = readdirSync(BRAND).filter((f) => f.endsWith(".svg"));
 const dim = (svg, attr) => {
   const m = svg.match(new RegExp(`<svg[^>]*\\b${attr}="(\\d+)"`));
   return m ? +m[1] : 512;
@@ -35,10 +35,9 @@ const dim = (svg, attr) => {
 
 const browser = await puppeteer.launch({ args: ["--no-sandbox", "--disable-setuid-sandbox"] });
 const page = await browser.newPage();
-let n = 0;
 
-for (const file of svgs) {
-  const svg = readFileSync(join(BRAND, file), "utf8");
+async function render(dir, file) {
+  const svg = readFileSync(join(dir, file), "utf8");
   const w = dim(svg, "width"), h = dim(svg, "height");
   const scale = Math.min(8, Math.max(1, Math.round(640 / Math.max(w, h))));
   await page.setViewport({ width: w, height: h, deviceScaleFactor: scale });
@@ -49,10 +48,20 @@ for (const file of svgs) {
   await page.evaluate(async () => { try { await document.fonts.ready; } catch (e) {} });
   const out = file.replace(/\.svg$/, ".png");
   const buf = await page.screenshot({ type: "png", omitBackground: true, clip: { x: 0, y: 0, width: w, height: h } });
-  writeFileSync(join(BRAND, out), buf);
-  console.log(`  ${out}  ${w * scale}x${h * scale}  ${(buf.length / 1024).toFixed(1)} KB`);
-  n++;
+  writeFileSync(join(dir, out), buf);
+  return { out: join(dir, out).replace(ROOT + "/", ""), w: w * scale, h: h * scale, kb: buf.length / 1024 };
+}
+
+// Top-level brand assets, then the hearts/ collection.
+const dirs = [BRAND, join(BRAND, "hearts")].filter(existsSync);
+let n = 0;
+for (const dir of dirs) {
+  for (const file of readdirSync(dir).filter((f) => f.endsWith(".svg"))) {
+    const r = await render(dir, file);
+    console.log(`  ${r.out}  ${r.w}x${r.h}  ${r.kb.toFixed(1)} KB`);
+    n++;
+  }
 }
 
 await browser.close();
-console.log(`Rasterized ${n} PNG previews into assets/brand/.`);
+console.log(`Rasterized ${n} PNGs into assets/brand/.`);
