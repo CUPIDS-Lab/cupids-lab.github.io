@@ -7,7 +7,11 @@ layout: default
 
 <section class="band">
   <div class="band__inner band__inner--page">
-    <article class="article">{{ content }}</article>
+    <article class="article">
+      {%- assign has_photo = page.photo | static_exists -%}
+      {%- if has_photo %}<img class="headshot headshot--profile" src="{{ page.photo | relative_url }}" alt="{{ page.title }}" width="200" height="200">{% endif -%}
+      {{ content }}
+    </article>
     {%- if page.back %}
     <p style="margin-top:36px;"><a class="card__more" href="{{ page.back | relative_url }}">&larr; Back to {{ page.back_label | default: 'overview' }}</a></p>
     {%- endif %}
