@@ -1,6 +1,6 @@
 /* ============================================================
    cupids-lab <3  — all behavior is local, no external libraries.
-     · particle-links background (subtle, CU gold)
+     · heart-emoji particle network with a half-second SI spread
      · heart-burst easter egg
      · matchmaker console note
      · mobile nav toggle
@@ -219,8 +219,6 @@
     return { el: c, sync: sync };
   }
 
-
-  /* ---------- forms: optional Formspree POST, then confirm ---------- */
   function wireForm(form) {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
