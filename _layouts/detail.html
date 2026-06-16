@@ -1,0 +1,15 @@
+---
+layout: default
+---
+{%- comment -%} Detail page for a collection item (project / person / resource).
+  Front matter: title, eyebrow, summary, back, back_label. Body is Markdown. {%- endcomment -%}
+{% include components/hero.html variant="child" eyebrow=page.eyebrow title=page.title lead=page.summary %}
+
+<section class="band">
+  <div class="band__inner band__inner--page">
+    <article class="article">{{ content }}</article>
+    {%- if page.back %}
+    <p style="margin-top:36px;"><a class="card__more" href="{{ page.back | relative_url }}">&larr; Back to {{ page.back_label | default: 'overview' }}</a></p>
+    {%- endif %}
+  </div>
+</section>

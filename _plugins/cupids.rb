@@ -65,6 +65,27 @@ module CupidsFilters
     end
   end
 
+  # Map a collection's docs -> card hashes for the card component, sorted by
+  # `order` then title. `featured` is carried so the parent can split the
+  # flagship item out of the grid. Honors published: false.
+  def collection_cards(name)
+    site = @context.registers[:site]
+    coll = site && site.collections[name.to_s]
+    return [] unless coll
+    coll.docs
+        .reject { |d| d.data["published"] == false }
+        .sort_by { |d| [(d.data["order"] || 9999), d.data["title"].to_s] }
+        .map do |d|
+          {
+            "tag"      => d.data["tag"],
+            "title"    => d.data["title"],
+            "body"     => (d.data["summary"] || d.data["description"]).to_s,
+            "url"      => d.url,
+            "featured" => d.data["featured"] == true,
+          }
+        end
+  end
+
   # Prefix internal links with baseurl; leave absolute / mailto / anchor links alone.
   def smart_url(url)
     u = url.to_s
