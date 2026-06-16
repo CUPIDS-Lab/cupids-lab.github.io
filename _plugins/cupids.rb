@@ -49,20 +49,63 @@ module CupidsFilters
   def dispatch_cards(list)
     Array(list).map do |d|
       meta = []
-      author = d["author"].to_s
+      author = author_names(d["authors"] || d["author"])
       meta << "By #{author}" unless author.empty?
       date = d["date"]
       meta << date.strftime("%b %Y") if date.respond_to?(:strftime)
-      rt = d["reading_time"].to_s
+      rt = reading_time(d.content)
       meta << rt unless rt.empty?
       {
-        "tag"   => d["tag"],
-        "title" => d["title"],
-        "body"  => (d["summary"] || d["description"]).to_s,
-        "meta"  => meta.join(" · "),
-        "url"   => d["url"],
+        "tag"    => dispatch_tag(d),
+        "accent" => dispatch_accent(d),
+        "title"  => d["title"],
+        "body"   => (d["summary"] || d["description"]).to_s,
+        "meta"   => meta.join(" · "),
+        "url"    => d["url"],
       }
     end
+  end
+
+  # Reading-time estimate from content length (~200 wpm), minimum 1 min.
+  # Strips tags so it works on rendered HTML pages and raw Markdown docs alike.
+  def reading_time(content)
+    words = content.to_s.gsub(/<[^>]+>/, " ").split(/\s+/).reject(&:empty?).size
+    minutes = (words / 200.0).ceil
+    minutes = 1 if minutes < 1
+    "#{minutes} min read"
+  end
+
+  # Composed display tag for a dispatch doc, from the controlled vocabulary in
+  # _data/dispatch.yml: "ISSUE 01 · ANNOUNCEMENT" (or just the label when no
+  # `issue:` is set). An explicit `tag:` in front matter overrides composition.
+  def dispatch_tag(doc)
+    explicit = doc["tag"].to_s
+    return explicit unless explicit.empty?
+    label = dispatch_kind(doc["kind"]).fetch("label") { doc["kind"].to_s.upcase }
+    issue = doc["issue"].to_s.strip
+    issue.empty? ? label : format("ISSUE %02d · %s", issue.to_i, label)
+  end
+
+  # Accent color for a dispatch doc's tag, from the vocabulary kind (falls back
+  # to the substring rules in accent_color when only an explicit tag is given).
+  def dispatch_accent(doc)
+    explicit = doc["tag"].to_s
+    return accent_color(explicit) unless explicit.empty?
+    bullet_color(dispatch_kind(doc["kind"])["accent"])
+  end
+
+  # Byline that links each author to their _people page (matched by title);
+  # names with no matching person render as plain text.
+  def author_byline(names)
+    base = author_baseurl
+    join_authors(author_people(names).map { |a|
+      a["url"] ? %(<a href="#{base}#{a["url"]}">#{a["name"]}</a>) : a["name"]
+    })
+  end
+
+  # Plain-text author list (no links), for card meta lines.
+  def author_names(names)
+    join_authors(author_people(names).map { |a| a["name"] })
   end
 
   # Map a collection's docs -> card hashes for the card component.
@@ -99,6 +142,51 @@ module CupidsFilters
     site = @context.registers[:site]
     base = site ? site.config["baseurl"].to_s : ""
     "#{base}#{u}"
+  end
+
+  private
+
+  # A vocabulary entry ({label, accent}) for a kind key, from _data/dispatch.yml.
+  # Returns {} for a blank kind; warns once for an unknown (off-vocabulary) one.
+  def dispatch_kind(key)
+    key = key.to_s
+    return {} if key.empty?
+    vocab = site_data("dispatch.kinds") || {}
+    return vocab[key] if vocab.key?(key)
+    @warned_kinds ||= {}
+    unless @warned_kinds[key]
+      Jekyll.logger.warn "Dispatch:", "unknown kind '#{key}' (not in _data/dispatch.yml)"
+      @warned_kinds[key] = true
+    end
+    {}
+  end
+
+  def author_baseurl
+    site = @context.registers[:site]
+    site ? site.config["baseurl"].to_s : ""
+  end
+
+  # Resolve author name(s) to {name, url} hashes via the _people collection,
+  # matched on `title`. url is nil when no person matches the name.
+  def author_people(names)
+    site = @context.registers[:site]
+    people = site && site.collections["people"] ? site.collections["people"].docs : []
+    Array(names).map do |name|
+      n = name.to_s.strip
+      doc = people.find { |d| d.data["title"].to_s.strip == n }
+      { "name" => n, "url" => (doc && doc.url) }
+    end
+  end
+
+  # Join author parts with an Oxford-style "&" for the final pair.
+  def join_authors(parts)
+    parts = parts.reject { |p| p.to_s.empty? }
+    case parts.size
+    when 0 then ""
+    when 1 then parts[0]
+    when 2 then "#{parts[0]} &amp; #{parts[1]}"
+    else "#{parts[0..-2].join(", ")} &amp; #{parts[-1]}"
+    end
   end
 end
 

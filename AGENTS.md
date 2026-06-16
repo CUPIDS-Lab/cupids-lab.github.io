@@ -110,7 +110,7 @@ Items in `_projects`, `_people`, `_resources` (and `_dispatch`) are individual M
 
 ## Adding content (no template changes needed)
 
-- **Dispatch issue:** add `_dispatch/<date>-<slug>.md` (set `published: true`).
+- **Dispatch issue:** add `_dispatch/<date>-<slug>.md` (set `published: true`). Set `kind:` to a key from the controlled vocabulary in `_data/dispatch.yml` (+ optional `issue:` number) — the tag (`ISSUE 01 · ANNOUNCEMENT`) and its accent are composed from there, not hand-written. List `authors:` using names that match `title:` in `_people` so the byline links them. Reading time is estimated from the body length automatically (no field).
 - **Project / person / resource:** add a file to the matching collection with `title`, `summary`, `order`, `category` (+ optional `tag`). It gets a child page and a linked card on the parent automatically.
 - **Datasets (archive table):** add rows under `datasets:` in `_data/archive.yml` — the placeholder panel becomes a table.
 - **Forms:** set `form_endpoint` in `_config.yml` (Formspree) to make the forms POST; otherwise they show a client-side confirmation.
