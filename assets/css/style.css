@@ -199,12 +199,13 @@ a { color: inherit; text-decoration: none; }
 .hero--child .hero__lead p + p { margin-top: 12px; }
 .hero--child .hero__lead { max-width: 660px; margin-bottom: 0; }
 
-.hero__actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.hero__actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
 
 /* ============================================================
    BANDS / SECTIONS
    ============================================================ */
 .band { border-bottom: 1px solid var(--line); }
+.band[id] { scroll-margin-top: 80px; } /* clear the sticky nav on anchor jumps */
 .band--alt  { background: var(--bg-alt); }
 .band--card { background: var(--bg-card); }
 .band__inner { max-width: var(--maxw); margin: 0 auto; padding: 56px 32px; }

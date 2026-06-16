@@ -1,5 +1,6 @@
 {%- comment -%}
-  Hero. Params: variant ("home"|"child"), eyebrow, title, title_heart, lead.
+  Hero. Params: variant ("home"|"child"), eyebrow, title, title_heart, lead,
+  actions (optional list of { label, to, style } -> in-hero buttons).
   Carries the subtle particle-links canvas (tuned per variant).
 {%- endcomment -%}
 {%- assign variant = include.variant | default: 'child' -%}
@@ -15,5 +16,10 @@
     {%- if include.eyebrow %}<div class="eyebrow">{{ include.eyebrow }}</div>{% endif -%}
     <h1>{{ include.title }}{% if include.title_heart %} <span aria-hidden="true">&#9829;</span>{% endif %}</h1>
     {%- if include.lead %}<div class="hero__lead">{{ include.lead }}</div>{% endif -%}
+    {%- if include.actions and include.actions != empty -%}
+    <div class="hero__actions">
+      {%- for a in include.actions -%}<a class="btn {{ a.style | default: 'btn--ghost' }} btn--hero" href="{{ a.to | smart_url }}">{{ a.label }}</a>{%- endfor -%}
+    </div>
+    {%- endif -%}
   </div>
 </section>
