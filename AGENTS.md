@@ -124,3 +124,7 @@ Items in `_projects`, `_people`, `_resources` (and `_dispatch`) are individual M
 ## Git
 
 Develop on a feature branch, open a PR to `main`, keep CI green. Don't commit `_site/`, `vendor/`, or `node_modules/` (see `.gitignore`).
+
+## Provenance
+
+This site was designed and built with Claude — a combination of **Claude Design** (initial design exploration) and **Claude Code** (implementation) — on the Opus 4.8 model.

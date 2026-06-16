@@ -29,10 +29,9 @@ email: brian.keegan@colorado.edu
 github_org: CUPIDS-Lab
 github_url: https://github.com/CUPIDS-Lab
 
-# Optional Formspree form endpoint. Leave blank to keep the design's
-# client-side "thank you" confirmation (no data is sent anywhere).
-# When set (e.g. https://formspree.io/f/xxxxxxxx) the help-desk, join,
-# and subscribe forms POST to it.
+# Formspree form endpoint. Leave blank to keep the design's client-side
+# "thank you" confirmation (no data sent). When set, the help-desk, join, and
+# subscribe forms POST here via AJAX (see wireForm in assets/js/cupids.js).
 form_endpoint: "https://formspree.io/f/xzdqwppy"
 
 # Build settings ---------------------------------------------

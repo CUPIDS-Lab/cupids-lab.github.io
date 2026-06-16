@@ -377,6 +377,7 @@ a.card:hover, .card--link:hover { border-color: var(--line-3); transform: transl
 .field:focus { outline: none; border-color: var(--gold); }
 
 .form-success { font-family: var(--mono); font-size: 14px; color: var(--green); padding: 14px 0; }
+.form-error { font-family: var(--mono); font-size: 13px; line-height: 1.5; color: var(--red); margin-top: 12px; }
 
 /* form cards */
 .form-card { background: var(--bg-card); border: 1px solid var(--line); border-radius: 14px; padding: 32px; }
