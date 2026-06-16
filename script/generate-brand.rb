@@ -29,32 +29,42 @@ SANS       = "'#{BRAND['fonts']['display']}', system-ui, sans-serif"
 EMOJI_FONT = "'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif"
 
 # ---- 8-bit "heart with arrow" mark -------------------------------------------
-# The recurring Cupid idiom, redrawn as retro pixel art (a nod to a terminal /
-# coding-agent aesthetic) rather than the proprietary Apple emoji. Pure <rect>s
-# on an integer grid, so it's license-clean and renders identically everywhere.
+# The Cupid idiom redrawn as retro pixel art (a nod to a terminal / coding-agent
+# aesthetic), after the Apple "heart with arrow" 💘: a hot-magenta heart pierced
+# by a blue arrow — a small blue heart for the tip, a silver metallic shaft, and
+# blue feather fletching. Pure <rect>s, so it's an original, license-clean redraw
+# (not Apple's artwork) that renders identically everywhere.
 #
-# The heart is sampled from the implicit curve (x²+y²−1)³ − x²·y³ ≤ 0 onto a
-# grid HEART_RES pixels wide; the arrow is a scalable 45° band. Bump HEART_RES
-# to make the art finer (less coarse) — everything else scales with it.
-HEART_RES = 26
+# The hearts are sampled from the implicit curve (x²+y²−1)³ − x²·y³ ≤ 0 onto a
+# grid HEART_RES pixels wide; bump HEART_RES to make the art finer (less coarse).
+HEART_RES = 30
+BLUE_ROT  = 36   # degrees: tilt of the little blue heart-tip so it aims down the shaft
 
 # Compact number formatting for SVG coordinates (trim trailing zeros).
 def nf(x)
   format("%.2f", x).sub(/\.?0+$/, "")
 end
 
-# Filled heart cells (cropped to bounds) + grid width/height, at `width` columns.
-def build_heart(width)
-  xmin, xmax = -1.25, 1.25
-  ymin, ymax = -1.18, 1.42
+# Filled heart cells (cropped to bounds) + grid width/height, at `width` columns,
+# optionally rotated `rot_deg` degrees (clockwise on screen).
+def build_heart(width, rot_deg = 0)
+  if rot_deg.zero?
+    xmin, xmax, ymax = -1.25, 1.25, 1.42
+  else
+    xmin, xmax, ymax = -1.7, 1.7, 1.7   # square box leaves room to rotate
+  end
   sx = (xmax - xmin) / width.to_f
-  rows = ((ymax - ymin) / sx).ceil
+  rows = (((rot_deg.zero? ? (ymax + 1.18) : (ymax + 1.7))) / sx).ceil
+  th = rot_deg * Math::PI / 180.0
+  ct = Math.cos(th); st = Math.sin(th)
   pts = []
   rows.times do |row|
     width.times do |col|
       x = xmin + (col + 0.5) * sx
       y = ymax - (row + 0.5) * sx
-      pts << [col, row] if (x * x + y * y - 1.0)**3 - x * x * y * y * y <= 0.0
+      xr =  x * ct + y * st
+      yr = -x * st + y * ct
+      pts << [col, row] if (xr * xr + yr * yr - 1.0)**3 - xr * xr * yr * yr * yr <= 0.0
     end
   end
   minc = pts.map { |p| p[0] }.min
@@ -64,6 +74,29 @@ def build_heart(width)
   [set, set.keys.map { |k| k[0] }.max + 1, set.keys.map { |k| k[1] }.max + 1]
 end
 
+# Coordinates of (c,r) in a frame centered on (cc,cr) and rotated by `ang`.
+def rot_local(c, r, cc, cr, ang)
+  dx = c - cc; dy = r - cr
+  ca = Math.cos(ang); sa = Math.sin(ang)
+  [dx * ca + dy * sa, -dx * sa + dy * ca]
+end
+
+# Paint one leaf-shaped feather (a rotated ellipse with a darker central vein
+# and a lighter top edge) into the arrow layer.
+def feather(arrow, cc, cr, a, b, ang)
+  ((cr - a - b).floor..(cr + a + b).ceil).each do |r|
+    ((cc - a - b).floor..(cc + a + b).ceil).each do |c|
+      lx, ly = rot_local(c, r, cc, cr, ang)
+      e = (lx / a)**2 + (ly / b)**2
+      next if e > 1.0
+      f = M["blue"]
+      f = M["blue_hi"] if ly < -b * 0.4 && e < 0.9   # top-edge sheen
+      f = M["blue_lo"] if ly.abs <= b * 0.17         # central vein
+      arrow[[c, r]] = f
+    end
+  end
+end
+
 # The 8-bit heart-with-arrow, sized so its larger dimension is `size`, centered
 # on (cx, cy). Returns an SVG <g> of crisp pixel <rect>s.
 def pixel_mark(cx, cy, size)
@@ -71,13 +104,13 @@ def pixel_mark(cx, cy, size)
   cxh = (hw - 1) / 2.0
   cyh = (hh - 1) / 2.0
 
-  cells = []  # [col, row, fill]
+  cells = []  # [col, row, fill] in draw order (heart first, arrow on top)
 
-  # Heart body with 8-bit shading: a small sheen on the (arrow-free) right lobe
-  # and a lower-right rim shadow.
-  hl_cx, hl_cy, hl_r = hw * 0.64, hh * 0.25, hw * 0.13
+  # Magenta heart body with 8-bit shading: a glossy sheen on the (arrow-free)
+  # right lobe and a lower-right rim shadow.
+  hl_cx, hl_cy, hl_r = hw * 0.64, hh * 0.24, hw * 0.15
   heart.each_key do |(c, r)|
-    rim_lo = !heart[[c + 1, r]] || !heart[[c, r + 1]]   # open to the right or below
+    rim_lo = !heart[[c + 1, r]] || !heart[[c, r + 1]]
     fill =
       if (c + r) > (cxh + cyh + hh * 0.04) && rim_lo
         M["heart_lo"]
@@ -89,39 +122,54 @@ def pixel_mark(cx, cy, size)
     cells << [c, r, fill]
   end
 
-  # Arrow: a 45° band piercing top-left → bottom-right. Work in rotated coords
-  # u (along the shaft, increasing down-right) and v (across it). A triangular
-  # head pokes out the upper-left; a forked fletch trails out the lower-right.
+  # Arrow on the diagonal: u runs along the shaft (down-right), v across it.
   us = heart.keys.map { |(c, r)| (c - cxh) + (r - cyh) }
-  umin = us.min - hh * 0.16
-  umax = us.max + hh * 0.22
-  head_len   = hh * 0.52
-  fletch_len = hh * 0.50
-  shaft_vt   = [hh * 0.115, 1.8].max
-  head_vt    = hh * 0.34
-  fletch_vt  = hh * 0.40
+  u_in  = us.min
+  u_out = us.max
+  shaft_vt = [hh * 0.085, 1.4].max
+  u_blue   = u_in  - hh * 0.50   # little blue heart sits up-left of the entry
+  u_tail   = u_out + hh * 0.60   # shaft + feathers trail past the exit
+  on_line  = ->(u) { [cxh + u / 2.0, cyh + u / 2.0] }   # point on the shaft at param u
 
-  exp = (hh * 0.7).ceil
-  arrow = {}  # [c,r] => fill (drawn on top of the heart so it reads as pierced)
+  arrow = {}  # [c,r] => fill
+
+  # SILVER SHAFT — only where it is NOT behind the magenta heart, so it reads as
+  # pierced (visible just outside the entry and exit, hidden across the body).
+  exp = (hh * 0.9).ceil
   (-exp..(hh - 1 + exp)).each do |r|
     (-exp..(hw - 1 + exp)).each do |c|
       u = (c - cxh) + (r - cyh)
       v = (c - cxh) - (r - cyh)
-      next if u < umin || u > umax
-      fill = nil
-      if u <= umin + head_len                       # arrowhead — triangle tapering to a point
-        taper = head_vt * (u - umin) / head_len
-        fill = M["arrow"] if v.abs <= taper
-      elsif u >= umax - fletch_len                  # fletch — forked feathers at the tail
-        taper = fletch_vt * (u - (umax - fletch_len)) / fletch_len
-        fill = M["arrow_lo"] if v.abs <= taper && v.abs >= taper * 0.5
-        fill = M["arrow"] if v.abs <= shaft_vt * 0.6 # thin spine joining the feathers
-      elsif v.abs <= shaft_vt                        # shaft across the heart
-        fill = M["arrow"]
-      end
-      arrow[[c, r]] = fill if fill
+      next if u < u_blue || u > u_tail || v.abs > shaft_vt
+      next if heart[[c, r]]                               # hidden behind the heart
+      f = if v >  shaft_vt * 0.33 then M["shaft_hi"]
+          elsif v < -shaft_vt * 0.33 then M["shaft_lo"]
+          else M["shaft"] end
+      arrow[[c, r]] = f
     end
   end
+
+  # BLUE FEATHER FLETCHING — two leaves splayed off the shaft near the tail.
+  fc_c, fc_r = on_line.call(u_out + hh * 0.34)
+  fa, fb = hh * 0.26, hh * 0.105
+  px, py = 0.70710678, -0.70710678   # unit perpendicular to the shaft (up-right)
+  off = hh * 0.085
+  feather(arrow, fc_c + px * off, fc_r + py * off, fa, fb, Math::PI / 4 + 0.46)
+  feather(arrow, fc_c - px * off, fc_r - py * off, fa, fb, Math::PI / 4 - 0.46)
+
+  # BLUE HEART TIP — a little tilted heart at the upper-left end of the shaft.
+  bh, bhw, bhh = build_heart((HEART_RES * 0.42).round, BLUE_ROT)
+  bcx = (bhw - 1) / 2.0; bcy = (bhh - 1) / 2.0
+  hcc, hcr = on_line.call(u_blue)
+  bh.each_key do |(c, r)|
+    cc = (hcc + (c - bcx)).round
+    rr = (hcr + (r - bcy)).round
+    f = M["blue"]
+    f = M["blue_hi"] if c < bcx * 0.85 && r < bcy * 1.1   # upper-left sheen
+    f = M["blue_lo"] if c > bcx * 1.15 || r > bcy * 1.2   # lower-right shade
+    arrow[[cc, rr]] = f
+  end
+
   arrow.each { |(c, r), fill| cells << [c, r, fill] }
 
   # Layout: scale the (heart ∪ arrow) grid so its larger side is `size`, centered.

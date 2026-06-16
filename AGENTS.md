@@ -39,9 +39,9 @@ Loose files in the repo root are intentionally minimal: `README.md`, `LICENSE`, 
 
 ## Brand identity
 
-The brand is a dark, data-forward identity with a recurring **Cupid motif — a heart pierced by a gold arrow** (the 💘 "heart with arrow"). The canonical metadata (prompt, palette, colors, fonts, mark, asset specs) lives in **`_data/brand.yml`**; edit there, then regenerate.
+The brand is a dark, data-forward identity with a recurring **Cupid motif — a magenta heart pierced by a blue arrow** (after the 💘 "heart with arrow", redrawn as pixel art). The canonical metadata (prompt, palette, colors, fonts, mark, asset specs) lives in **`_data/brand.yml`**; edit there, then regenerate.
 
-**Brand prompt:** *A dark, data-forward identity for a public-interest data lab: a near-black canvas, CU gold accents, an IBM Plex Mono `cupids-lab` wordmark, and a recurring Cupid motif — a heart pierced by a gold arrow, drawn as 8-bit pixel art (a retro / terminal nod). The Unicode "color heart" palette colors the decorative art. Restrained and civic, with a little matchmaker playfulness.*
+**Brand prompt:** *A dark, data-forward identity for a public-interest data lab: a near-black canvas, CU gold accents, an IBM Plex Mono `cupids-lab` wordmark, and a recurring Cupid motif — a hot-magenta heart pierced by a blue arrow (a little blue heart for the tip, a silver shaft, blue feathers), drawn as 8-bit pixel art (a retro / terminal nod). The Unicode "color heart" palette colors the decorative art. Restrained and civic, with a little matchmaker playfulness.*
 
 **Heart palette** — the Unicode "`<color>` heart" emojis (per [Hearts in Unicode](https://en.wikipedia.org/wiki/Hearts_in_Unicode); black `🖤` is omitted because it disappears on the dark canvas):
 
