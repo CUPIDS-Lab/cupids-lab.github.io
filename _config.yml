@@ -11,7 +11,7 @@ description: "The University of Colorado Public Interest Data Science Laboratory
 # `tagline` is the hero headline, `hero_lead` the hero lead, `description` the SEO/meta description.
 hero_eyebrow: "University of Colorado Public Interest Data Science Lab"
 hero_lead: "Rescuing datasets. Building data infrastructure. Connecting experts. Supporting the public interest."
-mission: "A *laboratory* for teaching data science in the public interest, a *clinic* connecting Colorado's watchdogs to technical capacity, and a *network* preserving evidence for democratic accountability."
+mission: "A <i>laboratory</i> for teaching data science in the public interest, a <i>clinic</i> connecting Colorado's watchdogs to technical capacity, and a <i>network</i> preserving evidence for democratic accountability."
 location: "Boulder, Colorado"
 
 # Served at the org root: https://cupids-lab.github.io
