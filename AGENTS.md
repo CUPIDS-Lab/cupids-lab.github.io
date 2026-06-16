@@ -55,7 +55,7 @@ The brand is a dark, data-forward identity with a recurring **Cupid motif — a 
 | white | 🤍 | `#e8e6e0` |
 | pink (arrow) | 💘 | `#f06fa0` |
 
-The mark itself is a **red heart (`#b23a2e`) + gold arrow (`#cfb87c`)`**. Core UI colors mirror the CSS tokens in `assets/css/style.css`.
+The mark is the **`💘` "heart with arrow" emoji** itself, rendered as SVG `<text>` so it uses the viewer's color-emoji font (on Apple devices it's the Apple glyph). We do **not** embed Apple's proprietary artwork. Core UI colors mirror the CSS tokens in `assets/css/style.css`.
 
 **Generation harness:** `script/generate-brand.rb` digests `_data/brand.yml` and emits deterministic SVGs into `assets/brand/`:
 
@@ -63,7 +63,7 @@ The mark itself is a **red heart (`#b23a2e`) + gold arrow (`#cfb87c`)`**. Core U
 ruby script/generate-brand.rb
 ```
 
-It produces: `favicon.svg`, `avatar.svg` (profile image), `og.svg` (1200×630 social card), `banner.svg`, `pattern.svg` (tiling background), and a `hearts/` collection — every palette color × a few rotations (e.g. `hearts/green.svg`, `hearts/green-r12.svg`) for reuse as list bullets, scatter art, or icons. `cupids.js` draws the same heart-with-arrow motif procedurally on the hero canvas. Commit regenerated assets; `script/` is excluded from the build.
+It produces: `favicon.svg`, `avatar.svg` (profile image), `og.svg` (1200×630 social card), `banner.svg`, `pattern.svg` (tiling background), and a `hearts/` collection — every palette color × a few rotations (e.g. `hearts/green.svg`, `hearts/green-r12.svg`) for reuse as list bullets, scatter art, or icons. `cupids.js` renders the same color-emoji hearts on the hero canvas via `fillText`. Commit regenerated assets; `script/` is excluded from the build.
 
 ## Build & test
 
