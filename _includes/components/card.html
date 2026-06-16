@@ -1,10 +1,10 @@
 {%- comment -%}
-  Card component. Param: include.card = { tag, title, body, meta, url, bullets[] }
-  Accent color is derived from the tag via the accent_color filter.
+  Card component. Param: include.card = { tag, accent, title, body, meta, url, bullets[] }
+  Accent color uses card.accent when supplied, else is derived from the tag.
 {%- endcomment -%}
 {%- assign c = include.card -%}
 {%- if c.url -%}<a class="card card--link" href="{{ c.url | smart_url }}"{% if c.url contains '://' %} rel="noopener"{% endif %}>{%- else -%}<div class="card">{%- endif -%}
-  {%- if c.tag %}<div class="card__tag" style="color: {{ c.tag | accent_color }};">{{ c.tag }}</div>{% endif -%}
+  {%- if c.tag -%}{%- if c.accent %}{%- assign tagcolor = c.accent -%}{%- else -%}{%- assign tagcolor = c.tag | accent_color -%}{%- endif -%}<div class="card__tag" style="color: {{ tagcolor }};">{{ c.tag }}</div>{%- endif -%}
   <h3>{{ c.title }}</h3>
   {%- if c.body %}<p class="card__body">{{ c.body }}</p>{% endif -%}
   {%- if c.bullets %}

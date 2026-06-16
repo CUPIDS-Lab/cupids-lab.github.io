@@ -5,7 +5,10 @@
       <p class="footer__about">The University of Colorado Public Interest Data Science Lab. An initiative within CMDI at CU Boulder.</p>
     </div>
     <nav class="footer__col" aria-label="Footer">
-      {%- for item in site.data.navigation.footer %}
+      {%- for item in site.data.navigation.primary %}{% unless item.key == 'home' %}
+      <a href="{{ item.url | relative_url }}">{{ item.label }}</a>
+      {%- endunless %}{% endfor %}
+      {%- for item in site.data.navigation.footer_extra %}
       <a href="{{ item.url | relative_url }}">{{ item.label }}</a>
       {%- endfor %}
     </nav>

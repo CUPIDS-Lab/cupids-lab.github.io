@@ -1,18 +1,15 @@
 # Site navigation. `key` matches a page's `nav:` front matter for the
-# active-link highlight.
+# active-link highlight. The footer mirrors `primary` (minus home) plus
+# `footer_extra`, so the nav and footer never drift apart.
 primary:
-  - { label: "/home",      url: "/",              key: home }
-  - { label: "/projects",  url: "/projects/",     key: projects }
-  - { label: "/people",    url: "/people/",       key: people }
-  - { label: "/research",  url: "/research/",     key: research }
-  - { label: "/dispatch",  url: "/dispatch/",     key: dispatch }
-  - { label: "/resources", url: "/resources/",    key: resources }
+  - { label: "/home",      url: "/",           key: home }
+  - { label: "/projects",  url: "/projects/",  key: projects }
+  - { label: "/people",    url: "/people/",    key: people }
+  - { label: "/dispatch",  url: "/dispatch/",  key: dispatch }
+  - { label: "/resources", url: "/resources/", key: resources }
 
 cta: { label: "Get Involved", url: "/get-involved/", key: getinvolved }
 
-footer:
-  - { label: "/projects",  url: "/projects/" }
-  - { label: "/research",  url: "/research/" }
-  - { label: "/dispatch",  url: "/dispatch/" }
-  - { label: "/resources", url: "/resources/" }
+# Extra links shown only in the footer (appended after the primary pages).
+footer_extra:
   - { label: "/policies",  url: "/policies/" }

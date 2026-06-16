@@ -79,9 +79,11 @@
   var SPREAD_MS  = 500;   // half-second infection tick
   var TRANSMIT   = 0.45;  // chance the single per-tick propagation fires
   var RESET_FRAC = 0.88;  // once this fraction is infected, reset & re-seed so it loops
-  // Viewport scaling: keep heart density (and the look) consistent desktop↔mobile.
-  var AREA_PER_NODE = 12000; // px² of hero per heart (data-count is the upper cap)
-  var SIZE_REF = 1100;       // hero width at which hearts render full-size
+  // Fixed node count: the same number of hearts on every viewport. Only their
+  // size and edge width scale with the hero width, so a phone shows the same
+  // network as desktop — just smaller, never sparser.
+  var SIZE_REF = 1100;   // hero width at which hearts + edges render full-size
+  var BASE_EDGE = 3;     // link width (px) at full size, scaled to the viewport
   // Prevent-overlap, adapted from ForceAtlas2's anti-collision ("adjustSizes":
   // https://github.com/bhargavchippada/forceatlas2). Each heart has a radius
   // (~half its glyph size); overlapping pairs get separated every frame.
@@ -90,7 +92,7 @@
   var OVERLAP_PAD = 2;    // extra px of breathing room between hearts
 
   function initCanvas(c) {
-    var maxCount = +(c.dataset.count || 40);  // desktop cap
+    var nodeCount = +(c.dataset.count || 32);  // fixed heart count (no viewport scaling)
     var baseLink = +(c.dataset.link || 130);
     var dotOp = +(c.dataset.dotop || 0.45);
     var lineOp = +(c.dataset.lineop || 0.14);
@@ -98,16 +100,17 @@
     var raf = null;
     var timer = null;        // SI spread interval
     var linkDist = baseLink; // recomputed per seed for the current viewport
+    var edgeW = BASE_EDGE;   // link width, recomputed per seed for the viewport
 
-    // Node count scales with hero AREA (constant density) and heart size +
-    // link distance scale with hero WIDTH — so a phone isn't a crowded,
-    // fast-spreading clump and desktop isn't sparse.
+    // Fixed count of hearts on every viewport; only the heart size, link
+    // distance and edge width scale with hero WIDTH — so a phone shows the same
+    // network as desktop, just rendered smaller.
     function seed(W, H) {
       var scale = Math.max(0.6, Math.min(1, W / SIZE_REF));
-      var n = Math.max(6, Math.min(maxCount, Math.round((W * H) / AREA_PER_NODE)));
       linkDist = baseLink * scale;
+      edgeW = BASE_EDGE * scale;
       pts = [];
-      for (var i = 0; i < n; i++) {
+      for (var i = 0; i < nodeCount; i++) {
         var s = SUSCEPTIBLE[(Math.random() * SUSCEPTIBLE.length) | 0];
         pts.push({
           x: Math.random() * W, y: Math.random() * H,
@@ -219,7 +222,7 @@
             grad.addColorStop(1, pts[b].color);
             ctx.globalAlpha = lineOp * (1 - 0.7 * d / linkDist);
             ctx.strokeStyle = grad;
-            ctx.lineWidth = 3;
+            ctx.lineWidth = edgeW;
             ctx.beginPath();
             ctx.moveTo(pts[a].x, pts[a].y);
             ctx.lineTo(pts[b].x, pts[b].y);
@@ -256,31 +259,49 @@
     return { el: c, sync: sync };
   }
 
+  // AJAX form submit to Formspree (or any endpoint set via data-endpoint).
+  // Shows the on-brand success state on a 2xx, surfaces validation errors
+  // otherwise, and re-enables the button. With no endpoint it just confirms
+  // (the design's client-side fallback).
   function wireForm(form) {
+    var card = form.parentNode;
+    var success = card.querySelector('.js-form-success');
+    var btn = form.querySelector('button[type="submit"]');
+    var label = btn ? btn.innerHTML : '';
+    var endpoint = form.getAttribute('data-endpoint');
+
+    function reveal() { if (success) { form.style.display = 'none'; success.hidden = false; } }
+    function resetBtn() { if (btn) { btn.disabled = false; btn.innerHTML = label; } }
+    function showError(msg) {
+      var el = card.querySelector('.js-form-error');
+      if (!el) {
+        el = document.createElement('div');
+        el.className = 'js-form-error form-error';
+        el.setAttribute('role', 'alert');
+        form.parentNode.insertBefore(el, form.nextSibling);
+      }
+      el.textContent = msg || "Sorry — that didn't send. Please try again, or reach us directly.";
+      el.hidden = false;
+    }
+
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      var success = form.parentNode.querySelector('.js-form-success');
-      var endpoint = form.getAttribute('data-endpoint');
-
-      function reveal() {
-        if (success) {
-          form.style.display = 'none';
-          success.hidden = false;
-        }
-      }
-
-      if (endpoint) {
-        var btn = form.querySelector('button[type="submit"]');
-        if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
-        fetch(endpoint, {
-          method: 'POST',
-          body: new FormData(form),
-          headers: { 'Accept': 'application/json' }
-        }).then(function () { reveal(); })
-          .catch(function () { reveal(); });
-      } else {
-        reveal();
-      }
+      if (!endpoint) { reveal(); return; }
+      var prev = card.querySelector('.js-form-error'); if (prev) prev.hidden = true;
+      if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+      fetch(endpoint, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      }).then(function (res) {
+        if (res.ok) { reveal(); return; }
+        return res.json().then(function (data) {
+          var msg = data && data.errors && data.errors.length
+            ? data.errors.map(function (er) { return er.message; }).join(' ')
+            : null;
+          showError(msg); resetBtn();
+        }).catch(function () { showError(); resetBtn(); });
+      }).catch(function () { showError(); resetBtn(); });
     });
   }
 
