@@ -64,18 +64,21 @@
     return c;
   }
 
-  // Real heart emoji nodes — the Cupid 💘 ("heart with arrow") is the recurring
-  // motif, woven through the Unicode color-heart palette. Drawn with the
-  // platform's color-emoji font (so on Apple devices these ARE the Apple
-  // glyphs). Each glyph maps to a color the edges interpolate between. 💘 is
-  // weighted so the arrow heart dominates.
-  var HEARTS = [
-    { g: '💘', c: '#f06fa0' }, { g: '💘', c: '#f06fa0' }, { g: '💘', c: '#f06fa0' },
+  // Real color-emoji hearts, rendered with the platform's color-emoji font (so
+  // on Apple devices these ARE the Apple glyphs). The hero runs an SI
+  // (susceptible -> infected) spread: every node starts as a colored heart and
+  // the Cupid 💘 spreads along the links to its neighbors. Each glyph maps to a
+  // color the edges interpolate between.
+  var SUSCEPTIBLE = [
     { g: '❤️', c: '#ed4e5b' }, { g: '🧡', c: '#f0883e' }, { g: '💛', c: '#f7c948' },
     { g: '💚', c: '#6fcf97' }, { g: '💙', c: '#4a9fe6' }, { g: '💜', c: '#9b6dd6' },
     { g: '🤎', c: '#9c6b4a' }, { g: '🤍', c: '#e8e6e0' }
   ];
+  var INFECTED   = { g: '💘', c: '#f06fa0' }; // the Cupid heart that spreads
   var EMOJI_FONT = '"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
+  var SPREAD_MS  = 500;   // half-second infection tick
+  var TRANSMIT   = 0.45;  // chance an infected node infects a given neighbor per tick
+  var RESET_FRAC = 0.88;  // once this fraction is infected, reset & re-seed so it loops
 
   function initCanvas(c) {
     var count = +(c.dataset.count || 40);
@@ -84,18 +87,55 @@
     var lineOp = +(c.dataset.lineop || 0.14);
     var pts = null;          // seeded lazily, once we have real dimensions
     var raf = null;
+    var timer = null;        // SI spread interval
 
     function seed(W, H) {
       pts = [];
       for (var i = 0; i < count; i++) {
-        var hh = HEARTS[(Math.random() * HEARTS.length) | 0];
+        var s = SUSCEPTIBLE[(Math.random() * SUSCEPTIBLE.length) | 0];
         pts.push({
           x: Math.random() * W, y: Math.random() * H,
           vx: (Math.random() - 0.5) * 0.22, vy: (Math.random() - 0.5) * 0.22,
-          glyph: hh.g, color: hh.c,
+          baseGlyph: s.g, baseColor: s.c, glyph: s.g, color: s.c, infected: false,
           size: 14 + Math.random() * 30   // ~doubled size range vs. before
         });
       }
+      seedInfections();
+    }
+
+    function infect(p) { p.infected = true; p.glyph = INFECTED.g; p.color = INFECTED.c; }
+    function cure(p) { p.infected = false; p.glyph = p.baseGlyph; p.color = p.baseColor; }
+
+    // Patient zero (a few seeds, scaled to the network size).
+    function seedInfections() {
+      if (!pts || !pts.length) return;
+      var n = Math.max(1, Math.round(pts.length * 0.05));
+      for (var i = 0; i < n; i++) infect(pts[(Math.random() * pts.length) | 0]);
+    }
+
+    // One SI step: infected nodes spread 💘 to connected (in-range) neighbors.
+    // Decisions use the state at tick start; saturation triggers a reset.
+    function spreadTick() {
+      if (!c.isConnected) { if (timer) { clearInterval(timer); timer = null; } return; }
+      if (!pts || !pts.length) return;
+      var inf = 0, k;
+      for (k = 0; k < pts.length; k++) if (pts[k].infected) inf++;
+      if (inf === 0) { seedInfections(); return; }
+      if (inf >= pts.length * RESET_FRAC) {
+        for (k = 0; k < pts.length; k++) cure(pts[k]);
+        seedInfections();
+        return;
+      }
+      var d2 = linkDist * linkDist, toInfect = [];
+      for (var a = 0; a < pts.length; a++) {
+        if (!pts[a].infected) continue;
+        for (var b = 0; b < pts.length; b++) {
+          if (b === a || pts[b].infected) continue;
+          var dx = pts[a].x - pts[b].x, dy = pts[a].y - pts[b].y;
+          if (dx * dx + dy * dy < d2 && Math.random() < TRANSMIT) toInfect.push(pts[b]);
+        }
+      }
+      for (k = 0; k < toInfect.length; k++) infect(toInfect[k]);
     }
 
     // Resize backing store; seed on first valid size, rescale on later changes.
@@ -168,6 +208,7 @@
     }
 
     draw();
+    timer = setInterval(spreadTick, SPREAD_MS);
     return { el: c, sync: sync };
   }
 
