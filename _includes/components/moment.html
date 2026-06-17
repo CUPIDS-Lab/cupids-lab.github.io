@@ -1,0 +1,20 @@
+{%- comment -%} "The moment" — the redaction ledger + decline stats ("what's
+  disappearing"). Params: moment (a map with kicker, ledger[], stats[]);
+  defaults to site.data.moment. Each ledger row is { label, status, tone };
+  each stat is { num, label }. {%- endcomment -%}
+{%- assign m = include.moment | default: site.data.moment -%}
+{%- if m.kicker %}<div class="kicker">{{ m.kicker }}</div>{% endif -%}
+{%- if m.ledger and m.ledger != empty -%}
+<div class="ledger">
+  {%- for row in m.ledger %}
+  {{ row.label }} <span class="redact">&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;</span> <span class="tag-strong" style="color: {{ row.tone | bullet_color }};">{{ row.status }}</span>{% unless forloop.last %}<br>{% endunless %}
+  {%- endfor %}
+</div>
+{%- endif -%}
+{%- if m.stats and m.stats != empty -%}
+<div class="stats">
+  {%- for st in m.stats %}
+  <div class="stat"><div class="stat__num">{{ st.num }}</div><div class="stat__label">{{ st.label }}</div></div>
+  {%- endfor %}
+</div>
+{%- endif -%}

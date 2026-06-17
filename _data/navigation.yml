@@ -3,6 +3,7 @@
 # `footer_extra`, so the nav and footer never drift apart.
 primary:
   - { label: "/home",      url: "/",           key: home }
+  - { label: "/about",     url: "/about/",     key: about }
   - { label: "/projects",  url: "/projects/",  key: projects }
   - { label: "/people",    url: "/people/",    key: people }
   - { label: "/dispatch",  url: "/dispatch/",  key: dispatch }
