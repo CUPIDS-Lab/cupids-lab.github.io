@@ -94,8 +94,8 @@ module CupidsFilters
     bullet_color(dispatch_kind(doc["kind"])["accent"])
   end
 
-  # Byline that links each author to their _people page (matched by title);
-  # names with no matching person render as plain text.
+  # Byline that links each author to their _people page (resolved by slug);
+  # references with no matching person render as plain text.
   def author_byline(names)
     base = author_baseurl
     join_authors(author_people(names).map { |a|
@@ -109,28 +109,33 @@ module CupidsFilters
   end
 
   # Map a collection's docs -> card hashes for the card component.
-  # Ranking metadata: `order` (ordinal, ascending) is the primary sort key;
-  # `category` (a machine-friendly group tag) is carried through so templates
-  # can group or filter. `featured` lets the parent split the flagship item
-  # out of the grid. Honors published: false.
+  # Ranking metadata: `order` (ordinal, ascending) is the primary sort key and
+  # is reserved for *pinning* a few items; everything else falls back to
+  # alphabetical by `sort_name` (or `title`) so a large roster needs no manual
+  # numbering. `category` (a machine-friendly group tag) and `status` are
+  # carried through so templates can group/filter (e.g. the People roster).
+  # `featured` lets the parent split the flagship item out of the grid.
+  # Honors published: false.
   def collection_cards(name)
     site = @context.registers[:site]
     coll = site && site.collections[name.to_s]
     return [] unless coll
     coll.docs
         .reject { |d| d.data["published"] == false }
-        .sort_by { |d| [(d.data["order"] || 9999), d.data["category"].to_s, d.data["title"].to_s] }
+        .sort_by { |d| [(d.data["order"] || 9999), (d.data["sort_name"] || d.data["title"]).to_s] }
         .map do |d|
           {
-            "tag"      => d.data["tag"],
-            "title"    => d.data["title"],
-            "body"     => (d.data["summary"] || d.data["description"]).to_s,
-            "url"      => d.url,
-            "featured" => d.data["featured"] == true,
-            "order"    => d.data["order"],
-            "category" => d.data["category"],
-            "meta"     => d.data["meta"],
-            "bullets"  => d.data["bullets"],
+            "tag"       => d.data["tag"],
+            "title"     => d.data["title"],
+            "body"      => (d.data["summary"] || d.data["description"]).to_s,
+            "url"       => d.url,
+            "featured"  => d.data["featured"] == true,
+            "order"     => d.data["order"],
+            "category"  => d.data["category"],
+            "status"    => d.data["status"],
+            "sort_name" => d.data["sort_name"],
+            "meta"      => d.data["meta"],
+            "bullets"   => d.data["bullets"],
           }
         end
   end
@@ -157,6 +162,14 @@ module CupidsFilters
     site.static_files.any? { |f| f.relative_path.to_s.sub(%r{\A/+}, "") == needle }
   end
 
+  # Slug (or list of slugs) -> linked canonical names, for people-reference
+  # front matter (authors:, team:, advisors:, ...). Strict: an unknown slug
+  # fails the build (see CupidsPeople.find!), so a reference can't silently rot.
+  def people_links(refs)
+    site = @context.registers[:site]
+    Array(refs).map { |r| CupidsPeople.link(site, CupidsPeople.find!(site, r)) }
+  end
+
   private
 
   # A vocabulary entry ({label, accent}) for a kind key, from _data/dispatch.yml.
@@ -179,15 +192,18 @@ module CupidsFilters
     site ? site.config["baseurl"].to_s : ""
   end
 
-  # Resolve author name(s) to {name, url} hashes via the _people collection,
-  # matched on `title`. url is nil when no person matches the name.
+  # Resolve author reference(s) to {name, url} hashes via the _people
+  # collection. References are slugs (display-name fallback for back-compat);
+  # the name rendered is always the doc's canonical title, so a rename can't
+  # drift a byline. A reference with no matching person renders as plain text
+  # (guest authors) but logs a warning.
   def author_people(names)
     site = @context.registers[:site]
-    people = site && site.collections["people"] ? site.collections["people"].docs : []
-    Array(names).map do |name|
-      n = name.to_s.strip
-      doc = people.find { |d| d.data["title"].to_s.strip == n }
-      { "name" => n, "url" => (doc && doc.url) }
+    Array(names).map do |ref|
+      r = ref.to_s.strip
+      doc = CupidsPeople.find(site, r)
+      Jekyll.logger.warn "Byline:", "no _people match for '#{r}'" if doc.nil? && !r.empty?
+      { "name" => (doc ? doc.data["title"] : r), "url" => (doc && doc.url) }
     end
   end
 
@@ -204,3 +220,85 @@ module CupidsFilters
 end
 
 Liquid::Template.register_filter(CupidsFilters)
+
+# --- People references -------------------------------------------------------
+# Identity is the _people *slug* (the filename), never the display name — so a
+# reference can't be ambiguous (slugs are unique) and the name shown is always
+# the doc's canonical title (so a rename updates every reference automatically).
+# Explicit references ({% person %}, people_links, the post_read hook) resolve
+# STRICTLY: an unknown slug raises and fails the build. The byline resolves
+# leniently, so a guest author with no profile can still render as plain text.
+module CupidsPeople
+  module_function
+
+  def docs(site)
+    coll = site.collections["people"]
+    coll ? coll.docs : []
+  end
+
+  # The reference key for a person: explicit `slug:` front matter, else filename.
+  def slug_of(doc)
+    doc.data["slug"] || File.basename(doc.path, ".*")
+  end
+
+  # Resolve a reference (slug first, display-name fallback) to a doc, or nil.
+  def find(site, ref)
+    r = ref.to_s.strip
+    return nil if r.empty?
+    list = docs(site)
+    list.find { |d| slug_of(d) == r } || list.find { |d| d.data["title"].to_s.strip == r }
+  end
+
+  # Strict resolve — raises (fails the build) when a reference doesn't match.
+  def find!(site, ref)
+    find(site, ref) || raise(
+      "Unknown person '#{ref}'. Reference people by their _people slug; " \
+      "known slugs: #{docs(site).map { |d| slug_of(d) }.sort.join(', ')}"
+    )
+  end
+
+  # Anchor linking a person's canonical name to their profile page.
+  def link(site, doc)
+    %(<a class="person-link" href="#{site.config["baseurl"]}#{doc.url}">#{doc.data["title"]}</a>)
+  end
+end
+
+# {% person <slug> %} — inline link to a person's profile; the link text is the
+# person's canonical title. Liquid variables resolve, so {% person {{ ref }} %}
+# works too. An unknown slug fails the build (see CupidsPeople.find!).
+class PersonTag < Liquid::Tag
+  def initialize(tag_name, markup, tokens)
+    super
+    @markup = markup.strip
+  end
+
+  def render(context)
+    site = context.registers[:site]
+    ref  = Liquid::Template.parse(@markup).render(context).to_s.strip
+    CupidsPeople.link(site, CupidsPeople.find!(site, ref))
+  end
+end
+Liquid::Template.register_tag("person", PersonTag)
+
+# Build-time enforcement (the "constrained" guarantee):
+#   1. Every people reference in front matter must resolve to a real person —
+#      checked across all collections' published docs before rendering, so a
+#      typo or a deleted person fails CI rather than shipping. (Inline
+#      {% person %} references are enforced at render time, the same way.)
+#   2. Every _people `category` should be a group declared in _data/people.yml;
+#      an off-vocabulary category still renders but logs a warning (mirrors the
+#      Dispatch `kinds:` vocabulary).
+Jekyll::Hooks.register :site, :post_read do |site|
+  %w[author authors team advisors contributors].each do |field|
+    site.collections.each_value do |coll|
+      coll.docs.each { |doc| Array(doc.data[field]).each { |r| CupidsPeople.find!(site, r) } }
+    end
+  end
+
+  groups = (site.data.dig("people", "groups") || []).map { |g| g["key"] }
+  CupidsPeople.docs(site).each do |doc|
+    cat = doc.data["category"].to_s
+    next if cat.empty? || groups.include?(cat)
+    Jekyll.logger.warn "People:", "unknown category '#{cat}' in #{doc.relative_path} (add it to _data/people.yml)"
+  end
+end

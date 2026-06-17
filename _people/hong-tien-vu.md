@@ -1,7 +1,8 @@
 ---
 title: Hong Tien Vu
-order: 2
-category: collaborator
+category: faculty
+status: active
+sort_name: Vu
 photo: /assets/img/headshots/hong-tien-vu.jpg
 summary: "Director, Center for Environmental Journalism"
 ---

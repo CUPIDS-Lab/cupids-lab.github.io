@@ -9,9 +9,10 @@ title: "What the ozone data still shows — before it's gone"
 kind: investigation
 issue: 3
 date: 2026-05-15
-# `authors` must match `title:` values in _people so the byline can link them.
+# `authors` are _people slugs (the filename of the person's _people doc). The
+# byline links them by slug, and an unknown slug fails the build.
 authors:
-  - "Brian C. Keegan"
+  - brian-keegan
 summary: "We reconstructed a decade of Front Range air quality from archived EPA monitors to map who breathes the worst of Denver's ozone — and what's at stake as the data disappears."
 # Reading time is estimated automatically from the body length — no field needed.
 published: false

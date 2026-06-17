@@ -60,6 +60,12 @@ collections:
   people:
     output: true
     permalink: /people/:name/
+  # Watchdog / newsroom partners — organizations, not people. Kept in their own
+  # store (org fields: name, summary, link) and cross-referenced by slug from
+  # projects and the People page.
+  partners:
+    output: true
+    permalink: /partners/:name/
   resources:
     output: true
     permalink: /resources/:name/
@@ -113,6 +119,14 @@ defaults:
     values:
       layout: detail
       eyebrow: People
+      back: /people/
+      back_label: People
+  - scope:
+      path: ""
+      type: partners
+    values:
+      layout: detail
+      eyebrow: Partner
       back: /people/
       back_label: People
   - scope:

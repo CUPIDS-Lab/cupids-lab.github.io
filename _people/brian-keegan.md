@@ -5,8 +5,17 @@ order: 1
 category: director
 featured: true
 tag: Director
+status: active
+sort_name: Keegan
 photo: /assets/img/headshots/brian-keegan.png
 summary: "Associate Professor, Department of Information Science · CU Boulder"
+pronouns: "he/him"
+email: brian.keegan@colorado.edu
+github: github.com/brianckeegan
+# Condensed bio for the director block on the People page; the full bio is the
+# Markdown body below (rendered on this profile page).
+lede: |
+  A computational social scientist with eighteen years studying how people collaborate on Wikipedia, Reddit, and Twitter. That research has always depended on open data, a commitment that has been systematically eroded as platforms enclosed the information commons. He has taught "Information Expositions" for eight years, serves as Vice Chair of one of the nation's first cannabis licensing boards, and writes a data driven column "Charting Boulder" for the Boulder Reporting Lab. CUPIDS Lab is the synthesis of that research, teaching, and civic work.
 ---
 Professor Keegan is a computational social scientist, an associate professor in the Department of Information Science at the University of Colorado Boulder, and director of the CUPIDS Lab. He holds courtesy appointments in the Department of Computer Science and is an affiliate of the ATLAS Institute, Institute for Behavioral Research, American Politics Research Lab, and REACH.
 
@@ -15,6 +24,3 @@ His research uses digital traces of social behavior to explore how disruptions i
 Professor Keegan has taught "Information Expositions" for eight years, served as Vice Chair of one of the nation's first cannabis licensing boards, and writes a data-driven column "[Charting Boulder](https://boulderreportinglab.org/tag/charting-boulder/)" for the Boulder Reporting Lab. CUPIDS is the synthesis of that research, teaching, and civic work.
 
 Before joining CU Boulder, he was a research associate and data scientist at the Harvard Business School Online initiative (2014–2016) and a post-doctoral research fellow with Professor David Lazer at Northeastern University (2012–2014). Keegan received his Ph.D. in Media, Technology, and Society from Northwestern University’s School of Communication in 2012 where he was co-advised by Professors Noshir Contractor and Darren Gergle. He received S.B. degrees in Mechanical Engineering and Science, Technology, and Society from the Massachusetts Institute of Technology in 2006. He was born in southern Oregon and grew up in Henderson, Nevada, a suburb of Las Vegas. He is married and has two sons.
-
-- **Email:** [brian.keegan@colorado.edu](mailto:brian.keegan@colorado.edu)
-- **GitHub:** [github.com/brianckeegan/](https://github.com/brianckeegan/)
