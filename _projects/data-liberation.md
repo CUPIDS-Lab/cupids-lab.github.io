@@ -1,18 +1,20 @@
 ---
-title: "Data liberation toolkit"
-eyebrow: "Open-source toolkit"
+title: "Agent skills"
+eyebrow: "Open-source agent skills"
 order: 3
 category: infrastructure
 meta: "Open source · MIT-licensed"
-summary: "An open-source agent skill and project template that automate rescuing civic data — the reusable engine behind the lab's archives and help desk."
+summary: "Two portable, open-source agent skills that turn the lab's repeatable work — liberating civic data, and building the project around it — into reusable software any AI assistant can run."
 bullets:
-  - { text: "Agent skill that orchestrates a liberation project end to end", accent: amber }
-  - { text: "Python project template, scaffolded in one command", accent: amber }
-  - { text: "Acquisition → cleaning → validation → documentation", accent: amber }
+  - { text: "data-liberation — get data out of PDFs, FOIA dumps, and scraped sites into tidy, documented datasets", accent: amber }
+  - { text: "data-project — scaffold an accessible, documented, governed project around that data", accent: amber }
+  - { text: "Portable across Claude Code, Codex, Gemini, and other agent harnesses", accent: amber }
   - { text: "Open source, MIT-licensed, free to fork", accent: amber }
 ---
-Most of the lab's work starts the same way: public data is stranded — removed, scanned, scattered, or undocumented — and someone needs it whole. The **data liberation toolkit** turns that recurring work into reusable software, so a new rescue starts from a working pipeline instead of a blank file.
+Most of the lab's work rhymes: public data is stranded — removed, scanned, scattered — and then a real project has to be built around it so the result is reusable and accountable. We capture both halves as **agent skills**: portable, plain-Markdown instructions an AI assistant (Claude Code, Codex, Gemini, and others) follows to do the work the way we would.
 
-It's two open-source repositories: an [agent skill](https://github.com/CUPIDS-Lab/data-liberation-skill) that orchestrates a liberation project end to end, and a [project template](https://github.com/CUPIDS-Lab/data-liberation-template) it scaffolds from. Together they standardize how we acquire, clean, validate, and document a dataset — the same method that powers the [At-Risk Federal Data Archive](/projects/at-risk-archive/) and our [Center for Environmental Journalism collaboration](/projects/cej/).
+There are two, and they compose. **[data-liberation](https://github.com/CUPIDS-Lab/data-liberation-skill)** gets the data out — orchestrating acquisition, cleaning, validation, and documentation from a government PDF, FOIA release, or scraped site into a tidy, documented dataset (it scaffolds from a [project template](https://github.com/CUPIDS-Lab/data-liberation-template)). **[data-project](https://github.com/CUPIDS-Lab/data-project-skill)** architects the collaboration around that data — a right-sized repository, reproducible pipeline, documentation, governance, and an open-knowledge catalog, built only as far as the project needs.
 
-It's free to use and adapt. Read the [practitioner guide](/resources/data-liberation/), or [bring a dataset to the help desk](/get-involved/#desk).
+Together they standardize how we acquire, clean, validate, document, and govern a dataset — the same method behind the [At-Risk Federal Data Archive](/projects/at-risk-archive/) and our [Center for Environmental Journalism collaboration](/projects/cej/).
+
+They're free to use and adapt. Read the [practitioner guide](/resources/data-liberation/), or [bring a dataset to the help desk](/get-involved/#request-help).

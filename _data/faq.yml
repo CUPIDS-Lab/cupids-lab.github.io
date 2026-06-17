@@ -1,0 +1,32 @@
+# Frequently asked questions, rendered on the About page (/about/) via
+# components/faq.html. Answers are Markdown (rendered with `markdownify`);
+# one entry per question. Keep each answer on a single line.
+- q: "What is public-interest data science?"
+  a: "Data science for the public — Colorado's journalists, lawyers, nonprofits, and citizens — not for paying clients or platforms. In practice: preserving public data that's disappearing and building the capacity to use it (the three kinds of work described above)."
+
+- q: "How can I get involved?"
+  a: "Bring a data problem to the pro-bono [help desk](/get-involved/#request-help), join a student team, partner with us, or fund the work. Start on the [Get Involved](/get-involved/) page."
+
+- q: "Who can work with the lab?"
+  a: "The help desk serves Colorado journalists, lawyers, and nonprofits; student teams are open to CU undergraduate, graduate, and visiting researchers across disciplines; organizations can partner or fund."
+
+- q: "Why \"CUPIDS\" and not \"UCPIDS\"?"
+  a: "Because **CU** is the University of Colorado (UC would be the University of *California*). We're CU's Public Interest Data Science lab — CU-PIDS — and yes, the Cupid's-arrow pun is on purpose."
+
+- q: "What does the arrow-through-the-file-folder logo mean?"
+  a: "Data liberation in one picture: an arrow breaking a closed file folder open to free the public data trapped inside — also a nod to Cupid's arrow, and to the idea that getting data out of locked formats is the first move in almost everything we do."
+
+- q: "Where can I find your data?"
+  a: "We're early; most archives aren't broadly published yet. We're building durable, open repositories (like the [At-Risk Federal Data Archive](/projects/at-risk-archive/)) and will announce datasets on [Projects](/projects/) and in the [Dispatch](/dispatch/). Need a specific dataset now? [Bring it to the help desk](/get-involved/#request-help). Code is open at [github.com/CUPIDS-Lab](https://github.com/CUPIDS-Lab)."
+
+- q: "Is your work open source?"
+  a: "Yes — methods, code, and this website are open source on [GitHub](https://github.com/CUPIDS-Lab), so our claims can be checked rather than taken on faith."
+
+- q: "How do you protect sources and sensitive data?"
+  a: "Source protection is a design requirement: we minimize what we collect, keep sensitive channels off institutional systems, and don't unmask sources — see our [policies](/policies/)."
+
+- q: "How do you use AI responsibly?"
+  a: "We treat models as instruments that need calibration: measure error, document limits, keep humans in the loop, and put the caveats up front."
+
+- q: "What's the connection to COLUMN Lab?"
+  a: "CUPIDS's predecessor is [COLUMN](https://columnlab.github.io/) (the Colorado Laboratory for Users, Media, and Networks), founded by Brian Keegan at CU Boulder — the same interdisciplinary, human-centered, computational approach, redirected from studying the online information commons to preserving the public data it depends on."

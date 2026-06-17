@@ -54,6 +54,8 @@ The lab is also a lineage of people. COLUMN's researchers and alumni — many of
 
 CUPIDS carries that work forward into a moment that needs it more.
 
+{% include components/faq.html %}
+
 ## Where you come in
 
 The lab only works because people show up for it — to bring a data problem, to do the work, or to fund it. That's the whole model, and there's a way in for every skill set.

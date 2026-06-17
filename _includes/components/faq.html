@@ -1,0 +1,15 @@
+{%- comment -%}
+  FAQ accordion. Accessible by default: native <details>/<summary> (keyboard-
+  operable, announces expanded/collapsed) — no JS. Content from _data/faq.yml.
+  Params: heading (optional), items (optional list; defaults to site.data.faq).
+{%- endcomment -%}
+{%- assign items = include.items | default: site.data.faq -%}
+<section class="faq" aria-labelledby="faq-heading">
+  <h2 id="faq-heading">{{ include.heading | default: "Frequently asked questions" }}</h2>
+  {%- for item in items %}
+  <details class="faq__item">
+    <summary class="faq__q">{{ item.q }}</summary>
+    <div class="faq__a">{{ item.a | markdownify }}</div>
+  </details>
+  {%- endfor %}
+</section>
