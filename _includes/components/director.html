@@ -1,21 +1,26 @@
-{%- comment -%} Director block. Param: include.person = { name, role, bio, email, github } {%- endcomment -%}
+{%- comment -%} Director block. Param: include.person — a _people doc (reads
+  title/summary/lede/email/github/pronouns/photo) or an inline hash (the older
+  name/role/bio keys still work as fallbacks). {%- endcomment -%}
 {%- assign p = include.person -%}
+{%- assign p_name = p.name | default: p.title -%}
+{%- assign p_role = p.role | default: p.summary -%}
+{%- assign p_bio  = p.bio  | default: p.lede -%}
 {%- assign has_photo = p.photo | static_exists -%}
 <div class="split split--director director">
   {%- if has_photo -%}
-  <img class="headshot headshot--1x1" src="{{ p.photo | relative_url }}" alt="{{ p.name }}">
+  <img class="headshot headshot--1x1" src="{{ p.photo | relative_url }}" alt="{{ p_name }}">
   {%- else -%}
   <div class="placeholder placeholder--1x1"><span>[ headshot ]</span></div>
   {%- endif -%}
   <div>
     <div class="kicker kicker--gold" style="letter-spacing:0.08em;">Director</div>
-    <h2>{% if p.url %}<a href="{{ p.url | relative_url }}">{{ p.name }}</a>{% else %}{{ p.name }}{% endif %}</h2>
-    <div class="director__role">{{ p.role }}{% if p.pronouns %} · {{ p.pronouns }}{% endif %}</div>
-    <p class="director__bio">{{ p.bio }}</p>
+    <h2>{% if p.url %}<a href="{{ p.url | relative_url }}">{{ p_name }}</a>{% else %}{{ p_name }}{% endif %}</h2>
+    <div class="director__role">{{ p_role }}{% if p.pronouns %} · {{ p.pronouns }}{% endif %}</div>
+    <p class="director__bio">{{ p_bio }}</p>
     <div class="director__links">
-      <a class="gold" href="mailto:{{ p.email }}">{{ p.email }}</a>
-      <span class="cell-dim">·</span>
-      <a class="cell-dim" href="{{ site.github_url }}" rel="noopener">{{ p.github }}</a>
+      {%- if p.email -%}<a class="gold" href="mailto:{{ p.email }}">{{ p.email }}</a>{%- endif -%}
+      {%- if p.email and p.github %}<span class="cell-dim"> · </span>{% endif -%}
+      {%- if p.github -%}<a class="cell-dim" href="https://{{ p.github }}" rel="noopener">{{ p.github }}</a>{%- endif -%}
     </div>
   </div>
 </div>

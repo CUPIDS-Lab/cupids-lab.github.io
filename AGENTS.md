@@ -11,7 +11,7 @@ The website for **CUPIDS Lab** (University of Colorado Public Interest Data Scie
 1. **No external requests.** Everything is same-origin: fonts are self-hosted in `assets/fonts/` (`@font-face`), and JS is hand-written in `assets/js/cupids.js`. Do **not** add Google Fonts, CDNs, analytics, or third-party scripts/libraries.
 2. **Content is data, not markup.** Author content in Markdown + YAML; keep presentation in `_layouts`, `_includes/components`, and the Liquid filters in `_plugins/`. Don't hand-write page HTML.
 3. **Reuse the components and filters** rather than duplicating markup/inline styles. Match the existing dark theme tokens (CSS vars in `assets/css/style.css`).
-4. **Don't repeat content.** Shared values have one home: site identity (title, tagline, description, mission, hero eyebrow, location) in `_config.yml`; per-item content in `_data/*.yml` or the collections. Pages and layouts *retrieve* these — never hard-code a copy that can drift.
+4. **Don't repeat content.** Shared values have one home: site identity (title, tagline, description, mission, hero eyebrow, location) in `_config.yml`; per-item content in `_data/*.yml` or the collections. Pages and layouts *retrieve* these — never hard-code a copy that can drift. **People are single-source in `_people`** (one file per person — name, role, photo, links, bio); the director block, cards, and bylines are all projections of it, and other content references a person by **slug** (see `{% person %}` below), never by re-typing their name.
 5. **One line per paragraph.** Write each paragraph on a single line (no hard wraps); blank lines separate paragraphs. Only break a line where HTML rendering needs it — e.g. an explicit `<br>`, or a `white-space: pre-line` block like the director bio.
 6. **Keep CI green.** Build + link-check before pushing (see below).
 
@@ -21,11 +21,16 @@ The website for **CUPIDS Lab** (University of Colorado Public Interest Data Scie
 _pages/                Top-level pages (Markdown). Each sets an explicit
                        `permalink`. Rendered via `home` or `page` layouts.
 _dispatch/             Dispatch collection — one Markdown file per issue.
-_projects/ _people/ _resources/
+_projects/ _people/ _resources/ _partners/
                        Collections — one file per item; each gets a child page
-                       and is listed (as a card) on its parent page.
-_data/*.yml            Reference data: director block, datasets (archive),
-                       pillars, focus areas, nav, contact, brand, steps.
+                       and is listed (as a card) on its parent page. `_people`
+                       is the single source of truth for everyone (partitioned
+                       by `category`); `_partners` holds organizations,
+                       cross-referenced by slug from projects and the People page.
+_data/*.yml            Reference data & controlled vocabularies: people group
+                       taxonomy (`people.yml`), dispatch kinds (`dispatch.yml`),
+                       datasets (archive), pillars, focus areas, nav, contact,
+                       brand, steps.
 _layouts/              default · home · page (section dispatcher) · dispatch ·
                        detail (collection item)
 _includes/components/  card, card_grid, placeholder_grid, placeholder_panel,
@@ -94,24 +99,29 @@ Items in `_projects`, `_people`, `_resources` (and `_dispatch`) are individual M
 
 - `title` — display title
 - `summary` — one-line description (used as the card body + hero lead)
-- `order` — **ordinal rank** (integer, ascending); the primary sort key
-- `category` — **machine-friendly group tag** (e.g. `investigation`, `guide`, `advisor`); used for grouping/filtering and as a secondary sort key
+- `order` — **pin rank** (integer, ascending); reserve it for the few items that must lead (e.g. the director). Unpinned items fall back to alphabetical, so a large roster needs no manual numbering.
+- `sort_name` — alphabetical sort key when unpinned (e.g. a surname, `Keegan`); defaults to `title`
+- `category` — **machine-friendly group tag**; for `_people` it must be a group key in `_data/people.yml` (`director`, `faculty`, `student`, `advisor`, `alumni`). Drives grouping/filtering.
+- `status` — people lifecycle (`active`, `alumni`, `emeritus`); a transition (student → alumni) is a one-field edit, not a moved file
 - `tag` — optional display label (drives accent color via `accent_color`)
 - `featured: true` — flagship item; rendered by the parent's bespoke block (featured card / director) and **omitted** from the grid
 - `published: false` — keep as an unpublished draft/template
 
-`collection_cards` (in `_plugins/cupids.rb`) sorts by `[order, category, title]` and exposes `order` + `category` on each card. The `collection` section accepts an optional `category:` to filter the grid to one category.
+`collection_cards` (in `_plugins/cupids.rb`) sorts by `[order, sort_name || title]` and exposes `order`, `category`, `status` on each card. The `collection` section accepts an optional `category:` to filter the grid to one category. The **People page** (`roster` section) renders one card grid per group by iterating `_data/people.yml` — to add a group, add a vocabulary entry there and tag a person's `category`; no template change.
 
 ## Custom Liquid filters (`_plugins/cupids.rb`)
 
-`accent_color` · `bullet_color` · `tone_class` · `site_data` (dotted-path data lookup) · `smart_url` · `static_exists` (true when a referenced static asset is present) · `dispatch_cards` · `collection_cards`.
+`accent_color` · `bullet_color` · `tone_class` · `site_data` (dotted-path data lookup) · `smart_url` · `static_exists` (true when a referenced static asset is present) · `dispatch_cards` · `collection_cards` · `people_links` (slug list → linked names) · the `{% person %}` tag.
+
+**Linking people.** Reference a person by their `_people` **slug** (the filename), never by display name — slugs are unique (no ambiguity) and the link text is read from the person's `title` (so a rename can't drift it). Inline in prose: `{% person brian-keegan %}` → a link to their profile. In front matter (`authors:`, `team:`, …): use slug lists, rendered via `people_links` or the byline. **It's enforced:** an unknown slug *fails the build* — a `post_read` hook validates every reference, and the `{% person %}` tag raises at render — while an off-vocabulary `_people` `category` logs a warning.
 
 > These run only because the site is built with `bundle exec jekyll build` in the GitHub Actions workflow — **not** the legacy `github-pages` gem (which runs in safe mode and ignores `_plugins/`). Keep deploying through Actions.
 
 ## Adding content (no template changes needed)
 
-- **Dispatch issue:** add `_dispatch/<date>-<slug>.md` (set `published: true`). Set `kind:` to a key from the controlled vocabulary in `_data/dispatch.yml` (+ optional `issue:` number) — the tag (`ISSUE 01 · ANNOUNCEMENT`) and its accent are composed from there, not hand-written. List `authors:` using names that match `title:` in `_people` so the byline links them. Reading time is estimated from the body length automatically (no field).
-- **Project / person / resource:** add a file to the matching collection with `title`, `summary`, `order`, `category` (+ optional `tag`). It gets a child page and a linked card on the parent automatically.
+- **Dispatch issue:** add `_dispatch/<date>-<slug>.md` (set `published: true`). Set `kind:` to a key from the controlled vocabulary in `_data/dispatch.yml` (+ optional `issue:` number) — the tag (`ISSUE 01 · ANNOUNCEMENT`) and its accent are composed from there, not hand-written. List `authors:` as `_people` **slugs** so the byline links them (an unknown slug fails the build); mention people in the body with `{% person <slug> %}`. Reading time is estimated from the body length automatically (no field).
+- **Project / person / resource:** add a file to the matching collection with `title`, `summary`, `category` (+ optional `tag`, and for people `sort_name`/`status`). It gets a child page and a linked card on the parent automatically. For `_people`, `category` must be a group in `_data/people.yml`; a person's contact (`email`, `github`, `link`/`link_label`) renders from front matter on their profile page.
+- **Partner (organization):** add `_partners/<slug>.md` with `title`, `summary`, and optional `link`/`link_label`. It gets a `/partners/<slug>/` page and a card on the People page; link that URL from a project to cross-reference it.
 - **Datasets (archive table):** add rows under `datasets:` in `_data/archive.yml` — the placeholder panel becomes a table.
 - **Forms:** set `form_endpoint` in `_config.yml` (Formspree) to make the forms POST; otherwise they show a client-side confirmation.
 

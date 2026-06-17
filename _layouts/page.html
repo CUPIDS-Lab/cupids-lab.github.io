@@ -57,6 +57,24 @@ layout: default
     {%- if s.data %}{% assign person = s.data | site_data %}{% endif -%}
     {% include components/director.html person=person %}
 
+  {%- when 'roster' -%}
+    {%- comment -%} People roster: the director block (the collection's director
+      doc) followed by one card grid per group in _data/people.yml, in each
+      group's `order`. Add a group there and tag a person's `category:` to
+      extend the page — no edit needed here. {%- endcomment -%}
+    {%- assign director_doc = site.people | where: "category", "director" | first -%}
+    {%- if director_doc %}{% include components/director.html person=director_doc %}{% endif -%}
+    {%- assign roster_cards = "people" | collection_cards -%}
+    {%- assign groups = site.data.people.groups | sort: "order" -%}
+    {%- for g in groups -%}
+      {%- if g.key == "director" %}{% continue %}{% endif -%}
+      {%- assign members = roster_cards | where: "category", g.key -%}
+      {%- if members != empty -%}
+        <h2 class="h-section h-section--sm"{% unless forloop.first %} style="margin-top:44px;"{% endunless %}>{{ g.heading }}</h2>
+        {% include components/card_grid.html items=members cols=s.cols %}
+      {%- endif -%}
+    {%- endfor -%}
+
   {%- when 'archive' -%}
     {%- assign rows = s.rows -%}
     {%- if s.data %}{% assign rows = s.data | site_data %}{% endif -%}

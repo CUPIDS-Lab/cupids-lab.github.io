@@ -1,6 +1,5 @@
 ---
 title: "Advisor — Law & Ethics"
-order: 5
 category: advisor
 summary: "Faculty advisor · to be announced."
 ---

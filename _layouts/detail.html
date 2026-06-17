@@ -11,6 +11,14 @@ layout: default
       {%- assign has_photo = page.photo | static_exists -%}
       {%- if has_photo %}<img class="headshot headshot--profile" src="{{ page.photo | relative_url }}" alt="{{ page.title }}" width="200" height="200">{% endif -%}
       {{ content }}
+      {%- if page.email or page.github or page.link -%}
+      <div class="director__links" style="margin-top:28px;">
+        {%- assign sep = "" -%}
+        {%- if page.email -%}<a class="gold" href="mailto:{{ page.email }}">{{ page.email }}</a>{%- assign sep = '<span class="cell-dim"> · </span>' -%}{%- endif -%}
+        {%- if page.github -%}{{ sep }}<a class="cell-dim" href="https://{{ page.github }}" rel="noopener">{{ page.github }}</a>{%- assign sep = '<span class="cell-dim"> · </span>' -%}{%- endif -%}
+        {%- if page.link -%}{{ sep }}<a class="cell-dim" href="{{ page.link }}" rel="noopener">{{ page.link_label | default: page.link }}</a>{%- endif -%}
+      </div>
+      {%- endif -%}
     </article>
     {%- if page.back %}
     <p style="margin-top:36px;"><a class="card__more" href="{{ page.back | relative_url }}">&larr; Back to {{ page.back_label | default: 'overview' }}</a></p>

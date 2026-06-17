@@ -1,14 +1,24 @@
-# People — director + collaborators/advisors. Edit here; the People page
-# (and any links to people) build from this reference file.
-# Director block on the People page. Collaborators/advisors are individual
-# Markdown files in the `_people/` collection (each with its own child page).
-director:
-  name: Brian C. Keegan
-  role: "Associate Professor, Department of Information Science · CU Boulder"
-  email: brian.keegan@colorado.edu
-  github: github.com/CUPIDS-Lab
-  url: /people/brian-keegan/
-  pronouns: "he/him"
-  photo: /assets/img/headshots/brian-keegan.png
-  bio: |
-    A computational social scientist with eighteen years studying how people collaborate on Wikipedia, Reddit, and Twitter. That research has always depended on open data, a commitment that has been systematically eroded as platforms enclosed the information commons. He has taught "Information Expositions" for eight years, serves as Vice Chair of one of the nation's first cannabis licensing boards, and writes a data driven column "Charting Boulder" for the Boulder Reporting Lab. CUPIDS Lab is the synthesis of that research, teaching, and civic work.
+# Controlled vocabulary for People groups.
+#
+# The People page renders one section per group by iterating this list (see the
+# `roster` section in _layouts/page.html): add a group here, then tag a person's
+# `category:` with its key — no template change. An off-vocabulary category
+# still renders but logs a build warning (mirrors the Dispatch `kinds:`
+# vocabulary in _data/dispatch.yml).
+#
+# This file holds NO per-person content: every person is a single Markdown file
+# in the _people collection (the one source of truth for their name, role,
+# photo, links, and bio). The director is that collection's `featured`/director
+# doc, rendered as the bespoke director block rather than a card.
+#
+# Per group:
+#   key      machine tag set as a person's `category:`
+#   label    singular noun (e.g. a card eyebrow)
+#   heading  the section heading on the People page
+#   order    section order on the page (ascending)
+groups:
+  - { key: director, label: "Director",             heading: "Director",              order: 1 }
+  - { key: faculty,  label: "Faculty collaborator", heading: "Faculty collaborators", order: 2 }
+  - { key: student,  label: "Student researcher",   heading: "Student researchers",   order: 3 }
+  - { key: advisor,  label: "Advisory board",       heading: "Advisory board",        order: 4 }
+  - { key: alumni,   label: "Alumni",               heading: "Alumni",                order: 5 }
