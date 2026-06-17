@@ -189,6 +189,7 @@ a { color: inherit; text-decoration: none; }
 
 .hero h1 {
   font-weight: 900; line-height: 1.0; letter-spacing: -0.03em; margin: 0 0 24px;
+  word-spacing: -0.2em; /* tighten the gaps between the per-word redaction boxes */
 }
 /* "Remove redaction" reveal: every word sits in its own black box (kept for
    contrast over the live particle canvas); on load each box wipes open
