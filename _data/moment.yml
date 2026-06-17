@@ -1,0 +1,12 @@
+# "The moment — what's disappearing." The redaction ledger + decline stats.
+# Moved off the home landing to the About page; rendered via
+# components/moment.html. Tones (red/amber/green) map to colors via bullet_color.
+kicker: "The moment — what's disappearing"
+ledger:
+  - { label: "EPA air quality monitoring", status: "REMOVED", tone: red }
+  - { label: "USGS streamflow records", status: "AT RISK", tone: amber }
+  - { label: "NOAA climate projections", status: "AT RISK", tone: amber }
+stats:
+  - { num: "½", label: "of Colorado's newspaper journalists lost since 2005." }
+  - { num: "300→70", label: "reporters at the Denver Post, then and now." }
+  - { num: "100s", label: "of federal datasets removed or restricted since 2025." }

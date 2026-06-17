@@ -16,23 +16,6 @@ layout: default
   </div>
 </section>
 
-<!-- the moment -->
-<section class="band band--alt">
-  <div class="band__inner band__inner--tight">
-    <div class="kicker">{{ h.moment.kicker }}</div>
-    <div class="ledger">
-      {%- for row in h.moment.ledger %}
-      {{ row.label }} <span class="redact">&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;</span> <span class="tag-strong" style="color: {{ row.tone | bullet_color }};">{{ row.status }}</span>{% unless forloop.last %}<br>{% endunless %}
-      {%- endfor %}
-    </div>
-    <div class="stats">
-      {%- for st in h.moment.stats %}
-      <div class="stat"><div class="stat__num">{{ st.num }}</div><div class="stat__label">{{ st.label }}</div></div>
-      {%- endfor %}
-    </div>
-  </div>
-</section>
-
 <!-- how the lab works (pillars) -->
 <section class="band">
   <div class="band__inner">
