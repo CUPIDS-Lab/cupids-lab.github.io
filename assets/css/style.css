@@ -70,6 +70,7 @@
 
   /* Brand */
   --gold:      #cfb87c;  /* CU gold */
+  --on-gold:   #1a1407;  /* near-black text for gold backgrounds (~9.4:1, AAA) */
   --red:       #b23a2e;  /* alert / at-risk accent */
   --green:     #6fcf97;  /* preserved */
   --amber:     #e0a14e;  /* at-risk */
@@ -156,11 +157,12 @@ a { color: inherit; text-decoration: none; }
 .btn {
   display: inline-block; font-family: var(--mono); font-weight: 600;
   border: none; cursor: pointer; white-space: nowrap; border-radius: 6px;
+  background: var(--gold); color: var(--on-gold); /* legible default; variants below override */
   transition: filter 0.15s ease, transform 0.05s ease;
 }
 .btn:hover { filter: brightness(1.08); }
 .btn:active { transform: translateY(1px); }
-.btn--gold { background: var(--gold); color: var(--bg); }
+.btn--gold { background: var(--gold); color: var(--on-gold); }
 .btn--ghost { background: transparent; border: 1px solid var(--line-3); color: var(--ink); }
 .btn--nav { font-size: 13px; padding: 8px 15px; }
 .btn--hero { font-size: 13px; padding: 12px 20px; }
@@ -448,11 +450,30 @@ textarea.field { resize: vertical; }
 .article h2 { font-weight: 800; font-size: 26px; letter-spacing: -0.01em; margin: 36px 0 12px; color: var(--ink); }
 .article h3 { font-weight: 700; font-size: 20px; margin: 28px 0 10px; color: var(--ink); }
 .article p { margin: 0 0 18px; }
-.article a { color: var(--gold); text-decoration: underline; text-underline-offset: 2px; }
+.article a:not(.btn) { color: var(--gold); text-decoration: underline; text-underline-offset: 2px; }
 .article ul, .article ol { padding-left: 22px; margin: 0 0 18px; }
 .article li { margin: 0 0 8px; }
 .article code { font-family: var(--mono); font-size: 0.9em; background: var(--bg-card); padding: 2px 6px; border-radius: 4px; }
 .article blockquote { border-left: 3px solid var(--gold); margin: 0 0 18px; padding: 4px 0 4px 18px; color: var(--ink-muted); }
+
+/* ---------- FAQ accordion (native <details>; used on /about/) ---------- */
+.faq { margin: 8px 0 4px; }
+.faq__item { border-top: 1px solid var(--line); }
+.faq__item:last-of-type { border-bottom: 1px solid var(--line); }
+.faq__q {
+  font-family: var(--mono); font-weight: 600; font-size: 15px; color: var(--ink);
+  cursor: pointer; list-style: none; position: relative; padding: 16px 40px 16px 0;
+}
+.faq__q::-webkit-details-marker { display: none; } /* swap the default triangle for a +/- */
+.faq__q::after {
+  content: "+"; position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
+  color: var(--gold); font-size: 22px; font-weight: 400; line-height: 1;
+}
+.faq__item[open] .faq__q::after { content: "\2212"; } /* minus */
+.faq__q:hover { color: var(--gold); }
+.faq__q:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 3px; }
+.faq__a { padding: 2px 0 18px; }
+.faq__a > :last-child { margin-bottom: 0; }
 
 /* ============================================================
    SECURE CONTACT CALLOUT
