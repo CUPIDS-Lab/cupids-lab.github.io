@@ -14,8 +14,10 @@
   <canvas class="cupids-particles hero__canvas" data-color="#cfb87c" data-count="{{ pcount }}" data-link="{{ plink }}" data-dotop="{{ pdot }}" data-lineop="{{ pline }}" aria-hidden="true"></canvas>
   <div class="hero__inner">
     {%- if include.eyebrow %}<div class="eyebrow">{{ include.eyebrow }}</div>{% endif -%}
-    <h1>{{ include.title }}{% if include.title_mark %} <img class="mark-accent" src="{{ '/assets/brand/mark.svg' | relative_url }}" alt="" aria-hidden="true">{% endif %}</h1>
-    {%- if include.lead %}<div class="hero__lead">{{ include.lead }}</div>{% endif -%}
+    {%- comment -%} Each word is wrapped in its own .rw box so it can be redacted and revealed individually. {%- endcomment -%}
+    <h1>{%- assign _words = include.title | strip | split: " " -%}{%- capture _h1 -%}{%- for w in _words -%}<span class="rw" style="--i:{{ forloop.index0 }}">{{ w }}</span> {% endfor -%}{%- endcapture -%}{{ _h1 | rstrip }}{%- if include.title_mark %} <img class="mark-accent" src="{{ '/assets/brand/mark.svg' | relative_url }}" alt="" aria-hidden="true">{% endif -%}</h1>
+    {%- comment -%} Normalize the lead to a single <p> so the gold highlight (box-decoration-break) hugs the text in every layout. {%- endcomment -%}
+    {%- if include.lead -%}{%- assign _lh = include.lead | strip | slice: 0, 2 -%}{%- if _lh == "<p" -%}<div class="hero__lead">{{ include.lead }}</div>{%- else -%}<div class="hero__lead"><p>{{ include.lead }}</p></div>{%- endif -%}{%- endif -%}
     {%- if include.actions and include.actions != empty -%}
     <div class="hero__actions">
       {%- for a in include.actions -%}<a class="btn {{ a.style | default: 'btn--ghost' }} btn--hero" href="{{ a.to | smart_url }}">{{ a.label }}</a>{%- endfor -%}
