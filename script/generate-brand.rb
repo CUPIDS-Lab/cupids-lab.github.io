@@ -62,12 +62,14 @@ FOLDER_FRONT = "M8.29999 15.4886C8.87268 13.904 10.3769 12.8481 12.0618 12.8481L
 FOLDER_CX, FOLDER_CY = 15.3, 17.9   # ~center of the 32×32 folder art
 
 # A `color` file folder centered at (cx,cy), `size` tall, optionally rotated —
-# flat shades (no gradient), so it can be repeated freely in the decorative art.
+# flat two-tone shades (light tab / deep pocket) + a dark fold outline, so it
+# reads distinctly as a folder even small; repeatable freely in the decorative art.
 def folder_glyph(cx, cy, size, color, rot = 0)
   sc = size.to_f / 24.0
-  paths = %(<path fill="#{lighten(color, 0.14)}" d="#{FOLDER_BACK}"/>) +
+  st = %( stroke="#{darken(color, 0.48)}" stroke-width="1.5" stroke-linejoin="round" paint-order="stroke")
+  paths = %(<path fill="#{lighten(color, 0.34)}"#{st} d="#{FOLDER_BACK}"/>) +
           %(<path fill="#{darken(color, 0.10)}" d="#{FOLDER_MID}"/>) +
-          %(<path fill="#{color}" d="#{FOLDER_FRONT}"/>)
+          %(<path fill="#{darken(color, 0.16)}"#{st} d="#{FOLDER_FRONT}"/>)
   %(<g transform="translate(#{nf cx},#{nf cy}) rotate(#{rot}) scale(#{nf sc}) translate(#{-FOLDER_CX},#{-FOLDER_CY})">#{paths}</g>)
 end
 
@@ -158,18 +160,21 @@ def background(w, h)
   doc(w, h, body)
 end
 
-# A single 32×32 file folder in shades of `base` (gradient back + front), for the
-# per-color folders/ collection (list bullets, scatter art, icons).
+# A single 32×32 file folder for the per-color folders/ collection — bold-combo:
+# a light tab (back gradient), a deep pocket (front gradient), and a dark fold
+# outline, so it reads distinctly as a folder even at small sizes.
 def folder_svg(base)
-  lt = lighten(base, 0.22)
-  dk = darken(base, 0.12)
+  back_hi = lighten(base, 0.40)
+  back_lo = lighten(base, 0.24)
+  front_lo = darken(base, 0.22)
+  st = %( stroke="#{darken(base, 0.48)}" stroke-width="1.5" stroke-linejoin="round" paint-order="stroke")
   body = +%(<defs>)
-  body << %(<linearGradient id="fb" x1="7.08807" y1="6.68747" x2="9.90057" y2="16.8125" gradientUnits="userSpaceOnUse"><stop stop-color="#{lt}"/><stop offset="1" stop-color="#{base}"/></linearGradient>)
-  body << %(<linearGradient id="ff" x1="17.0434" y1="12.8481" x2="17.0434" y2="29.8838" gradientUnits="userSpaceOnUse"><stop stop-color="#{lt}"/><stop offset="1" stop-color="#{dk}"/></linearGradient>)
+  body << %(<linearGradient id="fb" x1="7.08807" y1="6.68747" x2="9.90057" y2="16.8125" gradientUnits="userSpaceOnUse"><stop stop-color="#{back_hi}"/><stop offset="1" stop-color="#{back_lo}"/></linearGradient>)
+  body << %(<linearGradient id="ff" x1="17.0434" y1="12.8481" x2="17.0434" y2="29.8838" gradientUnits="userSpaceOnUse"><stop stop-color="#{base}"/><stop offset="1" stop-color="#{front_lo}"/></linearGradient>)
   body << %(</defs>)
-  body << %(<path fill="url(#fb)" d="#{FOLDER_BACK}"/>)
-  body << %(<path fill="#{darken(base, 0.06)}" d="#{FOLDER_MID}"/>)
-  body << %(<path fill="url(#ff)" d="#{FOLDER_FRONT}"/>)
+  body << %(<path fill="url(#fb)"#{st} d="#{FOLDER_BACK}"/>)
+  body << %(<path fill="#{darken(base, 0.10)}" d="#{FOLDER_MID}"/>)
+  body << %(<path fill="url(#ff)"#{st} d="#{FOLDER_FRONT}"/>)
   doc(32, 32, body)
 end
 

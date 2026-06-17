@@ -249,15 +249,19 @@
             ctx.drawImage(MARK_IMG, pm.x - ms / 2, pm.y - ms / 2, ms, ms);
           }
         } else {
-          // Susceptible: a complete open file folder in shades of the node hue.
+          // Susceptible: a complete open folder — two-tone (light tab / deep
+          // pocket) + a dark fold outline, so it reads as a folder even small.
           var sc = pm.size / 26;
           ctx.save();
           ctx.translate(pm.x, pm.y);
           ctx.scale(sc, sc);
           ctx.translate(-15.3, -17.9);        // center the 32×32 folder art
-          ctx.fillStyle = shade(pm.color, 0.16);  ctx.fill(FOLDER_BACK);
-          ctx.fillStyle = shade(pm.color, -0.12); ctx.fill(FOLDER_MID);
-          ctx.fillStyle = pm.color;                ctx.fill(FOLDER_FRONT);
+          ctx.lineJoin = 'round';
+          ctx.lineWidth = 1.5;
+          ctx.strokeStyle = shade(pm.color, -0.48);
+          ctx.fillStyle = shade(pm.color, 0.34);  ctx.fill(FOLDER_BACK);  ctx.stroke(FOLDER_BACK);
+          ctx.fillStyle = shade(pm.color, -0.10); ctx.fill(FOLDER_MID);
+          ctx.fillStyle = shade(pm.color, -0.18); ctx.fill(FOLDER_FRONT); ctx.stroke(FOLDER_FRONT);
           ctx.restore();
         }
       }
