@@ -18,8 +18,13 @@ The website for **CUPIDS Lab** (University of Colorado Public Interest Data Scie
 ## Layout of the repo
 
 ```
-_pages/                Top-level pages (Markdown). Each sets an explicit
-                       `permalink`. Rendered via `home` or `page` layouts.
+_pages/                Site pages (Markdown), each with an explicit `permalink`
+                       (URLs are decoupled from file paths). Grouped into
+                       subdirectories that mirror the URL tree — `get-involved/`
+                       (+ `help/`) and `resources/`, each with an `index.md`
+                       landing; standalone pages (home, about, projects, people,
+                       dispatch, policies) sit at the top level. Rendered via
+                       `home`, `page`, or `detail` layouts.
 _dispatch/             Dispatch collection — one Markdown file per issue.
 _projects/ _people/ _resources/ _partners/
                        Collections — one file per item; each gets a child page
