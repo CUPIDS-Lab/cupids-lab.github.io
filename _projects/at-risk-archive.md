@@ -1,5 +1,5 @@
 ---
-title: "At-risk federal data archive"
+title: "At-risk data archive"
 order: 3
 category: archive
 tag: ARCHIVE
