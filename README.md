@@ -13,7 +13,9 @@ Content lives in **Markdown + YAML**; presentation lives in **layouts, component
 ```
 _config.yml            Site identity: title, tagline (hero headline),
                        hero_lead, description (SEO), mission, hero_eyebrow, location
-_pages/*.md            Top-level pages (each sets its own permalink)
+_pages/                site pages (each sets its own permalink); grouped into
+                       subdirs by section — get-involved/ (+ help/), resources/ —
+                       with standalone pages at the top level
 _dispatch/*.md         the Dispatch — one Markdown file per issue
 _projects/ _people/ _resources/*.md
                        collections — one file per item; each gets a child page,
