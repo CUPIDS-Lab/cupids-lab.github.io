@@ -9,6 +9,6 @@
     "brand:all": "ruby script/generate-brand.rb && node script/rasterize.mjs"
   },
   "devDependencies": {
-    "puppeteer": "^25.1.0"
+    "puppeteer": "^25.2.0"
   }
 }
