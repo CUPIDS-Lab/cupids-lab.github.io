@@ -12,7 +12,7 @@ group :jekyll_plugins do
 end
 
 # Link / HTML validation in CI
-gem "html-proofer", "~> 5.0", group: :test
+gem "html-proofer", "~> 5.2", group: :test
 
 # Boilerplate for newer Rubies that dropped default gems
 gem "webrick", "~> 1.8"
