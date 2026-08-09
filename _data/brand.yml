@@ -66,7 +66,13 @@ assets:
   - { file: favicon.svg,    w: 64,   h: 64,  kind: mark }
   - { file: mark.svg,       w: 96,   h: 96,  kind: pixmark }   # transparent, inline (nav/footer)
   - { file: avatar.svg,     w: 512,  h: 512, kind: avatar }
+  # Profile picture for the circular crops (GitHub, Slack, X): the mark alone,
+  # no wordmark, padded so the arrow's point + fletching survive the crop.
+  - { file: avatar-circle.svg,  w: 512,  h: 512, kind: avatar_circle }
   - { file: og.svg,         w: 1200, h: 630, kind: og }
   - { file: banner.svg,     w: 1500, h: 500, kind: og }
+  # Header image: a still frame of the hero's particle-link folder network,
+  # replayed deterministically from the same rules as assets/js/cupids.js.
+  - { file: banner-network.svg, w: 1500, h: 500, kind: network }
   - { file: pattern.svg,    w: 240,  h: 240, kind: pattern }
   - { file: background.svg, w: 1600, h: 900, kind: background }

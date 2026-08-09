@@ -38,13 +38,44 @@ def nf(x)
   format("%.2f", x).sub(/\.?0+$/, "")
 end
 
+# The mark's transform when its (square) frame is centered on (cx,cy), `size` across.
+def mark_transform(cx, cy, size)
+  vbx, vby, vbw, vbh = SEED_VB
+  s = size.to_f / [vbw, vbh].max
+  "translate(#{nf(cx - size / 2.0 - vbx * s)},#{nf(cy - size / 2.0 - vby * s)}) scale(#{nf s})"
+end
+
 # The mark centered on (cx,cy), scaled so its (square) frame is `size` across.
 def folder_arrow(cx, cy, size)
-  vbx, vby, vbw, vbh = SEED_VB
-  s  = size.to_f / [vbw, vbh].max
-  tx = cx - size / 2.0 - vbx * s
-  ty = cy - size / 2.0 - vby * s
-  %(<g transform="translate(#{nf tx},#{nf ty}) scale(#{nf s})">#{SEED_INNER}</g>)
+  %(<g transform="#{mark_transform(cx, cy, size)}">#{SEED_INNER}</g>)
+end
+
+# Repeatable mark: define the seed once (`mark_defs`), then stamp instances with
+# `mark_stamp` — a canvas full of marks would otherwise repeat the seed's
+# gradient ids (and its markup) once per copy.
+MARK_ID = "mark"
+def mark_defs
+  %(<defs><g id="#{MARK_ID}">#{SEED_INNER}</g></defs>\n)
+end
+
+def mark_stamp(cx, cy, size)
+  %(<use href="##{MARK_ID}" transform="#{mark_transform(cx, cy, size)}"/>)
+end
+
+# The seed frames the artwork loosely, and the art's extremities (the arrow's
+# point and fletching) still reach past the frame's inscribed circle — so a
+# square lockup cropped to a circle clips the mark. This is the artwork's
+# minimal enclosing circle, as a fraction of the seed's square frame, measured
+# off the rendered seed (opaque-pixel scan, strokes included). Re-measure if the
+# seed art changes.
+ART_CX, ART_CY, ART_R = 0.4721, 0.4713, 0.5138
+
+# The mark sized and placed so its enclosing circle is exactly the circle
+# (cx,cy,r) — i.e. the WHOLE folder-arrow sits inside that circle, whatever
+# crop is applied outside it.
+def folder_arrow_in_circle(cx, cy, r)
+  size = r / ART_R
+  folder_arrow(cx - (ART_CX - 0.5) * size, cy - (ART_CY - 0.5) * size, size)
 end
 
 # ---- color helpers (derive per-folder shades) --------------------------------
@@ -121,6 +152,155 @@ def avatar
   doc(512, 512, body)
 end
 
+# Circular profile avatar: the mark alone — no wordmark — on a dark disc, sized
+# so the whole folder-arrow (point and fletching included) clears the circular
+# crop avatars get on GitHub, Slack, X, &c. `MARK_FILL` is the share of the
+# disc's radius the artwork occupies; the rest is the padding that keeps it whole.
+MARK_FILL = 0.78
+def avatar_circle(w, h)
+  cx = w / 2.0
+  cy = h / 2.0
+  r = [w, h].min / 2.0
+  ring = r * 0.012   # hairline gold rim, so the near-black disc reads on dark UI
+  body = +""
+  body << %(<circle cx="#{nf cx}" cy="#{nf cy}" r="#{nf r}" fill="#{C['bg']}"/>\n)
+  body << %(<circle cx="#{nf cx}" cy="#{nf cy}" r="#{nf(r - ring)}" fill="none" stroke="#{C['gold']}" stroke-opacity="0.34" stroke-width="#{nf ring}"/>\n)
+  body << folder_arrow_in_circle(cx, cy, r * MARK_FILL)
+  doc(w, h, body)
+end
+
+# ---- Particle-link network (a still frame of the hero canvas) ----------------
+# A deterministic replay of the drifting folder network in assets/js/cupids.js:
+# the same folder art, drift, link rule, prevent-overlap separation and SI spread
+# (CUPID's gold "opens" a folder, then travels the links to its neighbors), run
+# with a seeded RNG and snapshotted mid-spread — so the banner is an actual
+# frame of the hero animation rather than a look-alike of it. Constants mirror
+# cupids.js and the home hero's data-attributes in _includes/components/hero.html.
+# Where the still departs from the hero, it does so because nothing is layered
+# over it: the hero dims the network so headlines stay legible on top of it and
+# lets folders run off the edges, while the banner is the whole picture.
+NET_SEED       = 101         # RNG seed — change it to draw a different network
+NET_COUNT      = 52          # folders on the canvas (hero: 32, on a taller box)
+NET_LINK       = 165         # link distance in px at full size (hero: data-link)
+NET_DOT_OP     = 0.95        # folder opacity (hero dims to data-dotop, 0.55)
+NET_LINE_OP    = 0.55        # link opacity   (hero dims to data-lineop, 0.34)
+NET_EDGE_W     = 3           # link width at full size (cupids.js BASE_EDGE)
+NET_SIZE_REF   = 1100        # width at which folders + links render full size
+NET_ART_SCALE  = 1.25        # folders run a little larger than on the hero
+NET_RADIUS     = 0.42        # folder radius as a fraction of node size
+NET_PAD        = 2           # extra px of breathing room between folders
+NET_MARGIN     = 0.62        # keep folders this far (× size) inside the frame
+NET_TRANSMIT   = 0.45        # chance a spread tick propagates
+NET_TICK       = 30          # frames between spread ticks (500ms at 60fps)
+NET_INFECTED   = 0.42        # snapshot the spread once this share is opened
+NET_MAX_FRAMES = 7200        # safety stop (~2 min of animation)
+
+# One animation frame: drift, bounce off the frame, then separate any folders
+# that overlap (ForceAtlas2's anti-collision, projected to positions). Folders
+# bounce off an inset margin rather than the canvas edge, so none is cropped.
+def network_step(pts, w, h)
+  pts.each do |p|
+    m = p[:size] * NET_MARGIN
+    p[:x] += p[:vx]
+    p[:y] += p[:vy]
+    p[:vx] = -p[:vx] if p[:x] < m || p[:x] > w - m
+    p[:vy] = -p[:vy] if p[:y] < m || p[:y] > h - m
+  end
+  pts.each_with_index do |pa, a|
+    pts[(a + 1)..].each do |pb|
+      dx = pb[:x] - pa[:x]
+      dy = pb[:y] - pa[:y]
+      d = Math.sqrt(dx * dx + dy * dy)
+      min_d = (pa[:size] + pb[:size]) * NET_RADIUS + NET_PAD
+      next unless d.positive? && d < min_d
+
+      push = (min_d - d) / 2.0
+      ux = dx / d
+      uy = dy / d
+      pa[:x] -= ux * push
+      pa[:y] -= uy * push
+      pb[:x] += ux * push
+      pb[:y] += uy * push
+    end
+  end
+  pts.each do |p|
+    m = p[:size] * NET_MARGIN
+    p[:x] = p[:x].clamp(m, w - m)
+    p[:y] = p[:y].clamp(m, h - m)
+  end
+end
+
+# One SI step: at most ONE new infection per tick, drawn from the susceptible
+# folders that are linked to an already-opened one.
+def network_tick(pts, link_dist, rng)
+  return if rng.rand >= NET_TRANSMIT
+
+  d2 = link_dist * link_dist
+  candidates = pts.reject { |p| p[:infected] }.select do |p|
+    pts.any? { |q| q[:infected] && (q[:x] - p[:x])**2 + (q[:y] - p[:y])**2 < d2 }
+  end
+  return if candidates.empty?
+
+  hit = candidates[rng.rand(candidates.length)]
+  hit[:infected] = true
+  hit[:color] = C["gold"]
+end
+
+def network(w, h)
+  rng = Random.new(NET_SEED)
+  scale = (w / NET_SIZE_REF.to_f).clamp(0.6, 1.0)
+  link_dist = NET_LINK * scale
+  edge_w = NET_EDGE_W * scale
+  pts = Array.new(NET_COUNT) do
+    size = (14 + rng.rand * 30) * scale * NET_ART_SCALE
+    m = size * NET_MARGIN
+    { x: m + rng.rand * (w - 2 * m), y: m + rng.rand * (h - 2 * m),
+      vx: (rng.rand - 0.5) * 0.22, vy: (rng.rand - 0.5) * 0.22,
+      color: PALETTE[rng.rand(PALETTE.length)]["color"], infected: false,
+      size: size }
+  end
+  # Patient zero, then run the animation until the spread hits the snapshot mark.
+  [1, (pts.length * 0.05).round].max.times do
+    p = pts[rng.rand(pts.length)]
+    p[:infected] = true
+    p[:color] = C["gold"]
+  end
+  target = (pts.length * NET_INFECTED).round
+  NET_MAX_FRAMES.times do |frame|
+    network_step(pts, w, h)
+    next unless ((frame + 1) % NET_TICK).zero?
+    break if pts.count { |p| p[:infected] } >= target
+
+    network_tick(pts, link_dist, rng)
+  end
+
+  # Links first, each a gradient between its two endpoint folders, fading out
+  # with distance; then the folders — opened ones render the mark itself.
+  defs = +""
+  edges = +""
+  pts.each_with_index do |pa, a|
+    pts[(a + 1)..].each_with_index do |pb, i|
+      d = Math.hypot(pa[:x] - pb[:x], pa[:y] - pb[:y])
+      next unless d < link_dist
+
+      id = "e#{a}-#{i}"
+      defs << %(<linearGradient id="#{id}" gradientUnits="userSpaceOnUse" x1="#{nf pa[:x]}" y1="#{nf pa[:y]}" x2="#{nf pb[:x]}" y2="#{nf pb[:y]}">) <<
+              %(<stop stop-color="#{pa[:color]}"/><stop offset="1" stop-color="#{pb[:color]}"/></linearGradient>\n)
+      edges << %(<line x1="#{nf pa[:x]}" y1="#{nf pa[:y]}" x2="#{nf pb[:x]}" y2="#{nf pb[:y]}" ) <<
+               %(stroke="url(##{id})" stroke-opacity="#{nf(NET_LINE_OP * (1 - 0.7 * d / link_dist))}" stroke-width="#{nf edge_w}"/>\n)
+    end
+  end
+  nodes = pts.map do |p|
+    p[:infected] ? mark_stamp(p[:x], p[:y], p[:size] * 1.6) : folder_glyph(p[:x], p[:y], p[:size], p[:color])
+  end
+
+  body = +%(<rect width="#{w}" height="#{h}" fill="#{C['bg']}"/>\n)
+  body << mark_defs << %(<defs>\n#{defs}</defs>\n)
+  body << edges
+  body << %(<g opacity="#{NET_DOT_OP}">\n#{nodes.join("\n")}\n</g>)
+  doc(w, h, body)
+end
+
 def social(w, h)
   body = +""
   body << %(<rect width="#{w}" height="#{h}" fill="#{C['bg']}"/>\n)
@@ -185,7 +365,9 @@ BRAND["assets"].each do |a|
     when "mark"    then favicon
     when "pixmark" then pixmark
     when "avatar"  then avatar
+    when "avatar_circle" then avatar_circle(a["w"], a["h"])
     when "og"         then social(a["w"], a["h"])
+    when "network"    then network(a["w"], a["h"])
     when "pattern"    then pattern
     when "background" then background(a["w"], a["h"])
     end
