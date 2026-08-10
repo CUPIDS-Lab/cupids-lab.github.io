@@ -9,4 +9,4 @@ sections:
   - { type: dispatch_list, heading: "Latest issue", count: 6, cols: 3, label: dispatch }
   - { type: subscribe }
 ---
-Written by cross-disciplinary student teams: rapid-response explainers, dataset guides, and original data-driven investigations from across Colorado.
+Written by cross-disciplinary student teams: stories, investigations, documentation, and tutorials from across Colorado.
