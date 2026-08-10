@@ -1,6 +1,6 @@
 ---
 title: "Generating code, not answers: how we liberated Colorado's reservoir records"
-kind: report
+kind: tutorial
 issue: 2
 date: 2026-06-19
 authors:

@@ -1,16 +1,17 @@
-# The three pillars on the home page.
+# The three pillars on the home page, in the order the mission names them
+# (_config.yml): infrastructure, then the help desk, then the newsletter.
 - num: "01"
-  title: Monthly Newsletter
-  body: "Cross-disciplinary student teams ship every issue — stories, investigations, documentation, and tutorials."
-  more: "Read the Dispatch →"
-  url: /dispatch/
-- num: "02"
   title: Data Infrastructure
   body: "Acquire, clean, document, and archive critical public datasets in durable, open repositories."
   more: "See our research →"
   url: /resources/
-- num: "03"
+- num: "02"
   title: Community Help Desk
   body: "Pro-bono data support for journalists, lawyers, and nonprofits across Colorado."
   more: "Request help →"
   url: /get-involved/
+- num: "03"
+  title: Monthly Newsletter
+  body: "Cross-disciplinary student teams ship every issue — shorts, stories, investigations, and tutorials."
+  more: "Read the Dispatch →"
+  url: /dispatch/

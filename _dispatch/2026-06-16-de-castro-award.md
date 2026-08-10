@@ -1,6 +1,6 @@
 ---
 title: "CUPIDS and the Center for Environmental Journalism win the 2026 de Castro Research Award"
-kind: announcement
+kind: short
 issue: 1
 date: 2026-06-16
 authors:
